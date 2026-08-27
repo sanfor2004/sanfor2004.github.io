@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout title="Projects" description="Project documentation and engineering writeups by sanfor2004.">
+  <section class="bg-base-200 py-16">
+    <div class="container-page">
+      <div class="breadcrumbs text-sm">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>Projects</li>
+        </ul>
+      </div>
+      <div class="mt-8 max-w-3xl">
+        <h1 class="text-4xl font-bold">Projects</h1>
+        <p class="mt-4 text-lg text-base-content/75">Documented software projects, decisions, risks, and next improvements.</p>
+      </div>
+      <div class="mt-10 grid gap-6 lg:grid-cols-2">
+        {projects.map((project) => <PostCard entry={project} basePath="/projects" />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

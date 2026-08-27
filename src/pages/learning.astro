@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const resources = [
+  {
+    title: "Programming Foundations",
+    description: "Notes on language basics, data structures, algorithms, debugging, and reading documentation.",
+    tags: ["JavaScript", "TypeScript", "Python", "Git"],
+  },
+  {
+    title: "Web Engineering",
+    description: "Practical guides for building, testing, securing, and deploying full-stack web applications.",
+    tags: ["Astro", "Next.js", "APIs", "Databases"],
+  },
+  {
+    title: "Cybersecurity Fundamentals",
+    description: "Responsible notes on authentication, threat modeling, secure defaults, and defensive testing.",
+    tags: ["Auth", "OWASP", "Security Reviews", "Privacy"],
+  },
+];
+---
+
+<BaseLayout title="Learning Resources" description="Curated learning notes and programming resources by sanfor2004.">
+  <section class="bg-base-200 py-16">
+    <div class="container-page">
+      <div class="breadcrumbs text-sm">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>Learning</li>
+        </ul>
+      </div>
+      <div class="mt-8 max-w-3xl">
+        <h1 class="text-4xl font-bold">Learning Resources</h1>
+        <p class="mt-4 text-lg text-base-content/75">A place for structured notes, study paths, and references that turn learning into reusable explanations.</p>
+      </div>
+      <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        {resources.map((resource) => (
+          <article class="card card-border bg-base-100">
+            <div class="card-body">
+              <h2 class="card-title">{resource.title}</h2>
+              <p class="text-base-content/75">{resource.description}</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                {resource.tags.map((tag) => <span class="badge badge-outline badge-sm">{tag}</span>)}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <section class="mt-12 rounded-box border border-base-300 bg-base-100 p-6">
+        <h2 class="text-2xl font-semibold">Add Your Own Resource</h2>
+        <p class="mt-3 text-base-content/75">Create a new Markdown post under <code>src/content/blog</code> and use the Learning category for tutorials, reading notes, and walkthroughs.</p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>

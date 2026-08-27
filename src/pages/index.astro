@@ -1,0 +1,90 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import { site } from "../site";
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout title="Software Engineering and Cybersecurity Portfolio" description={site.description}>
+  <section class="hero min-h-[calc(100vh-4rem)] bg-base-200" style="background-image: linear-gradient(90deg, color-mix(in oklch, var(--color-base-100), transparent 6%) 0%, color-mix(in oklch, var(--color-base-100), transparent 18%) 43%, color-mix(in oklch, var(--color-neutral), transparent 54%) 100%), url('/assets/portfolio-workspace.png'); background-position: center; background-size: cover;">
+    <div class="hero-content container-page justify-start px-0 py-20">
+      <div class="max-w-2xl">
+        <p class="mb-4 font-medium uppercase tracking-wide text-primary">Personal portfolio and technical blog</p>
+        <h1 class="text-balance text-5xl font-bold leading-tight sm:text-6xl">sanfor2004</h1>
+        <p class="mt-6 max-w-xl text-lg leading-8 text-base-content/80">
+          Software engineering and cybersecurity notes, project writeups, and practical programming resources. This site is intentionally content-first so each project and lesson can become durable public evidence.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a class="btn btn-primary" href="/projects/">View projects</a>
+          <a class="btn" href="/blog/">Read the blog</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-100 py-16">
+    <div class="container-page grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <div>
+        <p class="font-medium text-primary">Focus</p>
+        <h2 class="mt-3 text-3xl font-semibold">Building, securing, and explaining software.</h2>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {["Web applications", "Security fundamentals", "Programming education"].map((item) => (
+          <div class="rounded-box border border-base-300 bg-base-200 p-5">
+            <h3 class="font-semibold">{item}</h3>
+            <p class="mt-2 text-sm leading-6 text-base-content/70">Placeholder area for deeper personal positioning and examples.</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-200 py-16">
+    <div class="container-page">
+      <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <p class="font-medium text-primary">Projects</p>
+          <h2 class="mt-3 text-3xl font-semibold">Featured work</h2>
+        </div>
+        <a class="btn" href="/projects/">All projects</a>
+      </div>
+      <div class="grid gap-6 lg:grid-cols-2">
+        {projects.slice(0, 2).map((project) => <PostCard entry={project} basePath="/projects" />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base-100 py-16">
+    <div class="container-page grid gap-10 lg:grid-cols-[1fr_1fr]">
+      <div>
+        <p class="font-medium text-primary">Latest writing</p>
+        <h2 class="mt-3 text-3xl font-semibold">Programming notes that teach by building.</h2>
+        <p class="mt-4 text-base-content/75">Use posts for tutorials, project logs, cybersecurity study notes, and debugging writeups.</p>
+      </div>
+      <div class="grid gap-6">
+        {posts.slice(0, 2).map((post) => <PostCard entry={post} basePath="/blog" />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-neutral py-16 text-neutral-content">
+    <div class="container-page grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center">
+      <div>
+        <h2 class="text-3xl font-semibold">Start with the editable placeholders.</h2>
+        <p class="mt-4 text-neutral-content/75">Replace contact details, add project links, and expand the about page as real public details are ready.</p>
+      </div>
+      <div class="mockup-code bg-base-100 text-base-content">
+        <pre data-prefix="$"><code>npm install</code></pre>
+        <pre data-prefix="$"><code>npm run dev</code></pre>
+        <pre data-prefix="$"><code>add Markdown in src/content</code></pre>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

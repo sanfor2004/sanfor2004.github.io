@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+
+export async function getStaticPaths() {
+  const slugify = (value: string) => value.toLowerCase().replaceAll(" ", "-");
+  const allEntries = [
+    ...(await getCollection("blog", ({ data }) => !data.draft)).map((entry) => ({ ...entry, basePath: "/blog" })),
+    ...(await getCollection("projects", ({ data }) => !data.draft)).map((entry) => ({ ...entry, basePath: "/projects" })),
+  ];
+  const tags = [...new Set(allEntries.flatMap((entry) => entry.data.tags))];
+
+  return tags.map((tag) => ({
+    params: { tag: slugify(tag) },
+    props: {
+      tag,
+      entries: allEntries.filter((entry) => entry.data.tags.some((entryTag) => slugify(entryTag) === slugify(tag))),
+    },
+  }));
+}
+
+const { tag, entries } = Astro.props;
+---
+
+<BaseLayout title={`Tag: ${tag}`} description={`Posts and projects tagged ${tag} by sanfor2004.`}>
+  <section class="bg-base-200 py-16">
+    <div class="container-page">
+      <div class="breadcrumbs text-sm">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>Tags</li>
+          <li>{tag}</li>
+        </ul>
+      </div>
+      <h1 class="mt-8 text-4xl font-bold">Tag: {tag}</h1>
+      <div class="mt-10 grid gap-6 lg:grid-cols-2">
+        {entries.map((entry) => <PostCard entry={entry} basePath={entry.basePath} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

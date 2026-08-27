@@ -1,0 +1,70 @@
+---
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import "../styles.css";
+import { site } from "../site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  structuredData?: Record<string, unknown>;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  image = "/assets/portfolio-workspace.png",
+  type = "website",
+  structuredData,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site.url);
+const pageTitle = title === site.title ? site.title : `${title} | ${site.title}`;
+const imageUrl = new URL(image, site.url);
+const defaultStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  name: site.title,
+  url: site.url,
+  description: site.description,
+  mainEntity: {
+    "@type": "Person",
+    name: site.author,
+    url: site.url,
+    sameAs: [site.github],
+    knowsAbout: ["Software engineering", "Cybersecurity", "Web development", "Programming education"],
+  },
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme="sanfor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={imageUrl.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl.href} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData ?? defaultStructuredData)} />
+    <title>{pageTitle}</title>
+  </head>
+  <body class="bg-base-100 text-base-content antialiased">
+    <SiteHeader />
+    <main id="content">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

@@ -1,0 +1,32 @@
+---
+import TagList from "./TagList.astro";
+
+const { entry, basePath } = Astro.props;
+const data = entry.data;
+const slug = entry.id.replace(/\.mdx?$/, "");
+const date = data.pubDate.toLocaleDateString("en", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+<article class="card card-border bg-base-100">
+  <div class="card-body gap-4">
+    <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/70">
+      <time datetime={data.pubDate.toISOString()}>{date}</time>
+      {data.category && <span class="badge badge-soft">{data.category}</span>}
+      {data.status && <span class="badge badge-soft">{data.status}</span>}
+    </div>
+    <div>
+      <h2 class="card-title text-balance text-xl">
+        <a class="link-hover" href={`${basePath}/${slug}/`}>{data.title}</a>
+      </h2>
+      <p class="mt-2 text-base-content/75">{data.description}</p>
+    </div>
+    <TagList tags={data.tags} />
+    <div class="card-actions">
+      <a class="btn btn-sm" href={`${basePath}/${slug}/`}>Read more</a>
+    </div>
+  </div>
+</article>

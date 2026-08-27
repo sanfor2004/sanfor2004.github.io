@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../site";
+---
+
+<BaseLayout title="Contact" description="Placeholder contact links for sanfor2004.">
+  <section class="bg-base-200 py-16">
+    <div class="container-page max-w-4xl">
+      <div class="breadcrumbs text-sm">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>Contact</li>
+        </ul>
+      </div>
+      <div class="mt-8">
+        <h1 class="text-4xl font-bold">Contact</h1>
+        <p class="mt-4 max-w-2xl text-lg text-base-content/75">These are placeholder links except for GitHub. Replace them with public contact details when ready.</p>
+      </div>
+      <div class="mt-10 grid gap-4">
+        {site.contactPlaceholders.map((item) => (
+          <a class="card card-border bg-base-100 transition hover:bg-base-200" href={item.href} rel="noopener noreferrer">
+            <div class="card-body sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 class="card-title">{item.label}</h2>
+                <p class="text-sm text-base-content/70">{item.href}</p>
+              </div>
+              <span class="btn btn-sm">Open</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

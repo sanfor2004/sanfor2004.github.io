@@ -1,0 +1,23 @@
+{
+  "name": "sanfor2004.github.io",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check && cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "lint": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.1.12",
+    "astro": "^7.2.8",
+    "cross-env": "^10.0.0",
+    "daisyui": "^5.0.50",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.2"
+  }
+}

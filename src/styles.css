@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "sanfor";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: oklch(98% 0.008 95);
+  --color-base-200: oklch(95% 0.012 95);
+  --color-base-300: oklch(89% 0.015 95);
+  --color-base-content: oklch(22% 0.03 248);
+  --color-primary: oklch(47% 0.105 186);
+  --color-primary-content: oklch(98% 0.01 186);
+  --color-secondary: oklch(58% 0.11 255);
+  --color-secondary-content: oklch(98% 0.01 255);
+  --color-accent: oklch(72% 0.16 72);
+  --color-accent-content: oklch(20% 0.03 72);
+  --color-neutral: oklch(29% 0.025 245);
+  --color-neutral-content: oklch(97% 0.008 245);
+  --color-info: oklch(65% 0.13 226);
+  --color-info-content: oklch(98% 0.01 226);
+  --color-success: oklch(62% 0.14 150);
+  --color-success-content: oklch(98% 0.01 150);
+  --color-warning: oklch(78% 0.17 78);
+  --color-warning-content: oklch(23% 0.03 78);
+  --color-error: oklch(58% 0.19 28);
+  --color-error-content: oklch(98% 0.01 28);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@utility container-page {
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-inline: 1rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in oklch, var(--color-primary), white 20%);
+  outline-offset: 3px;
+}
+
+.prose :where(a) {
+  color: var(--color-primary);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+.prose :where(h2, h3) {
+  scroll-margin-top: 6rem;
+}

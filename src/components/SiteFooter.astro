@@ -1,0 +1,30 @@
+---
+import { navItems, site } from "../site";
+---
+
+<footer class="footer sm:footer-horizontal border-t border-base-300 bg-base-200 p-10 text-base-content">
+  <aside>
+    <div class="inline-flex size-10 items-center justify-center rounded-sm bg-neutral font-semibold text-neutral-content">S</div>
+    <p>
+      <strong>{site.title}</strong>
+      <br />
+      Software engineering, cybersecurity, and practical programming notes.
+    </p>
+  </aside>
+  <nav>
+    <h2 class="footer-title">Site</h2>
+    {navItems.map((item) => <a class="link link-hover" href={item.href}>{item.label}</a>)}
+  </nav>
+  <nav>
+    <h2 class="footer-title">Feeds</h2>
+    <a class="link link-hover" href="/rss.xml">RSS</a>
+    <a class="link link-hover" href="/sitemap-index.xml">Sitemap</a>
+    <a class="link link-hover" href="/robots.txt">Robots</a>
+  </nav>
+  <nav>
+    <h2 class="footer-title">Contact</h2>
+    {site.contactPlaceholders.map((item) => (
+      <a class="link link-hover" href={item.href} rel="noopener noreferrer">{item.label}</a>
+    ))}
+  </nav>
+</footer>
