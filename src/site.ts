@@ -1,14 +1,16 @@
 export const site = {
-  title: "sanfor2004",
+  title: "Sanfor",
   description:
-    "Personal portfolio and technical blog for sanfor2004, focused on software engineering, cybersecurity, programming notes, and project documentation.",
+    "Ahmed Abdelaziz Hanafy, known as Sanfor, is a full stack software engineer focused on backend/API systems, automation, product engineering, and cybersecurity fundamentals.",
   url: "https://sanfor2004.github.io",
-  author: "sanfor2004",
+  author: "Ahmed Abdelaziz Hanafy",
+  handle: "sanfor2004",
   github: "https://github.com/sanfor2004",
   contactPlaceholders: [
     { label: "GitHub", href: "https://github.com/sanfor2004" },
-    { label: "Email placeholder", href: "mailto:your.email@example.com" },
-    { label: "LinkedIn placeholder", href: "https://www.linkedin.com/in/your-handle/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/sanfor2004/" },
+    { label: "Website", href: "https://zomzam.com" },
+    { label: "TryHackMe", href: "https://tryhackme.com/p/ahmed" },
   ],
 };
 

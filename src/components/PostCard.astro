@@ -11,7 +11,7 @@ const date = data.pubDate.toLocaleDateString("en", {
 });
 ---
 
-<article class="card card-border bg-base-100">
+<article class="card card-border bg-base-100 transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
   <div class="card-body gap-4">
     <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/70">
       <time datetime={data.pubDate.toISOString()}>{date}</time>
@@ -26,7 +26,7 @@ const date = data.pubDate.toLocaleDateString("en", {
     </div>
     <TagList tags={data.tags} />
     <div class="card-actions">
-      <a class="btn btn-sm" href={`${basePath}/${slug}/`}>Read more</a>
+      <a class="btn btn-sm btn-primary" href={`${basePath}/${slug}/`}>Read more</a>
     </div>
   </div>
 </article>

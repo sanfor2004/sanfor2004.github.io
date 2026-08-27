@@ -5,19 +5,19 @@
   default: true;
   prefersdark: false;
   color-scheme: light;
-  --color-base-100: oklch(98% 0.008 95);
-  --color-base-200: oklch(95% 0.012 95);
-  --color-base-300: oklch(89% 0.015 95);
-  --color-base-content: oklch(22% 0.03 248);
-  --color-primary: oklch(47% 0.105 186);
-  --color-primary-content: oklch(98% 0.01 186);
-  --color-secondary: oklch(58% 0.11 255);
-  --color-secondary-content: oklch(98% 0.01 255);
-  --color-accent: oklch(72% 0.16 72);
-  --color-accent-content: oklch(20% 0.03 72);
-  --color-neutral: oklch(29% 0.025 245);
-  --color-neutral-content: oklch(97% 0.008 245);
-  --color-info: oklch(65% 0.13 226);
+  --color-base-100: oklch(99% 0.006 78);
+  --color-base-200: oklch(96% 0.012 78);
+  --color-base-300: oklch(89% 0.016 72);
+  --color-base-content: oklch(20% 0.018 52);
+  --color-primary: #EE5712;
+  --color-primary-content: oklch(98% 0.01 78);
+  --color-secondary: oklch(38% 0.025 58);
+  --color-secondary-content: oklch(98% 0.01 58);
+  --color-accent: oklch(74% 0.135 76);
+  --color-accent-content: oklch(20% 0.018 52);
+  --color-neutral: oklch(23% 0.018 52);
+  --color-neutral-content: oklch(97% 0.008 78);
+  --color-info: oklch(55% 0.09 232);
   --color-info-content: oklch(98% 0.01 226);
   --color-success: oklch(62% 0.14 150);
   --color-success-content: oklch(98% 0.01 150);
@@ -47,6 +47,11 @@ html {
 
 body {
   min-height: 100vh;
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--color-base-300), transparent 82%) 1px, transparent 1px),
+    linear-gradient(180deg, color-mix(in oklch, var(--color-base-300), transparent 84%) 1px, transparent 1px),
+    var(--color-base-100);
+  background-size: 44px 44px;
 }
 
 :focus-visible {
@@ -62,4 +67,37 @@ body {
 
 .prose :where(h2, h3) {
   scroll-margin-top: 6rem;
+}
+
+.prose {
+  color: color-mix(in oklch, var(--color-base-content), transparent 8%);
+}
+
+.sketch-underline {
+  background-image: linear-gradient(transparent 72%, color-mix(in oklch, var(--color-primary), transparent 70%) 72%);
+}
+
+.illustration-slot::before,
+.illustration-slot::after {
+  content: "";
+  position: absolute;
+  border: 2px solid color-mix(in oklch, var(--color-primary), transparent 55%);
+  border-radius: 999px;
+  opacity: 0.65;
+}
+
+.illustration-slot::before {
+  width: 8rem;
+  height: 4rem;
+  right: -2rem;
+  top: 1.5rem;
+  transform: rotate(-12deg);
+}
+
+.illustration-slot::after {
+  width: 5rem;
+  height: 5rem;
+  left: -1.5rem;
+  bottom: -1.5rem;
+  transform: rotate(18deg);
 }

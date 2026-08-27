@@ -15,7 +15,7 @@ interface Props {
 const {
   title = site.title,
   description = site.description,
-  image = "/assets/portfolio-workspace.png",
+  image = "/assets/brand/sanfor-banner.png",
   type = "website",
   structuredData,
 } = Astro.props;
@@ -34,7 +34,8 @@ const defaultStructuredData = {
     name: site.author,
     url: site.url,
     sameAs: [site.github],
-    knowsAbout: ["Software engineering", "Cybersecurity", "Web development", "Programming education"],
+    alternateName: site.handle,
+    knowsAbout: ["Full stack software engineering", "Backend systems", "API design", "Automation", "Cybersecurity"],
   },
 };
 ---
@@ -46,6 +47,7 @@ const defaultStructuredData = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical.href} />
     <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
     <meta property="og:title" content={pageTitle} />

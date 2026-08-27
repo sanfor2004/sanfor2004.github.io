@@ -1,6 +1,6 @@
 # sanfor2004.github.io
 
-Personal portfolio and technical blog for `sanfor2004`, built with Astro, Tailwind CSS 4, and daisyUI 5 for free hosting on GitHub Pages.
+Personal portfolio and technical blog for `sanfor2004`, built with Astro, Tailwind CSS 4, and daisyUI 5 for free hosting on GitHub Pages. The current design uses the Sanfor brand identity from local approved assets and leaves clearly labeled illustration slots for future original artwork.
 
 ## What Is Included
 
@@ -9,7 +9,9 @@ Personal portfolio and technical blog for `sanfor2004`, built with Astro, Tailwi
 - A first project writeup for 360 Vision based on defensible project facts.
 - RSS feed, sitemap integration, robots.txt, canonical URLs, Open Graph metadata, and structured data.
 - GitHub Actions workflow for deploying the `main` branch to GitHub Pages.
-- Placeholder contact and bio content that should be edited before public promotion.
+- Sanfor logo, favicon, and brand banner assets copied into `public/`.
+- Editable blank illustration slots for future original artwork.
+- Public contact links only; direct private contact details should be added only when intentionally approved for this site.
 
 ## Local Development
 
@@ -70,9 +72,10 @@ Optional fields include `updatedDate`, `demo`, and `draft`.
 
 ## Edit Site Details
 
-- Update site-wide title, description, GitHub URL, and placeholder contact links in `src/site.ts`.
-- Replace placeholder biography text in `src/pages/about.astro`.
-- Replace `public/assets/portfolio-workspace.png` if you want a different hero or Open Graph image.
+- Update site-wide title, description, GitHub URL, and public contact links in `src/site.ts`.
+- Edit biography and experience text in `src/pages/about.astro`.
+- Replace illustration slots by editing `src/components/IllustrationSlot.astro` usage across the pages.
+- Replace `public/assets/brand/sanfor-banner.png` if you want a different Open Graph image.
 
 ## GitHub Pages
 

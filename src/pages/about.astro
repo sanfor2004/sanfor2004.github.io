@@ -1,37 +1,50 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import IllustrationSlot from "../components/IllustrationSlot.astro";
 ---
 
-<BaseLayout title="About" description="About sanfor2004 and the purpose of this software engineering and cybersecurity portfolio.">
+<BaseLayout title="About" description="About Ahmed Abdelaziz Hanafy, known as Sanfor, and his full stack software engineering background.">
   <section class="bg-base-200 py-16">
-    <div class="container-page max-w-4xl">
-      <div class="breadcrumbs text-sm">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li>About</li>
-        </ul>
+    <div class="container-page grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+      <div>
+        <div class="breadcrumbs text-sm">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li>About</li>
+          </ul>
+        </div>
+        <h1 class="mt-8 text-5xl font-bold">Ahmed Abdelaziz Hanafy</h1>
+        <p class="mt-4 text-xl text-base-content/75">Sanfor: full stack software engineer, systems builder, UI/UX thinker, and illustrator.</p>
       </div>
-      <h1 class="mt-8 text-4xl font-bold">About sanfor2004</h1>
-      <div class="prose mt-8 max-w-none">
+      <img class="w-full rounded-box border border-base-300 bg-base-100 shadow-sm" src="/assets/brand/sanfor-banner.png" alt="Sanfor illustrated brand banner" width="1280" height="336" />
+    </div>
+  </section>
+
+  <section class="bg-base-100 py-16">
+    <div class="container-page grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
+      <IllustrationSlot label="Alexandria/location sketch" note="Future Alexandria, Egypt line sketch or location-inspired drawing." />
+      <div class="prose max-w-none">
         <p>
-          This is a personal portfolio and technical blog focused on software engineering, cybersecurity, and programming education.
+          Ahmed started coding at 13 and has worked across JavaScript, PHP, Python, Go, Java, and low-level systems programming. He also works with UI/UX in Figma and brings an illustrator's eye to interface design.
         </p>
         <p>
-          Replace this section with a short public bio when ready. Keep it factual: preferred name, location if public, current role or study path, interests, and the kind of work you want to be known for.
+          His public portfolio direction is full stack software engineering with strong emphasis on backend/API systems, automation, product engineering, databases, and practical security.
         </p>
-        <h2>Current Focus</h2>
-        <ul>
-          <li>Building practical web applications with clear data models and strong user flows.</li>
-          <li>Learning and documenting cybersecurity fundamentals responsibly.</li>
-          <li>Teaching programming concepts through small, reproducible examples.</li>
-        </ul>
-        <h2>Placeholder Details To Edit</h2>
-        <ul>
-          <li>Name: [Add preferred public name]</li>
-          <li>Location: [Add location only if you want it public]</li>
-          <li>Availability: [Add freelance, internship, job search, or collaboration status]</li>
-          <li>Résumé: [Add a PDF link when available]</li>
-        </ul>
+        <h2>Professional Experience</h2>
+        <p>
+          At Skylimit LLC, Ahmed worked as a Full Stack Software Engineer from December 2022 to February 2026, building lead-generation, messaging, payment, reporting, IVR, and school collaboration systems.
+        </p>
+        <p>
+          As a Junior Software Engineer on Fiverr from March 2021 to December 2022, he delivered custom software, automation, and consulting projects for international clients.
+        </p>
+        <h2>Education</h2>
+        <p>
+          Ahmed is pursuing a Bachelor's Degree in Business Information Systems at Alexandria University, with public study interests around databases, system architecture, corporate solutions, and workflow automation.
+        </p>
+        <h2>Tools And Interests</h2>
+        <p>
+          Publicly listed areas include Laravel, Django, React, Node.js, Three.js, databases, Docker, Git, cloud platforms, REST APIs, WebSockets, OAuth, UI/UX, information security, drawing, SaaS development, and product development.
+        </p>
       </div>
     </div>
   </section>

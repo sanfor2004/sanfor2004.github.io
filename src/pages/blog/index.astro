@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import IllustrationSlot from "../../components/IllustrationSlot.astro";
 import PostCard from "../../components/PostCard.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -27,8 +28,11 @@ const categories = [...new Set(posts.map((post) => post.data.category))].sort();
           {categories.map((category) => <span class="badge badge-soft">{category}</span>)}
         </div>
       </div>
-      <div class="mt-10 grid gap-6 lg:grid-cols-2">
-        {posts.map((post) => <PostCard entry={post} basePath="/blog" />)}
+      <div class="mt-10 grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
+        <IllustrationSlot label="Blog notebook sketch" note="Future notebook, code margin, or tutorial diagram illustration." />
+        <div class="grid gap-6">
+          {posts.map((post) => <PostCard entry={post} basePath="/blog" />)}
+        </div>
       </div>
     </div>
   </section>

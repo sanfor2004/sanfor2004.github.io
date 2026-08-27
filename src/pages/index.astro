@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import IllustrationSlot from "../components/IllustrationSlot.astro";
 import PostCard from "../components/PostCard.astro";
 import { site } from "../site";
 
@@ -10,52 +11,75 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const strengths = [
+  ["Backend and APIs", "REST, WebSockets, webhooks, auth, data modeling, and resilient integrations."],
+  ["Automation", "Business workflows, lead systems, messaging, payments, and reporting pipelines."],
+  ["Product UI", "Interfaces designed with an illustrator's sense for clarity, rhythm, and visual hierarchy."],
+  ["Security", "Authentication, upload validation, visibility rules, and responsible cybersecurity learning."],
+];
 ---
 
-<BaseLayout title="Software Engineering and Cybersecurity Portfolio" description={site.description}>
-  <section class="hero min-h-[calc(100vh-4rem)] bg-base-200" style="background-image: linear-gradient(90deg, color-mix(in oklch, var(--color-base-100), transparent 6%) 0%, color-mix(in oklch, var(--color-base-100), transparent 18%) 43%, color-mix(in oklch, var(--color-neutral), transparent 54%) 100%), url('/assets/portfolio-workspace.png'); background-position: center; background-size: cover;">
-    <div class="hero-content container-page justify-start px-0 py-20">
-      <div class="max-w-2xl">
-        <p class="mb-4 font-medium uppercase tracking-wide text-primary">Personal portfolio and technical blog</p>
-        <h1 class="text-balance text-5xl font-bold leading-tight sm:text-6xl">sanfor2004</h1>
-        <p class="mt-6 max-w-xl text-lg leading-8 text-base-content/80">
-          Software engineering and cybersecurity notes, project writeups, and practical programming resources. This site is intentionally content-first so each project and lesson can become durable public evidence.
+<BaseLayout title="Full Stack Software Engineer" description={site.description}>
+  <section class="bg-base-100">
+    <div class="container-page grid min-h-[calc(100vh-4rem)] gap-12 py-16 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+      <div>
+        <p class="font-semibold uppercase tracking-wide text-primary">Full Stack Software Engineer</p>
+        <h1 class="mt-5 max-w-4xl text-balance text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl">
+          Ahmed Abdelaziz Hanafy builds <span class="sketch-underline">backend systems</span>, automation, and precise product interfaces.
+        </h1>
+        <p class="mt-7 max-w-2xl text-lg leading-8 text-base-content/75">
+          Known online as Sanfor, Ahmed works across JavaScript, PHP, Python, Go, Java, databases, cloud tools, and UI/UX. Cybersecurity is a serious secondary skill area: useful because good systems should be reliable, understandable, and harder to misuse.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a class="btn btn-primary" href="/projects/">View projects</a>
-          <a class="btn" href="/blog/">Read the blog</a>
+          <a class="btn btn-primary" href="/projects/">Explore projects</a>
+          <a class="btn" href="/about/">Read profile</a>
+          <a class="btn btn-ghost" href="/blog/">Technical writing</a>
         </div>
+      </div>
+      <div class="grid gap-5">
+        <img class="w-full rounded-box border border-base-300 bg-base-100 shadow-sm" src="/assets/brand/sanfor-banner.png" alt="Sanfor brand banner with orange illustrated marks" width="1280" height="336" />
+        <IllustrationSlot label="Hero self/workspace illustration" note="Future hand-drawn portrait, desk, or coding workspace illustration goes here." />
       </div>
     </div>
   </section>
 
+  <section class="bg-base-200 py-12">
+    <div class="container-page">
+      <IllustrationSlot label="Hand-drawn connector/divider" note="Add a slim orange line, arrow, or illustrated transition between sections." />
+    </div>
+  </section>
+
   <section class="bg-base-100 py-16">
-    <div class="container-page grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-      <div>
-        <p class="font-medium text-primary">Focus</p>
-        <h2 class="mt-3 text-3xl font-semibold">Building, securing, and explaining software.</h2>
+    <div class="container-page">
+      <div class="max-w-3xl">
+        <p class="font-semibold uppercase tracking-wide text-primary">Engineering posture</p>
+        <h2 class="mt-3 text-4xl font-semibold">Systems thinking, practical delivery, and a designer's eye.</h2>
       </div>
-      <div class="grid gap-4 sm:grid-cols-3">
-        {["Web applications", "Security fundamentals", "Programming education"].map((item) => (
-          <div class="rounded-box border border-base-300 bg-base-200 p-5">
-            <h3 class="font-semibold">{item}</h3>
-            <p class="mt-2 text-sm leading-6 text-base-content/70">Placeholder area for deeper personal positioning and examples.</p>
-          </div>
+      <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {strengths.map(([title, description]) => (
+          <article class="card card-border bg-base-100">
+            <div class="card-body gap-4">
+              <IllustrationSlot label="Project-type sketch" note={`Sketch cue for ${title}.`} />
+              <div>
+                <h3 class="card-title text-xl">{title}</h3>
+                <p class="mt-2 text-sm leading-6 text-base-content/70">{description}</p>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="bg-base-200 py-16">
-    <div class="container-page">
-      <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p class="font-medium text-primary">Projects</p>
-          <h2 class="mt-3 text-3xl font-semibold">Featured work</h2>
-        </div>
-        <a class="btn" href="/projects/">All projects</a>
+  <section class="bg-neutral py-16 text-neutral-content">
+    <div class="container-page grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+      <div>
+        <p class="font-semibold uppercase tracking-wide text-primary">Selected proof</p>
+        <h2 class="mt-3 text-4xl font-semibold">Featured work</h2>
+        <p class="mt-4 text-neutral-content/70">Project pages should explain the problem, architecture, tradeoffs, and security considerations without oversharing private details.</p>
       </div>
-      <div class="grid gap-6 lg:grid-cols-2">
+      <div class="grid gap-6">
         {projects.slice(0, 2).map((project) => <PostCard entry={project} basePath="/projects" />)}
       </div>
     </div>
@@ -64,9 +88,12 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   <section class="bg-base-100 py-16">
     <div class="container-page grid gap-10 lg:grid-cols-[1fr_1fr]">
       <div>
-        <p class="font-medium text-primary">Latest writing</p>
-        <h2 class="mt-3 text-3xl font-semibold">Programming notes that teach by building.</h2>
-        <p class="mt-4 text-base-content/75">Use posts for tutorials, project logs, cybersecurity study notes, and debugging writeups.</p>
+        <p class="font-semibold uppercase tracking-wide text-primary">Technical blog</p>
+        <h2 class="mt-3 text-4xl font-semibold">Notes that teach by building.</h2>
+        <p class="mt-4 text-base-content/75">Use the blog for tutorials, build logs, automation notes, backend patterns, and security learning reflections.</p>
+        <div class="mt-8">
+          <IllustrationSlot label="Blog notebook sketch" note="Future notebook, diagram, or margin-note illustration for writing pages." />
+        </div>
       </div>
       <div class="grid gap-6">
         {posts.slice(0, 2).map((post) => <PostCard entry={post} basePath="/blog" />)}
@@ -74,16 +101,17 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     </div>
   </section>
 
-  <section class="bg-neutral py-16 text-neutral-content">
-    <div class="container-page grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center">
+  <section class="bg-base-200 py-16">
+    <div class="container-page grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
       <div>
-        <h2 class="text-3xl font-semibold">Start with the editable placeholders.</h2>
-        <p class="mt-4 text-neutral-content/75">Replace contact details, add project links, and expand the about page as real public details are ready.</p>
+        <p class="font-semibold uppercase tracking-wide text-primary">Now editable</p>
+        <h2 class="mt-3 text-3xl font-semibold">Replace the illustration slots as original artwork becomes ready.</h2>
+        <p class="mt-4 text-base-content/75">The site is built to hold Sanfor's own illustrations later: each blank frame has a clear label and can be swapped for an image component without changing the content model.</p>
       </div>
-      <div class="mockup-code bg-base-100 text-base-content">
-        <pre data-prefix="$"><code>npm install</code></pre>
+      <div class="mockup-code bg-neutral text-neutral-content">
         <pre data-prefix="$"><code>npm run dev</code></pre>
-        <pre data-prefix="$"><code>add Markdown in src/content</code></pre>
+        <pre data-prefix="$"><code>edit src/content/projects</code></pre>
+        <pre data-prefix="$"><code>edit src/content/blog</code></pre>
       </div>
     </div>
   </section>

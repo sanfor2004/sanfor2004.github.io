@@ -1,30 +1,41 @@
 ---
+import IllustrationSlot from "./IllustrationSlot.astro";
 import { navItems, site } from "../site";
 ---
 
-<footer class="footer sm:footer-horizontal border-t border-base-300 bg-base-200 p-10 text-base-content">
-  <aside>
-    <div class="inline-flex size-10 items-center justify-center rounded-sm bg-neutral font-semibold text-neutral-content">S</div>
-    <p>
-      <strong>{site.title}</strong>
-      <br />
-      Software engineering, cybersecurity, and practical programming notes.
-    </p>
-  </aside>
-  <nav>
-    <h2 class="footer-title">Site</h2>
-    {navItems.map((item) => <a class="link link-hover" href={item.href}>{item.label}</a>)}
-  </nav>
-  <nav>
-    <h2 class="footer-title">Feeds</h2>
-    <a class="link link-hover" href="/rss.xml">RSS</a>
-    <a class="link link-hover" href="/sitemap-index.xml">Sitemap</a>
-    <a class="link link-hover" href="/robots.txt">Robots</a>
-  </nav>
-  <nav>
-    <h2 class="footer-title">Contact</h2>
-    {site.contactPlaceholders.map((item) => (
-      <a class="link link-hover" href={item.href} rel="noopener noreferrer">{item.label}</a>
-    ))}
-  </nav>
+<footer class="border-t border-base-300 bg-neutral text-neutral-content">
+  <div class="container-page grid gap-10 py-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <div>
+      <img class="h-10 w-auto brightness-0 invert" src="/assets/brand/logo.svg" alt="" width="56" height="38" />
+      <h2 class="mt-6 max-w-xl text-3xl font-semibold">Engineering systems with the eye of an illustrator.</h2>
+      <p class="mt-4 max-w-xl text-neutral-content/70">Sanfor is Ahmed Abdelaziz Hanafy: full stack software engineer, backend/API builder, automation problem solver, and illustrator.</p>
+    </div>
+    <IllustrationSlot tone="dark" label="Footer signature" note="Add a hand-drawn Sanfor signature or small personal mark here." />
+  </div>
+  <div class="footer sm:footer-horizontal container-page border-t border-neutral-content/15 py-10">
+    <aside>
+      <div class="inline-flex size-10 items-center justify-center rounded-sm bg-primary font-semibold text-primary-content">S</div>
+      <p>
+        <strong>{site.title}</strong>
+        <br />
+        Full stack software engineering, automation, and security notes.
+      </p>
+    </aside>
+    <nav>
+      <h2 class="footer-title">Site</h2>
+      {navItems.map((item) => <a class="link link-hover" href={item.href}>{item.label}</a>)}
+    </nav>
+    <nav>
+      <h2 class="footer-title">Feeds</h2>
+      <a class="link link-hover" href="/rss.xml">RSS</a>
+      <a class="link link-hover" href="/sitemap-index.xml">Sitemap</a>
+      <a class="link link-hover" href="/robots.txt">Robots</a>
+    </nav>
+    <nav>
+      <h2 class="footer-title">Contact</h2>
+      {site.contactPlaceholders.map((item) => (
+        <a class="link link-hover" href={item.href} rel="noopener noreferrer">{item.label}</a>
+      ))}
+    </nav>
+  </div>
 </footer>

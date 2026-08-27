@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import IllustrationSlot from "../../components/IllustrationSlot.astro";
 import PostCard from "../../components/PostCard.astro";
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
@@ -19,10 +20,13 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
       </div>
       <div class="mt-8 max-w-3xl">
         <h1 class="text-4xl font-bold">Projects</h1>
-        <p class="mt-4 text-lg text-base-content/75">Documented software projects, decisions, risks, and next improvements.</p>
+        <p class="mt-4 text-lg text-base-content/75">Documented software projects, backend decisions, automation work, security notes, and next improvements.</p>
       </div>
-      <div class="mt-10 grid gap-6 lg:grid-cols-2">
-        {projects.map((project) => <PostCard entry={project} basePath="/projects" />)}
+      <div class="mt-10 grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
+        <IllustrationSlot label="Project-type sketches" note="Add small drawings for APIs, automation, dashboards, tools, and security utilities." />
+        <div class="grid gap-6">
+          {projects.map((project) => <PostCard entry={project} basePath="/projects" />)}
+        </div>
       </div>
     </div>
   </section>
