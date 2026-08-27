@@ -1,0 +1,26 @@
+---
+interface Props {
+  label: string;
+  note?: string;
+  tone?: "light" | "dark";
+}
+
+const { label, note = "Replace with original Sanfor illustration.", tone = "light" } = Astro.props;
+const isDark = tone === "dark";
+---
+
+<div class:list={[
+  "illustration-slot relative overflow-hidden rounded-box border-2 border-dashed p-6",
+  isDark ? "border-neutral-content/35 bg-neutral-content/5 text-neutral-content" : "border-primary/35 bg-base-100 text-base-content",
+]}>
+  <div class="absolute inset-x-8 top-7 h-px bg-current opacity-15"></div>
+  <div class="absolute bottom-7 left-8 right-8 h-px bg-current opacity-15"></div>
+  <div class="absolute left-7 top-8 bottom-8 w-px bg-current opacity-15"></div>
+  <div class="absolute right-7 top-8 bottom-8 w-px bg-current opacity-15"></div>
+  <div class="relative z-10 grid min-h-44 place-items-center text-center">
+    <div>
+      <p class="font-semibold uppercase tracking-wide text-primary">{label}</p>
+      <p class:list={["mt-3 text-sm leading-6", isDark ? "text-neutral-content/70" : "text-base-content/65"]}>{note}</p>
+    </div>
+  </div>
+</div>
