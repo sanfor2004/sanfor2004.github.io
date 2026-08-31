@@ -1,4 +1,7 @@
 ---
+import { ClientRouter } from "astro:transitions";
+import AsciiSignal from "../components/AsciiSignal.astro";
+import MusicPlayer from "../components/MusicPlayer.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import "../styles.css";
@@ -23,6 +26,7 @@ const {
 const canonical = new URL(Astro.url.pathname, site.url);
 const pageTitle = title === site.title ? site.title : `${title} | ${site.title}`;
 const imageUrl = new URL(image, site.url);
+const isHome = Astro.url.pathname === "/";
 const defaultStructuredData = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
@@ -35,7 +39,8 @@ const defaultStructuredData = {
     url: site.url,
     sameAs: [site.github],
     alternateName: site.handle,
-    knowsAbout: ["Full stack software engineering", "Backend systems", "API design", "Automation", "Cybersecurity"],
+    jobTitle: site.identity,
+    knowsAbout: ["Systems programming", "Backend engineering", "Linux", "Networking", "C and C++", "Performance", "Software architecture", "Security fundamentals"],
   },
 };
 ---
@@ -60,13 +65,16 @@ const defaultStructuredData = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl.href} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData ?? defaultStructuredData)} />
+    <ClientRouter />
     <title>{pageTitle}</title>
   </head>
-  <body class="bg-base-100 text-base-content antialiased">
-    <SiteHeader />
+  <body class="site-shell antialiased">
+    {!isHome && <SiteHeader />}
     <main id="content">
       <slot />
     </main>
+    <MusicPlayer />
+    <AsciiSignal />
     <SiteFooter />
   </body>
 </html>

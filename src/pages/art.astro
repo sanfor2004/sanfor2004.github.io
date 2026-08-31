@@ -1,0 +1,51 @@
+---
+import AsciiLabel from "../components/AsciiLabel.astro";
+import SiteGrid from "../components/SiteGrid.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const artworks = [
+  { src: "/images/art/gallery/lameees.png", title: "Lameees / portrait", shape: "tall", alt: "Original anime-style digital portrait of a brown-haired character with Pikachu ears and green clothing." },
+  { src: "/images/art/gallery/charmeleon.png", title: "Charmeleon study", shape: "tall", alt: "Original digital fan-art drawing of Charmeleon with an orange flaming tail on a dark gray background." },
+  { src: "/images/art/gallery/lameees-2.png", title: "Lameees / wink", shape: "square", alt: "Original anime-style digital portrait of a brown-haired character with Pikachu ears, winking." },
+  { src: "/images/art/gallery/flower.png", title: "Orange bloom", shape: "square", alt: "Original digital drawing of a bright orange five-petal flower with a green stem." },
+  { src: "/images/art/gallery/bulbasaur.png", title: "Bulbasaur / garden cap", shape: "square", alt: "Original digital drawing of Bulbasaur wearing a dark green hat with a white flower." },
+  { src: "/images/art/gallery/butterflyfree.png", title: "Butterfly creature", shape: "square", alt: "Original digital drawing of a purple butterfly-inspired creature with pink antennae and blue details." },
+  { src: "/images/art/gallery/pidgey.png", title: "Pidgey / call", shape: "square", alt: "Original digital drawing of Pidgey with an open beak and layered brown feathers." },
+  { src: "/images/art/gallery/wartortle.png", title: "Wartortle / focus", shape: "square", alt: "Original digital drawing of Wartortle with blue ears and determined eyes." },
+  { src: "/images/art/gallery/gum.jpg", title: "Violet portrait", shape: "square", alt: "Original chibi-style digital portrait of a purple-haired character with closed eyes and pink cheeks." },
+  { src: "/images/art/gallery/rattata.png", title: "Rattata / run", shape: "square", alt: "Original digital drawing of a purple Rattata in a crouching pose." },
+  { src: "/images/art/gallery/kakuna.png", title: "Kakuna study", shape: "square", alt: "Original digital drawing of Kakuna, a yellow cocoon-like creature, on a white background." },
+  { src: "/images/art/gallery/tiger.png", title: "Tiger / line study", shape: "wide", alt: "Original golden line-art drawing of a tiger head on a transparent background." },
+  { src: "/images/art/gallery/hand.png", title: "Hands and orb", shape: "full", alt: "Original digital drawing of yellow cartoon hands holding a pale orb." },
+];
+---
+
+<BaseLayout
+  title="Art"
+  description="Original drawings, character studies, and digital fan art by Ahmed Abdelaziz."
+>
+  <SiteGrid as="section" class="art-page" aria-labelledby="art-title">
+    <div class="art-page__inner container-page">
+      <header class="art-page__header">
+        <AsciiLabel text="personal drawing archive" mark="06" />
+        <h1 id="art-title">My <em>art.</em></h1>
+        <p>A small collection of the characters, studies, and sketches I make away from the keyboard.</p>
+      </header>
+
+      <div class="art-gallery" aria-label="Original art gallery">
+        {artworks.map((art, index) => (
+          <figure class:list={["art-card", `art-card--${art.shape}`]}>
+            <div class="art-card__image">
+              <img src={art.src} alt={art.alt} loading={index < 3 ? "eager" : "lazy"} decoding="async" />
+              <span>MY ART / {String(index + 1).padStart(2, "0")}</span>
+            </div>
+            <figcaption>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{art.title}</strong>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </SiteGrid>
+</BaseLayout>

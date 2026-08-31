@@ -1,0 +1,15 @@
+---
+interface Props {
+  text: string;
+  mark?: string;
+  as?: "p" | "span";
+}
+
+const { text, mark = "::", as = "p" } = Astro.props as Props;
+const Tag = as;
+---
+
+<Tag class="ascii-label">
+  <span aria-hidden="true">{mark}</span>
+  {text}
+</Tag>

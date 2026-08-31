@@ -1,5 +1,5 @@
 ---
-const { tags = [] } = Astro.props;
+const { tags = [], linked = true } = Astro.props;
 ---
 
 {
@@ -7,7 +7,11 @@ const { tags = [] } = Astro.props;
     <ul class="flex flex-wrap gap-2" aria-label="Tags">
       {tags.map((tag: string) => (
         <li>
-          <a class="badge badge-outline badge-sm" href={`/tags/${tag.toLowerCase().replaceAll(" ", "-")}/`}>{tag}</a>
+          {linked ? (
+            <a class="badge badge-outline badge-sm" href={`/tags/${tag.toLowerCase().replaceAll(" ", "-")}/`}>{tag}</a>
+          ) : (
+            <span class="badge badge-outline badge-sm">{tag}</span>
+          )}
         </li>
       ))}
     </ul>

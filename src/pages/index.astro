@@ -1,118 +1,51 @@
 ---
-import { getCollection } from "astro:content";
+import AsciiLabel from "../components/AsciiLabel.astro";
+import SiteGrid from "../components/SiteGrid.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import IllustrationSlot from "../components/IllustrationSlot.astro";
-import PostCard from "../components/PostCard.astro";
-import { site } from "../site";
+import { navItems, site } from "../site";
 
-const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-
-const strengths = [
-  ["Backend and APIs", "REST, WebSockets, webhooks, auth, data modeling, and resilient integrations."],
-  ["Automation", "Business workflows, lead systems, messaging, payments, and reporting pipelines."],
-  ["Product UI", "Interfaces designed with an illustrator's sense for clarity, rhythm, and visual hierarchy."],
-  ["Security", "Authentication, upload validation, visibility rules, and responsible cybersecurity learning."],
-];
+const focusAreas = ["Systems programming", "Linux", "Backend architecture", "Networking", "Performance"];
 ---
 
-<BaseLayout title="Full Stack Software Engineer" description={site.description}>
-  <section class="bg-base-100">
-    <div class="container-page grid min-h-[calc(100vh-4rem)] gap-12 py-16 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
-      <div>
-        <p class="font-semibold uppercase tracking-wide text-primary">Full Stack Software Engineer</p>
-        <h1 class="mt-5 max-w-4xl text-balance text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl">
-          Ahmed Abdelaziz Hanafy builds <span class="sketch-underline">backend systems</span>, automation, and precise product interfaces.
-        </h1>
-        <p class="mt-7 max-w-2xl text-lg leading-8 text-base-content/75">
-          Known online as Sanfor, Ahmed works across JavaScript, PHP, Python, Go, Java, databases, cloud tools, and UI/UX. Cybersecurity is a serious secondary skill area: useful because good systems should be reliable, understandable, and harder to misuse.
-        </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a class="btn btn-primary" href="/projects/">Explore projects</a>
-          <a class="btn" href="/about/">Read profile</a>
-          <a class="btn btn-ghost" href="/blog/">Technical writing</a>
+<BaseLayout title={site.title} description={site.description}>
+  <a class="skip-link" href="#home-navigation">Skip to navigation</a>
+
+  <SiteGrid as="section" class="home-landing" aria-label="Sanfor portfolio entrance">
+    <div class="home-landing__inner container-page">
+      <header class="home-landing__meta">
+        <AsciiLabel text="index" mark="01" />
+        <p>{site.url.replace("https://", "")}</p>
+      </header>
+
+      <div class="home-hero">
+        <p class="home-hero__kicker">Software systems / backend / low-level notes</p>
+        <h1>SANFOR</h1>
+
+        <div class="home-hero__identity">
+          <img src="/assets/brand/logo.svg" alt="" width="56" height="38" />
+          <div>
+            <p>{site.identity}</p>
+            <ul aria-label="Engineering focus areas">
+              {focusAreas.map((area) => <li>{area}</li>)}
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="grid gap-5">
-        <img class="w-full rounded-box border border-base-300 bg-base-100 shadow-sm" src="/assets/brand/sanfor-banner.png" alt="Sanfor brand banner with orange illustrated marks" width="1280" height="336" />
-        <IllustrationSlot label="Hero self/workspace illustration" note="Future hand-drawn portrait, desk, or coding workspace illustration goes here." />
-      </div>
-    </div>
-  </section>
 
-  <section class="bg-base-200 py-12">
-    <div class="container-page">
-      <IllustrationSlot label="Hand-drawn connector/divider" note="Add a slim orange line, arrow, or illustrated transition between sections." />
-    </div>
-  </section>
-
-  <section class="bg-base-100 py-16">
-    <div class="container-page">
-      <div class="max-w-3xl">
-        <p class="font-semibold uppercase tracking-wide text-primary">Engineering posture</p>
-        <h2 class="mt-3 text-4xl font-semibold">Systems thinking, practical delivery, and a designer's eye.</h2>
-      </div>
-      <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {strengths.map(([title, description]) => (
-          <article class="card card-border bg-base-100">
-            <div class="card-body gap-4">
-              <IllustrationSlot label="Project-type sketch" note={`Sketch cue for ${title}.`} />
-              <div>
-                <h3 class="card-title text-xl">{title}</h3>
-                <p class="mt-2 text-sm leading-6 text-base-content/70">{description}</p>
-              </div>
-            </div>
-          </article>
+      <nav id="home-navigation" class="home-directory" aria-label="Primary destinations">
+        {navItems.map((item, index) => (
+          <a href={item.href}>
+            <span>{String(index + 1).padStart(2, "0")} /</span>
+            {item.label}
+          </a>
         ))}
-      </div>
-    </div>
-  </section>
+      </nav>
 
-  <section class="bg-neutral py-16 text-neutral-content">
-    <div class="container-page grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-      <div>
-        <p class="font-semibold uppercase tracking-wide text-primary">Selected proof</p>
-        <h2 class="mt-3 text-4xl font-semibold">Featured work</h2>
-        <p class="mt-4 text-neutral-content/70">Project pages should explain the problem, architecture, tradeoffs, and security considerations without oversharing private details.</p>
-      </div>
-      <div class="grid gap-6">
-        {projects.slice(0, 2).map((project) => <PostCard entry={project} basePath="/projects" />)}
+      <div class="home-status" aria-label="Site status">
+        <p>:: sanfor2004.github.io</p>
+        <p>Linux / networking / performance</p>
+        <p>writing / projects / art / contact</p>
       </div>
     </div>
-  </section>
-
-  <section class="bg-base-100 py-16">
-    <div class="container-page grid gap-10 lg:grid-cols-[1fr_1fr]">
-      <div>
-        <p class="font-semibold uppercase tracking-wide text-primary">Technical blog</p>
-        <h2 class="mt-3 text-4xl font-semibold">Notes that teach by building.</h2>
-        <p class="mt-4 text-base-content/75">Use the blog for tutorials, build logs, automation notes, backend patterns, and security learning reflections.</p>
-        <div class="mt-8">
-          <IllustrationSlot label="Blog notebook sketch" note="Future notebook, diagram, or margin-note illustration for writing pages." />
-        </div>
-      </div>
-      <div class="grid gap-6">
-        {posts.slice(0, 2).map((post) => <PostCard entry={post} basePath="/blog" />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-base-200 py-16">
-    <div class="container-page grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-      <div>
-        <p class="font-semibold uppercase tracking-wide text-primary">Now editable</p>
-        <h2 class="mt-3 text-3xl font-semibold">Replace the illustration slots as original artwork becomes ready.</h2>
-        <p class="mt-4 text-base-content/75">The site is built to hold Sanfor's own illustrations later: each blank frame has a clear label and can be swapped for an image component without changing the content model.</p>
-      </div>
-      <div class="mockup-code bg-neutral text-neutral-content">
-        <pre data-prefix="$"><code>npm run dev</code></pre>
-        <pre data-prefix="$"><code>edit src/content/projects</code></pre>
-        <pre data-prefix="$"><code>edit src/content/blog</code></pre>
-      </div>
-    </div>
-  </section>
+  </SiteGrid>
 </BaseLayout>

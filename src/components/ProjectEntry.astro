@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  index: number;
+  featured?: boolean;
+}
+
+const { project, index, featured = false } = Astro.props as Props;
+const slug = project.id.replace(/\.mdx?$/, "");
+const year = project.data.pubDate.getFullYear();
+const stackPreview = project.data.stack.slice(0, 4);
+---
+
+<article class:list={["project-entry", { "project-entry--featured": featured }]}>
+  <a class="project-entry__main" href={`/projects/${slug}/`}>
+    <div class="project-entry__topline">
+      <span class="project-entry__index">{featured ? "Featured project" : String(index + 1).padStart(2, "0")}</span>
+      <span>{year} · {project.data.status}</span>
+    </div>
+    <div class="project-entry__title">
+      <h2>{project.data.title}</h2>
+      <p>{project.data.role}</p>
+    </div>
+    <p class="project-entry__description">{project.data.description}</p>
+    <span class="project-entry__arrow" aria-hidden="true">↗</span>
+  </a>
+  <div class="project-entry__bottom">
+    <ul aria-label={`${project.data.title} stack`}>
+      {stackPreview.map((item) => <li>[{item}]</li>)}
+      {project.data.stack.length > stackPreview.length && <li>[+{project.data.stack.length - stackPreview.length}]</li>}
+    </ul>
+    <nav aria-label={`${project.data.title} links`}>
+      {project.data.repo && <a href={project.data.repo} rel="noopener noreferrer">GitHub -></a>}
+      {project.data.demo && <a href={project.data.demo} rel="noopener noreferrer">Live -></a>}
+      <a href={`/projects/${slug}/`}>Case study -></a>
+    </nav>
+  </div>
+</article>

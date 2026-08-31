@@ -1,0 +1,184 @@
+---
+import { musicTracks } from "../music";
+
+const tracks = JSON.stringify(musicTracks);
+const hasTracks = musicTracks.length > 0;
+---
+
+<aside class="music-player" data-music-player data-tracks={tracks} aria-label="Persistent music player" transition:persist>
+  <div class="music-player__inner container-page">
+    <audio data-audio preload="metadata"></audio>
+
+    <div class="music-player__controls" aria-label="Playback controls">
+      <button type="button" data-prev aria-label="Previous track" disabled={!hasTracks}>PREV</button>
+      <button type="button" data-play aria-label="Play music" disabled={!hasTracks}>PLAY</button>
+      <button type="button" data-next aria-label="Next track" disabled={!hasTracks}>NEXT</button>
+    </div>
+
+    <div class="music-player__track">
+      <p data-track-title>{hasTracks ? musicTracks[0].title : "No tracks configured"}</p>
+      <span data-track-meta>{hasTracks ? (musicTracks[0].artist ?? "Custom site audio") : "Add audio files in public/audio and list them in src/music.ts"}</span>
+    </div>
+
+    <div class="music-player__timeline">
+      <span data-current>00:00</span>
+      <input data-progress type="range" min="0" max="1000" value="0" aria-label="Music progress" disabled={!hasTracks} />
+      <span data-duration>00:00</span>
+    </div>
+
+    <p class="music-player__visualizer" data-visualizer aria-hidden="true">| | | | | | | | | | | |</p>
+
+    <label class="music-player__volume">
+      <span>VOL</span>
+      <input data-volume type="range" min="0" max="1" step="0.01" value="0.72" aria-label="Music volume" disabled={!hasTracks} />
+    </label>
+  </div>
+</aside>
+
+<script>
+  const formatTime = (seconds: number) => {
+    if (!Number.isFinite(seconds)) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  };
+
+  const initMusicPlayer = () => {
+    const player = document.querySelector<HTMLElement>("[data-music-player]");
+    if (!player || player.dataset.ready === "true") return;
+    player.dataset.ready = "true";
+
+    const tracks = JSON.parse(player.dataset.tracks || "[]") as Array<{ title: string; artist?: string; src: string }>;
+    const audio = player.querySelector<HTMLAudioElement>("[data-audio]");
+    const playButton = player.querySelector<HTMLButtonElement>("[data-play]");
+    const prevButton = player.querySelector<HTMLButtonElement>("[data-prev]");
+    const nextButton = player.querySelector<HTMLButtonElement>("[data-next]");
+    const title = player.querySelector<HTMLElement>("[data-track-title]");
+    const meta = player.querySelector<HTMLElement>("[data-track-meta]");
+    const current = player.querySelector<HTMLElement>("[data-current]");
+    const duration = player.querySelector<HTMLElement>("[data-duration]");
+    const progress = player.querySelector<HTMLInputElement>("[data-progress]");
+    const volume = player.querySelector<HTMLInputElement>("[data-volume]");
+    const visualizer = player.querySelector<HTMLElement>("[data-visualizer]");
+
+    if (!audio || !playButton || !prevButton || !nextButton || !title || !meta || !current || !duration || !progress || !volume || !visualizer) return;
+
+    let trackIndex = Number(localStorage.getItem("sanfor.music.track") || 0);
+    if (!tracks[trackIndex]) trackIndex = 0;
+
+    const setDisabled = (disabled: boolean) => {
+      for (const control of [playButton, prevButton, nextButton, progress, volume]) {
+        control.disabled = disabled;
+      }
+    };
+
+    const renderTrack = () => {
+      const track = tracks[trackIndex];
+      if (!track) {
+        setDisabled(true);
+        return;
+      }
+
+      setDisabled(false);
+      audio.src = track.src;
+      title.textContent = track.title;
+      meta.textContent = track.artist || "Custom site audio";
+      progress.value = "0";
+      current.textContent = "00:00";
+      duration.textContent = "00:00";
+      localStorage.setItem("sanfor.music.track", String(trackIndex));
+    };
+
+    const updatePlaybackLabel = () => {
+      playButton.textContent = audio.paused ? "PLAY" : "PAUSE";
+      playButton.setAttribute("aria-label", audio.paused ? "Play music" : "Pause music");
+    };
+
+    const animateVisualizer = () => {
+      const frames = ["| | | | | | | | | | | |", "| || | ||| | || | |", "|| | |||| | ||| |", "| |||| || | |||| |"];
+      const tick = () => {
+        if (audio.paused) {
+          visualizer.textContent = frames[0];
+          return;
+        }
+        const frame = Math.floor(audio.currentTime * 8) % frames.length;
+        visualizer.textContent = frames[frame];
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    volume.value = localStorage.getItem("sanfor.music.volume") || "0.72";
+    audio.volume = Number(volume.value);
+
+    renderTrack();
+    updatePlaybackLabel();
+
+    playButton.addEventListener("click", async () => {
+      if (!tracks.length) return;
+      try {
+        if (audio.paused) {
+          await audio.play();
+          animateVisualizer();
+        } else {
+          audio.pause();
+        }
+        updatePlaybackLabel();
+      } catch {
+        audio.pause();
+        updatePlaybackLabel();
+      }
+    });
+
+    prevButton.addEventListener("click", () => {
+      if (!tracks.length) return;
+      trackIndex = (trackIndex - 1 + tracks.length) % tracks.length;
+      renderTrack();
+      updatePlaybackLabel();
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (!tracks.length) return;
+      trackIndex = (trackIndex + 1) % tracks.length;
+      renderTrack();
+      updatePlaybackLabel();
+    });
+
+    audio.addEventListener("loadedmetadata", () => {
+      duration.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      current.textContent = formatTime(audio.currentTime);
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+        progress.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
+      }
+    });
+
+    audio.addEventListener("ended", () => {
+      if (tracks.length < 2) {
+        updatePlaybackLabel();
+        return;
+      }
+      trackIndex = (trackIndex + 1) % tracks.length;
+      renderTrack();
+      audio.play().then(animateVisualizer).catch(updatePlaybackLabel);
+    });
+
+    progress.addEventListener("input", () => {
+      if (!Number.isFinite(audio.duration)) return;
+      audio.currentTime = (Number(progress.value) / 1000) * audio.duration;
+    });
+
+    volume.addEventListener("input", () => {
+      audio.volume = Number(volume.value);
+      localStorage.setItem("sanfor.music.volume", volume.value);
+    });
+  };
+
+  initMusicPlayer();
+  if (!(window as typeof window & { __sanforMusicBootstrapped?: boolean }).__sanforMusicBootstrapped) {
+    (window as typeof window & { __sanforMusicBootstrapped?: boolean }).__sanforMusicBootstrapped = true;
+    document.addEventListener("astro:page-load", initMusicPlayer);
+  }
+</script>

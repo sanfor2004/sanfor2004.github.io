@@ -1,33 +1,34 @@
 ---
 import { getCollection } from "astro:content";
+import AsciiLabel from "../../components/AsciiLabel.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import IllustrationSlot from "../../components/IllustrationSlot.astro";
-import PostCard from "../../components/PostCard.astro";
+import ProjectEntry from "../../components/ProjectEntry.astro";
+import SiteGrid from "../../components/SiteGrid.astro";
 
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
-<BaseLayout title="Projects" description="Project documentation and engineering writeups by sanfor2004.">
-  <section class="bg-base-200 py-16">
+<BaseLayout title="Projects" description="Engineering case studies, backend decisions, systems notes, and project writeups by sanfor2004.">
+  <SiteGrid as="section" class="projects-index">
     <div class="container-page">
-      <div class="breadcrumbs text-sm">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li>Projects</li>
-        </ul>
+      <div class="projects-index__lead">
+        <AsciiLabel text="projects" mark="02" />
+        <p class="projects-index__intro">
+          I build projects around real problems, then refine each system until it feels simple, useful, and reliable.
+        </p>
       </div>
-      <div class="mt-8 max-w-3xl">
-        <h1 class="text-4xl font-bold">Projects</h1>
-        <p class="mt-4 text-lg text-base-content/75">Documented software projects, backend decisions, automation work, security notes, and next improvements.</p>
-      </div>
-      <div class="mt-10 grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
-        <IllustrationSlot label="Project-type sketches" note="Add small drawings for APIs, automation, dashboards, tools, and security utilities." />
-        <div class="grid gap-6">
-          {projects.map((project) => <PostCard entry={project} basePath="/projects" />)}
+
+      <div class="projects-index__collection">
+        <div class="projects-index__collection-heading">
+          <p>All Projects</p>
+          <span>{String(projects.length).padStart(2, "0")} projects</span>
+        </div>
+        <div class="project-list">
+          {projects.map((project, index) => <ProjectEntry project={project} index={index} />)}
         </div>
       </div>
     </div>
-  </section>
+  </SiteGrid>
 </BaseLayout>

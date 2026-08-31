@@ -1,26 +1,25 @@
 ---
 interface Props {
-  label: string;
-  note?: string;
   tone?: "light" | "dark";
+  size?: "sm" | "md" | "lg";
 }
 
-const { label, note = "Replace with original Sanfor illustration.", tone = "light" } = Astro.props;
+const { tone = "light", size = "md" } = Astro.props;
 const isDark = tone === "dark";
+const minHeight = {
+  sm: "min-h-16",
+  md: "min-h-44",
+  lg: "min-h-80",
+}[size];
 ---
 
 <div class:list={[
-  "illustration-slot relative overflow-hidden rounded-box border-2 border-dashed p-6",
-  isDark ? "border-neutral-content/35 bg-neutral-content/5 text-neutral-content" : "border-primary/35 bg-base-100 text-base-content",
-]}>
+  "illustration-slot relative overflow-hidden rounded-box border border-dashed",
+  minHeight,
+  isDark ? "border-neutral-content/20 bg-neutral-content/5 text-neutral-content" : "border-primary/20 bg-base-100/65 text-base-content",
+]} aria-hidden="true">
   <div class="absolute inset-x-8 top-7 h-px bg-current opacity-15"></div>
   <div class="absolute bottom-7 left-8 right-8 h-px bg-current opacity-15"></div>
   <div class="absolute left-7 top-8 bottom-8 w-px bg-current opacity-15"></div>
   <div class="absolute right-7 top-8 bottom-8 w-px bg-current opacity-15"></div>
-  <div class="relative z-10 grid min-h-44 place-items-center text-center">
-    <div>
-      <p class="font-semibold uppercase tracking-wide text-primary">{label}</p>
-      <p class:list={["mt-3 text-sm leading-6", isDark ? "text-neutral-content/70" : "text-base-content/65"]}>{note}</p>
-    </div>
-  </div>
 </div>

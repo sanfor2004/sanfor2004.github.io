@@ -1,0 +1,36 @@
+---
+interface Props {
+  range: string;
+  role: string;
+  organization: string;
+  summary: string;
+  details: string[];
+  technologies?: string[];
+}
+
+const { range, role, organization, summary, details, technologies = [] } = Astro.props as Props;
+---
+
+<details class="experience-entry">
+  <summary>
+    <span class="experience-entry__range">{range}</span>
+    <span class="experience-entry__main">
+      <strong>{role}</strong>
+      <span>{organization}</span>
+    </span>
+    <span class="experience-entry__summary">{summary}</span>
+    <span class="experience-entry__toggle" aria-hidden="true">↓</span>
+  </summary>
+  <div class="experience-entry__details">
+    <ul>
+      {details.map((item) => <li>{item}</li>)}
+    </ul>
+    {
+      technologies.length > 0 && (
+        <p>
+          {technologies.map((item) => <span>[{item}]</span>)}
+        </p>
+      )
+    }
+  </div>
+</details>

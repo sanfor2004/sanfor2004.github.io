@@ -4,35 +4,26 @@ import { navItems, site } from "../site";
 const path = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-40 border-b border-base-300 bg-base-100/92 backdrop-blur">
-  <a class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-base-100 focus:px-4 focus:py-2" href="#content">Skip to content</a>
-  <div class="navbar container-page min-h-16 px-0">
-    <div class="navbar-start">
-      <a class="btn btn-ghost px-2 text-lg font-semibold" href="/" aria-label={`${site.title} home`}>
-        <img class="h-9 w-auto" src="/assets/brand/logo.svg" alt="" width="56" height="38" />
-        <span>{site.title}</span>
+<header class="sticky top-0 z-40">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="site-header__inner container-page">
+    <div class="internal-nav">
+      <a class="brand-mark" href="/" aria-label={`${site.title} home`}>
+        <img src="/assets/brand/logo.svg" alt="" width="56" height="38" />
+        <span>SANFOR</span>
       </a>
-    </div>
-    <nav class="navbar-center hidden lg:flex" aria-label="Primary navigation">
-      <ul class="menu menu-horizontal gap-1 px-1">
+      <nav class="desktop-links" aria-label="Primary navigation">
         {navItems.map((item) => (
-          <li>
-            <a class={path.startsWith(item.href) ? "menu-active" : ""} href={item.href}>{item.label}</a>
-          </li>
+          <a class:list={[path.startsWith(item.href) && "is-active"]} href={item.href}>{item.label}</a>
         ))}
-      </ul>
-    </nav>
-    <div class="navbar-end gap-2">
-      <a class="btn btn-primary hidden sm:inline-flex" href={site.github} rel="me noopener noreferrer">GitHub</a>
-      <details class="dropdown dropdown-end lg:hidden">
-        <summary class="btn" aria-label="Open navigation menu">Menu</summary>
-        <ul class="menu dropdown-content z-50 mt-3 w-56 rounded-box border border-base-300 bg-base-100 p-2 shadow">
+      </nav>
+      <details class="mobile-links">
+        <summary aria-label="Open navigation menu">MENU</summary>
+        <div>
           {navItems.map((item) => (
-            <li>
-              <a class={path.startsWith(item.href) ? "menu-active" : ""} href={item.href}>{item.label}</a>
-            </li>
+            <a class:list={[path.startsWith(item.href) && "is-active"]} href={item.href}>{item.label}</a>
           ))}
-        </ul>
+        </div>
       </details>
     </div>
   </div>

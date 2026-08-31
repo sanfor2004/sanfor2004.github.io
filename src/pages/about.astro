@@ -1,51 +1,191 @@
 ---
+import { getCollection } from "astro:content";
+import AsciiLabel from "../components/AsciiLabel.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import IllustrationSlot from "../components/IllustrationSlot.astro";
+import ExperienceEntry from "../components/ExperienceEntry.astro";
+import SiteGrid from "../components/SiteGrid.astro";
+import { site } from "../site";
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const featuredProjects = projects.slice(0, 7);
+
+const experience = [
+  {
+    range: "Dec 2022 — Feb 2026",
+    role: "Full Stack Software Engineer",
+    organization: "Skylimit LLC",
+    summary: "Built lead-generation, messaging, payment, reporting, IVR, and school collaboration systems.",
+    details: [
+      "Worked across backend/API systems, databases, product workflows, reporting, and operational tools.",
+      "Shipped production-facing features that connected business processes with usable web interfaces.",
+      "Built with enough full-stack range to understand systems end to end while keeping backend architecture central.",
+    ],
+    technologies: ["APIs", "Databases", "Automation", "Payments", "Reporting"],
+  },
+  {
+    range: "Mar 2021 — Dec 2022",
+    role: "Junior Software Engineer",
+    organization: "Fiverr",
+    summary: "Delivered custom software, automation, and consulting projects for international clients.",
+    details: [
+      "Handled scoped client projects that required requirements discovery, implementation, iteration, and delivery.",
+      "Built practical automation and software tools while learning to communicate trade-offs clearly.",
+    ],
+    technologies: ["Automation", "Consulting", "Web", "Scripting"],
+  },
+];
+
+const skillGroups = [
+  ["Languages", ["C", "C++", "JavaScript", "TypeScript", "Python", "PHP"]],
+  ["Systems", ["Linux", "Memory", "Processes", "Threads", "Networking", "TCP/IP", "Sockets"]],
+  ["Backend", ["Node.js", "REST APIs", "Databases", "WebSockets", "OAuth", "Architecture"]],
+  ["Web", ["Astro", "React", "Next.js", "Laravel", "Django", "Tailwind CSS"]],
+  ["Security", ["OWASP", "Authentication", "Security reviews", "Privacy", "TryHackMe"]],
+  ["Tools", ["Docker", "Git", "Figma", "Cloud platforms", "Three.js"]],
+];
+
+const summaryRows = [
+  {
+    label: "Focus",
+    title: "Systems-minded backend engineering",
+    body: "I care about the hidden parts of software: data flow, boundaries, protocols, processes, memory, and the cost of decisions after code reaches production.",
+  },
+  {
+    label: "Range",
+    title: "Full-stack when useful, backend at the center",
+    body: "I have shipped web interfaces, automations, payments, reports, and product workflows, but I use that range to build stronger systems instead of treating UI as the whole story.",
+  },
+  {
+    label: "Direction",
+    title: "Linux, networking, performance, and security fundamentals",
+    body: "This site is moving toward deeper engineering notes and case studies around how software behaves under real constraints.",
+  },
+];
 ---
 
-<BaseLayout title="About" description="About Ahmed Abdelaziz Hanafy, known as Sanfor, and his full stack software engineering background.">
-  <section class="bg-base-200 py-16">
-    <div class="container-page grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-      <div>
-        <div class="breadcrumbs text-sm">
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li>About</li>
-          </ul>
+<BaseLayout title="About" description={`About ${site.author}, known as Sanfor, a software engineer focused on systems and backend engineering.`}>
+  <SiteGrid as="section" class="about-hero">
+    <div class="container-page">
+      <div class="about-hero__grid">
+        <div class="about-hero__heading">
+          <AsciiLabel text="about" mark="02" />
+          <h1>Ahmed Abdelaziz</h1>
         </div>
-        <h1 class="mt-8 text-5xl font-bold">Ahmed Abdelaziz Hanafy</h1>
-        <p class="mt-4 text-xl text-base-content/75">Sanfor: full stack software engineer, systems builder, UI/UX thinker, and illustrator.</p>
-      </div>
-      <img class="w-full rounded-box border border-base-300 bg-base-100 shadow-sm" src="/assets/brand/sanfor-banner.png" alt="Sanfor illustrated brand banner" width="1280" height="336" />
-    </div>
-  </section>
 
-  <section class="bg-base-100 py-16">
-    <div class="container-page grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
-      <IllustrationSlot label="Alexandria/location sketch" note="Future Alexandria, Egypt line sketch or location-inspired drawing." />
-      <div class="prose max-w-none">
-        <p>
-          Ahmed started coding at 13 and has worked across JavaScript, PHP, Python, Go, Java, and low-level systems programming. He also works with UI/UX in Figma and brings an illustrator's eye to interface design.
-        </p>
-        <p>
-          His public portfolio direction is full stack software engineering with strong emphasis on backend/API systems, automation, product engineering, databases, and practical security.
-        </p>
-        <h2>Professional Experience</h2>
-        <p>
-          At Skylimit LLC, Ahmed worked as a Full Stack Software Engineer from December 2022 to February 2026, building lead-generation, messaging, payment, reporting, IVR, and school collaboration systems.
-        </p>
-        <p>
-          As a Junior Software Engineer on Fiverr from March 2021 to December 2022, he delivered custom software, automation, and consulting projects for international clients.
-        </p>
-        <h2>Education</h2>
-        <p>
-          Ahmed is pursuing a Bachelor's Degree in Business Information Systems at Alexandria University, with public study interests around databases, system architecture, corporate solutions, and workflow automation.
-        </p>
-        <h2>Tools And Interests</h2>
-        <p>
-          Publicly listed areas include Laravel, Django, React, Node.js, Three.js, databases, Docker, Git, cloud platforms, REST APIs, WebSockets, OAuth, UI/UX, information security, drawing, SaaS development, and product development.
-        </p>
+        <div class="about-hero__body">
+        <figure class="about-portrait">
+          <div class="about-portrait__ascii" aria-label="ASCII style portrait placeholder for Sanfor">
+            <pre>{`     .-""""-.
+   .'  .--.  '.
+  /   /_  _\\   \\
+ |    | O O |    |
+ |    | O O |    |
+ |     \\__/     |
+  \\   .-..-.   /
+   '.  \\__/  .'
+     '-....-'
+
+  AHMED ABDELAZIZ
+  SYSTEMS / BACKEND`}</pre>
+          </div>
+          <figcaption>:: portrait placeholder / replace with real image</figcaption>
+        </figure>
+
+        <div class="about-intro">
+          <h2>Hanafy</h2>
+          <p class="about-intro__identity">Sanfor / {site.identity}</p>
+          <p>
+            Ahmed started coding at 13 and has worked across JavaScript, PHP, Python, Java, and low-level systems programming. His current portfolio direction centers systems programming, backend engineering, Linux, networking, memory, and performance.
+          </p>
+          <div class="about-intro__links" aria-label="About page shortcuts">
+            <a href="#projects">Projects</a>
+            <a href="#experience">Experience</a>
+            <a href="#skills">Skills</a>
+            <a href="/contact/">Contact</a>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
-  </section>
+  </SiteGrid>
+
+  <SiteGrid as="section" class="about-section" id="summary">
+    <div class="container-page about-list-section">
+      <div class="about-section__title">
+        <AsciiLabel text="summary / engineering profile" />
+        <h2>Summary</h2>
+      </div>
+      <div class="about-summary-list">
+        {
+          summaryRows.map((row, index) => (
+            <article class="about-summary-row">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <p>{row.label}</p>
+                <h3>{row.title}</h3>
+              </div>
+              <p>{row.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </SiteGrid>
+
+  <SiteGrid as="section" class="about-section" id="projects">
+    <div class="container-page about-list-section">
+      <div class="about-section__title">
+        <AsciiLabel text="selected / current projects" />
+        <h2>Selected Work</h2>
+      </div>
+      <div class="about-project-list">
+        {
+          featuredProjects.map((project, index) => (
+            <a href={`/projects/${project.id.replace(/\.mdx?$/, "")}/`} class="about-project-row">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{project.data.title}</strong>
+              <p>{project.data.description}</p>
+              <em>{project.data.status}</em>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </SiteGrid>
+
+  <SiteGrid as="section" class="about-section" id="experience">
+    <div class="container-page about-list-section">
+      <div class="about-section__title">
+        <AsciiLabel text="experience / previous work" />
+        <h2>Experience</h2>
+      </div>
+      <div class="experience-list">
+        {experience.map((entry) => <ExperienceEntry {...entry} />)}
+      </div>
+    </div>
+  </SiteGrid>
+
+  <SiteGrid as="section" class="about-section" id="skills">
+    <div class="container-page about-list-section">
+      <div class="about-section__title">
+        <AsciiLabel text="skills / technology" />
+        <h2>Technical Range</h2>
+      </div>
+      <div class="skill-grid">
+        {
+          skillGroups.map(([group, skills]) => (
+            <section class="skill-group">
+              <h3>{group}</h3>
+              <ul>
+                {(skills as string[]).map((skill) => <li>[{skill}]</li>)}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </SiteGrid>
 </BaseLayout>

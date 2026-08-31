@@ -1,7 +1,13 @@
 ---
 import TagList from "./TagList.astro";
 
-const { entry, basePath } = Astro.props;
+interface Props {
+  entry: any;
+  basePath: string;
+  featured?: boolean;
+}
+
+const { entry, basePath, featured = false } = Astro.props as Props;
 const data = entry.data;
 const slug = entry.id.replace(/\.mdx?$/, "");
 const date = data.pubDate.toLocaleDateString("en", {
@@ -11,22 +17,17 @@ const date = data.pubDate.toLocaleDateString("en", {
 });
 ---
 
-<article class="card card-border bg-base-100 transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
-  <div class="card-body gap-4">
-    <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/70">
-      <time datetime={data.pubDate.toISOString()}>{date}</time>
-      {data.category && <span class="badge badge-soft">{data.category}</span>}
-      {data.status && <span class="badge badge-soft">{data.status}</span>}
-    </div>
-    <div>
-      <h2 class="card-title text-balance text-xl">
-        <a class="link-hover" href={`${basePath}/${slug}/`}>{data.title}</a>
-      </h2>
-      <p class="mt-2 text-base-content/75">{data.description}</p>
-    </div>
-    <TagList tags={data.tags} />
-    <div class="card-actions">
-      <a class="btn btn-sm btn-primary" href={`${basePath}/${slug}/`}>Read more</a>
-    </div>
+<a class:list={["post-row", { "post-row--featured": featured }]} href={`${basePath}/${slug}/`} aria-label={`Read ${data.title}`}>
+  <div class="post-row__image">
+    {data.image ? <img src={data.image} alt="" loading={featured ? "eager" : "lazy"} /> : <div class="post-row__image-fallback" aria-hidden="true" />}
   </div>
-</article>
+  <div class="post-row__main">
+    <p><time datetime={data.pubDate.toISOString()}>{date}</time> · {data.category ?? data.status ?? "Note"}</p>
+    <h2>{data.title}</h2>
+    <span>{data.description}</span>
+    <em>Read -&gt;</em>
+  </div>
+  <div class="post-row__tags">
+    <TagList tags={data.tags} linked={false} />
+  </div>
+</a>

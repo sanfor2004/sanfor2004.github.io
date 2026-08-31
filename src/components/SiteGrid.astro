@@ -1,0 +1,14 @@
+---
+interface Props {
+  as?: "div" | "section" | "article";
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { as = "div", class: className = "", ...attrs } = Astro.props as Props;
+const Tag = as;
+---
+
+<Tag class:list={["site-grid", className]} {...attrs}>
+  <slot />
+</Tag>

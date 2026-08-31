@@ -1,38 +1,39 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import IllustrationSlot from "../components/IllustrationSlot.astro";
+import AsciiLabel from "../components/AsciiLabel.astro";
+import SiteGrid from "../components/SiteGrid.astro";
 import { site } from "../site";
 ---
 
-<BaseLayout title="Contact" description="Placeholder contact links for sanfor2004.">
-  <section class="bg-base-200 py-16">
-    <div class="container-page max-w-4xl">
-      <div class="breadcrumbs text-sm">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li>Contact</li>
-        </ul>
-      </div>
-      <div class="mt-8">
-        <h1 class="text-4xl font-bold">Contact</h1>
-        <p class="mt-4 max-w-2xl text-lg text-base-content/75">Public links only. Add direct contact details later only when they are intended for this website.</p>
-      </div>
-      <div class="mt-10 grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
-        <IllustrationSlot label="Alexandria/location sketch" note="Future location sketch or hand-drawn contact flourish." />
-        <div class="grid gap-4">
-          {site.contactPlaceholders.map((item) => (
-            <a class="card card-border bg-base-100 transition hover:bg-base-200" href={item.href} rel="noopener noreferrer">
-              <div class="card-body sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h2 class="card-title">{item.label}</h2>
-                  <p class="text-sm text-base-content/70">{item.href}</p>
-                </div>
-                <span class="btn btn-sm btn-primary">Open</span>
-              </div>
+<BaseLayout title="Contact" description="Public links for Sanfor.">
+  <SiteGrid as="section" class="contact-page">
+    <div class="container-page">
+      <header class="contact-page__header">
+        <div>
+          <AsciiLabel text="contact" mark="05" />
+          <h1>Contact</h1>
+        </div>
+        <p>Public channels for project conversations, engineering work, and practical collaboration.</p>
+      </header>
+
+      <div class="contact-page__body">
+        <div class="contact-page__note">
+          <AsciiLabel text="open channels" mark="01" />
+          <h2>Reach out when the work needs a systems mindset.</h2>
+          <p>These are the public profiles currently configured for Sanfor. Choose the channel that fits the conversation.</p>
+        </div>
+
+        <div class="contact-link-list">
+          {site.contactPlaceholders.map((item, index) => (
+            <a class="contact-link-row" href={item.href} rel="noopener noreferrer">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{item.label}</strong>
+              <p>{item.display ?? item.href}</p>
+              <em>Open -&gt;</em>
             </a>
           ))}
         </div>
       </div>
     </div>
-  </section>
+  </SiteGrid>
 </BaseLayout>

@@ -1,0 +1,17 @@
+---
+import AsciiLabel from "./AsciiLabel.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}
+
+const { eyebrow, title, description } = Astro.props;
+---
+
+<header class="page-header">
+  <AsciiLabel text={eyebrow} />
+  <h1>{title}</h1>
+  {description && <p>{description}</p>}
+</header>

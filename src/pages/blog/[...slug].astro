@@ -1,17 +1,25 @@
 ---
 import { getCollection, render } from "astro:content";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import AsciiLabel from "../../components/AsciiLabel.astro";
+import SiteGrid from "../../components/SiteGrid.astro";
 import TagList from "../../components/TagList.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { site } from "../../site";
 
 export async function getStaticPaths() {
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts.map((post) => ({ params: { slug: post.id.replace(/\.mdx?$/, "") }, props: { post } }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const slug = post.id.replace(/\.mdx?$/, "");
 const formattedDate = post.data.pubDate.toLocaleDateString("en", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+const updatedDate = (post.data.updatedDate ?? post.data.pubDate).toLocaleDateString("en", {
   year: "numeric",
   month: "long",
   day: "numeric",
@@ -25,35 +33,41 @@ const structuredData = {
   dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
   author: { "@type": "Person", name: site.author, url: site.url },
   publisher: { "@type": "Person", name: site.author, url: site.url },
-  mainEntityOfPage: new URL(`/blog/${post.id.replace(/\.mdx?$/, "")}/`, site.url).href,
+  mainEntityOfPage: new URL(`/blog/${slug}/`, site.url).href,
   keywords: post.data.tags,
 };
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description} type="article" structuredData={structuredData}>
-  <article class="bg-base-100 py-16">
-    <div class="container-page max-w-4xl">
-      <div class="breadcrumbs text-sm">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li>{post.data.title}</li>
-        </ul>
-      </div>
-      <header class="mt-8">
-        <div class="flex flex-wrap items-center gap-3 text-sm text-base-content/70">
-          <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
-          <span class="badge badge-soft">{post.data.category}</span>
-        </div>
-        <h1 class="mt-4 text-4xl font-bold">{post.data.title}</h1>
-        <p class="mt-4 text-lg text-base-content/75">{post.data.description}</p>
-        <div class="mt-6">
-          <TagList tags={post.data.tags} />
-        </div>
+  <SiteGrid as="article" class="writing-article">
+    <div class="container-page">
+      <header class="writing-article__header">
+        <AsciiLabel text={post.data.category} mark="note" />
+        <h1>{post.data.title}</h1>
+        <p>{post.data.description}</p>
       </header>
-      <div class="prose mt-10 max-w-none">
-        <Content />
+
+      <div class="writing-article__body">
+        <aside class="writing-article__meta" aria-label="Article metadata">
+          <div>
+            <h2>Published</h2>
+            <p><time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time></p>
+          </div>
+          <div>
+            <h2>Updated</h2>
+            <p>{updatedDate}</p>
+          </div>
+          <div>
+            <h2>Tags</h2>
+            <TagList tags={post.data.tags} />
+          </div>
+          <a href="/blog/">Back to writing -&gt;</a>
+        </aside>
+
+        <div class="project-prose writing-prose prose">
+          <Content />
+        </div>
       </div>
     </div>
-  </article>
+  </SiteGrid>
 </BaseLayout>
