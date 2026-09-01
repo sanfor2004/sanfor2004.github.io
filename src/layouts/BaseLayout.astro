@@ -2,8 +2,12 @@
 import { ClientRouter } from "astro:transitions";
 import AsciiSignal from "../components/AsciiSignal.astro";
 import MusicPlayer from "../components/MusicPlayer.astro";
+import PageLoader from "../components/PageLoader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
+import SiteCursor from "../components/SiteCursor.astro";
+import SmoothScroll from "../components/SmoothScroll.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 import "../styles.css";
 import { site } from "../site";
 
@@ -65,10 +69,32 @@ const defaultStructuredData = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl.href} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData ?? defaultStructuredData)} />
+    <script is:inline>
+      (() => {
+        const storageKey = "sanfor-theme";
+        const applySavedTheme = () => {
+          try {
+            const savedTheme = localStorage.getItem(storageKey);
+            const theme = savedTheme === "dark" ? "dark" : "light";
+            if (savedTheme !== theme) localStorage.setItem(storageKey, theme);
+            document.documentElement.dataset.theme = theme === "dark" ? "sanfor-dark" : "sanfor";
+          } catch {
+            document.documentElement.dataset.theme = "sanfor";
+          }
+        };
+
+        applySavedTheme();
+        if (!window.__sanforThemeSync) {
+          window.__sanforThemeSync = true;
+          document.addEventListener("astro:after-swap", applySavedTheme);
+        }
+      })();
+    </script>
     <ClientRouter />
     <title>{pageTitle}</title>
   </head>
   <body class="site-shell antialiased">
+    <PageLoader />
     {!isHome && <SiteHeader />}
     <main id="content">
       <slot />
@@ -76,5 +102,8 @@ const defaultStructuredData = {
     <MusicPlayer />
     <AsciiSignal />
     <SiteFooter />
+    <ThemeToggle />
+    <SiteCursor />
+    <SmoothScroll />
   </body>
 </html>

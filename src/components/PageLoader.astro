@@ -1,0 +1,33 @@
+<div class="page-loader" data-page-loader aria-hidden="true">
+  <div class="page-loader__panel page-loader__panel--top"></div>
+  <div class="page-loader__panel page-loader__panel--bottom"></div>
+  <img class="page-loader__mark" src="/favicon.svg" alt="" width="64" height="64" />
+</div>
+
+<script>
+  const getLoader = () => document.querySelector<HTMLElement>("[data-page-loader]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const prepareLoader = () => {
+    getLoader()?.classList.remove("is-opening", "is-finished");
+  };
+
+  const revealPage = () => {
+    const loader = getLoader();
+    if (!loader) return;
+
+    if (reduceMotion) {
+      loader.classList.add("is-finished");
+      return;
+    }
+
+    requestAnimationFrame(() => loader.classList.add("is-opening"));
+    window.setTimeout(() => loader.classList.add("is-finished"), 950);
+  };
+
+  document.addEventListener("astro:before-preparation", prepareLoader);
+  document.addEventListener("astro:page-load", revealPage);
+
+  if (document.readyState === "complete") revealPage();
+  else window.addEventListener("load", revealPage, { once: true });
+</script>

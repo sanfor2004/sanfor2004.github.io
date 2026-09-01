@@ -1,0 +1,48 @@
+<button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+  <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="3.25" />
+    <path d="M12 2.5v2.25M12 19.25v2.25M2.5 12h2.25M19.25 12h2.25M5.28 5.28l1.6 1.6M17.12 17.12l1.6 1.6M18.72 5.28l-1.6 1.6M6.88 17.12l-1.6 1.6" />
+  </svg>
+  <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.5 15.2A8.8 8.8 0 0 1 8.8 3.5 8.8 8.8 0 1 0 20.5 15.2Z" />
+  </svg>
+</button>
+
+<script>
+  const storageKey = "sanfor-theme";
+  const root = document.documentElement;
+
+  const getSavedTheme = (): "light" | "dark" => {
+    try {
+      return localStorage.getItem(storageKey) === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  };
+
+  const applyTheme = (theme: "light" | "dark") => {
+    const isDark = theme === "dark";
+    root.dataset.theme = isDark ? "sanfor-dark" : "sanfor";
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(isDark));
+      button.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} mode`);
+    });
+  };
+
+  const setupThemeToggle = () => {
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+      if (button.dataset.themeBound) return;
+      button.dataset.themeBound = "true";
+      button.addEventListener("click", () => {
+        const nextTheme: "light" | "dark" = root.dataset.theme === "sanfor-dark" ? "light" : "dark";
+        localStorage.setItem(storageKey, nextTheme);
+        applyTheme(nextTheme);
+      });
+    });
+
+    applyTheme(getSavedTheme());
+  };
+
+  setupThemeToggle();
+  document.addEventListener("astro:page-load", setupThemeToggle);
+</script>
