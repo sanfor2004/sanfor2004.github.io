@@ -90,7 +90,7 @@ Optional fields include `updatedDate`, `demo`, and `draft`.
 
 - Update site-wide title, description, GitHub URL, and public contact links in `src/site.ts`.
 - Edit biography and experience text in `src/pages/about.astro`.
-- Replace `public/assets/brand/sanfor-banner.png` if you want a different Open Graph image.
+- Replace `public/assets/brand/sanfor-linkedin-preview-2026.png` if you want a different Open Graph image.
 
 ## GitHub Pages
 
