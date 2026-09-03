@@ -22,17 +22,33 @@ const hasTracks = musicTracks.length > 0;
 
     <div class="music-player__timeline">
       <span data-current>00:00</span>
-      <input data-progress type="range" min="0" max="1000" value="0" aria-label="Music progress" disabled={!hasTracks} />
+      <input class="range music-player__range" data-progress type="range" min="0" max="1000" value="0" aria-label="Music progress" disabled={!hasTracks} />
       <span data-duration>00:00</span>
     </div>
 
-    <p class="music-player__visualizer" data-visualizer aria-hidden="true">| | | | | | | | | | | |</p>
+    <div class="music-player__visualizer" data-visualizer aria-hidden="true">
+      {Array.from({ length: 16 }, (_, index) => <span style={`--bar-index: ${index}`}></span>)}
+    </div>
 
     <label class="music-player__volume">
       <span>VOL</span>
-      <input data-volume type="range" min="0" max="1" step="0.01" value="0.72" aria-label="Music volume" disabled={!hasTracks} />
+      <input class="range music-player__range" data-volume type="range" min="0" max="1" step="0.01" value="0.72" aria-label="Music volume" disabled={!hasTracks} />
     </label>
   </div>
+
+  {hasTracks && (
+    <dialog class="modal music-prompt" data-music-prompt aria-labelledby="music-prompt-title">
+      <div class="modal-box music-prompt__box">
+        <p class="music-prompt__label">AUDIO / 01</p>
+        <h2 id="music-prompt-title">Listen to music?</h2>
+        <p class="music-prompt__copy">Play a quiet classical piano soundtrack while you explore the site.</p>
+        <form method="dialog" class="modal-action music-prompt__actions">
+          <button class="btn music-prompt__button" value="no" data-music-decline>No</button>
+          <button class="btn music-prompt__button music-prompt__button--yes" type="button" data-music-accept>Yes, play</button>
+        </form>
+      </div>
+    </dialog>
+  )}
 </aside>
 
 <script>
@@ -60,11 +76,22 @@ const hasTracks = musicTracks.length > 0;
     const progress = player.querySelector<HTMLInputElement>("[data-progress]");
     const volume = player.querySelector<HTMLInputElement>("[data-volume]");
     const visualizer = player.querySelector<HTMLElement>("[data-visualizer]");
+    const musicPrompt = player.querySelector<HTMLDialogElement>("[data-music-prompt]");
+    const acceptMusic = player.querySelector<HTMLButtonElement>("[data-music-accept]");
+    const declineMusic = player.querySelector<HTMLButtonElement>("[data-music-decline]");
+    const siteCursor = document.querySelector<HTMLElement>("[data-site-cursor]");
+    const cursorHome = siteCursor?.parentElement;
 
     if (!audio || !playButton || !prevButton || !nextButton || !title || !meta || !current || !duration || !progress || !volume || !visualizer) return;
 
     let trackIndex = Number(localStorage.getItem("sanfor.music.track") || 0);
     if (!tracks[trackIndex]) trackIndex = 0;
+
+    let audioContext: AudioContext | undefined;
+    let analyser: AnalyserNode | undefined;
+    let frequencyData: Uint8Array<ArrayBuffer> | undefined;
+    let visualizerFrame = 0;
+    const visualizerBars = Array.from(visualizer.querySelectorAll<HTMLElement>("span"));
 
     const setDisabled = (disabled: boolean) => {
       for (const control of [playButton, prevButton, nextButton, progress, volume]) {
@@ -84,6 +111,7 @@ const hasTracks = musicTracks.length > 0;
       title.textContent = track.title;
       meta.textContent = track.artist || "Custom site audio";
       progress.value = "0";
+      progress.style.setProperty("--range-progress", "0%");
       current.textContent = "00:00";
       duration.textContent = "00:00";
       localStorage.setItem("sanfor.music.track", String(trackIndex));
@@ -94,22 +122,59 @@ const hasTracks = musicTracks.length > 0;
       playButton.setAttribute("aria-label", audio.paused ? "Play music" : "Pause music");
     };
 
+    const resetVisualizer = () => {
+      visualizerBars.forEach((bar) => bar.style.setProperty("--level", "0.12"));
+    };
+
+    const prepareVisualizer = async () => {
+      if (!audioContext) {
+        audioContext = new AudioContext();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 64;
+        analyser.smoothingTimeConstant = 0.82;
+        frequencyData = new Uint8Array(analyser.frequencyBinCount);
+
+        const source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+      }
+
+      if (audioContext.state === "suspended") await audioContext.resume();
+    };
+
     const animateVisualizer = () => {
-      const frames = ["| | | | | | | | | | | |", "| || | ||| | || | |", "|| | |||| | ||| |", "| |||| || | |||| |"];
+      cancelAnimationFrame(visualizerFrame);
+
       const tick = () => {
-        if (audio.paused) {
-          visualizer.textContent = frames[0];
+        if (audio.paused || !analyser || !frequencyData) {
+          resetVisualizer();
           return;
         }
-        const frame = Math.floor(audio.currentTime * 8) % frames.length;
-        visualizer.textContent = frames[frame];
-        requestAnimationFrame(tick);
+
+        const spectrum = frequencyData;
+        analyser.getByteFrequencyData(spectrum);
+        visualizerBars.forEach((bar, index) => {
+          const bin = Math.min(spectrum.length - 1, Math.floor((index / visualizerBars.length) * spectrum.length));
+          const strength = spectrum[bin] / 255;
+          bar.style.setProperty("--level", String(Math.max(0.12, Math.sqrt(strength))));
+        });
+        visualizerFrame = requestAnimationFrame(tick);
       };
-      requestAnimationFrame(tick);
+      visualizerFrame = requestAnimationFrame(tick);
+    };
+
+    resetVisualizer();
+
+    const startPlayback = async () => {
+      await prepareVisualizer();
+      await audio.play();
+      animateVisualizer();
+      updatePlaybackLabel();
     };
 
     volume.value = localStorage.getItem("sanfor.music.volume") || "0.72";
     audio.volume = Number(volume.value);
+    volume.style.setProperty("--range-progress", `${Number(volume.value) * 100}%`);
 
     renderTrack();
     updatePlaybackLabel();
@@ -118,8 +183,7 @@ const hasTracks = musicTracks.length > 0;
       if (!tracks.length) return;
       try {
         if (audio.paused) {
-          await audio.play();
-          animateVisualizer();
+          await startPlayback();
         } else {
           audio.pause();
         }
@@ -152,6 +216,7 @@ const hasTracks = musicTracks.length > 0;
       current.textContent = formatTime(audio.currentTime);
       if (Number.isFinite(audio.duration) && audio.duration > 0) {
         progress.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
+        progress.style.setProperty("--range-progress", `${Number(progress.value) / 10}%`);
       }
     });
 
@@ -168,12 +233,40 @@ const hasTracks = musicTracks.length > 0;
     progress.addEventListener("input", () => {
       if (!Number.isFinite(audio.duration)) return;
       audio.currentTime = (Number(progress.value) / 1000) * audio.duration;
+      progress.style.setProperty("--range-progress", `${Number(progress.value) / 10}%`);
     });
 
     volume.addEventListener("input", () => {
       audio.volume = Number(volume.value);
+      volume.style.setProperty("--range-progress", `${Number(volume.value) * 100}%`);
       localStorage.setItem("sanfor.music.volume", volume.value);
     });
+
+    const rememberPromptChoice = () => sessionStorage.setItem("sanfor.music.prompt", "answered");
+
+    acceptMusic?.addEventListener("click", async () => {
+      rememberPromptChoice();
+      musicPrompt?.close();
+      try {
+        await startPlayback();
+      } catch {
+        audio.pause();
+        updatePlaybackLabel();
+      }
+    });
+
+    declineMusic?.addEventListener("click", rememberPromptChoice);
+    musicPrompt?.addEventListener("cancel", rememberPromptChoice);
+    musicPrompt?.addEventListener("close", () => {
+      if (siteCursor && cursorHome) cursorHome.append(siteCursor);
+    });
+
+    if (musicPrompt && !sessionStorage.getItem("sanfor.music.prompt")) {
+      requestAnimationFrame(() => {
+        musicPrompt.showModal();
+        if (siteCursor) musicPrompt.append(siteCursor);
+      });
+    }
   };
 
   initMusicPlayer();

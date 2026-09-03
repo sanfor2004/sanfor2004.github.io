@@ -5,10 +5,8 @@ import PostCard from "../../components/PostCard.astro";
 
 export async function getStaticPaths() {
   const slugify = (value: string) => value.toLowerCase().replaceAll(" ", "-");
-  const allEntries = [
-    ...(await getCollection("blog", ({ data }) => !data.draft)).map((entry) => ({ ...entry, basePath: "/blog" })),
-    ...(await getCollection("projects", ({ data }) => !data.draft)).map((entry) => ({ ...entry, basePath: "/projects" })),
-  ];
+  const allEntries = (await getCollection("projects", ({ data }) => !data.draft))
+    .map((entry) => ({ ...entry, basePath: "/projects" }));
   const tags = [...new Set(allEntries.flatMap((entry) => entry.data.tags))];
 
   return tags.map((tag) => ({

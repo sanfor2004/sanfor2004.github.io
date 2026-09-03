@@ -16,6 +16,8 @@ const blog = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
   schema: z.object({
     ...shared,
+    image: z.string(),
+    imageAlt: z.string(),
     category: z.string(),
   }),
 });

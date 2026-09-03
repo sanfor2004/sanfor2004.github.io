@@ -2,6 +2,7 @@
 title: "Building a Technical Learning Loop"
 description: "A practical way to turn programming and cybersecurity study into projects, notes, and portfolio artifacts."
 image: "/images/writing/technical-learning-loop.png"
+imageAlt: "A visual learning loop connecting technical notes, programming practice, and cybersecurity projects."
 pubDate: 2026-08-27
 category: "Learning"
 tags: ["Learning", "Programming", "Cybersecurity", "Portfolio"]

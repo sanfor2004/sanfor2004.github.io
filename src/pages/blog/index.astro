@@ -1,5 +1,118 @@
 ---
+import { getCollection } from "astro:content";
+import AsciiLabel from "../../components/AsciiLabel.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteGrid from "../../components/SiteGrid.astro";
+import TagList from "../../components/TagList.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
 ---
 
-<BaseLayout title="Writing" description="Systems, backend, programming, and learning notes by Sanfor." />
+<BaseLayout title="Writing" description="Systems, backend, programming, and learning notes by Sanfor.">
+  <SiteGrid as="section" class="writing-index">
+    <div class="container-page">
+      <div class="projects-index__lead">
+        <AsciiLabel text="Blogs" mark="03" />
+        <p class="projects-index__intro">
+          I write about the systems I build, the problems I investigate, and the lessons worth keeping.
+        </p>
+      </div>
+
+      <div class="projects-index__collection">
+        <div class="projects-index__collection-heading">
+          <p>All Posts</p>
+          <span class="blog-search__count" data-blog-search-count aria-live="polite">
+            {String(posts.length).padStart(2, "0")} shown
+          </span>
+        </div>
+
+      <form class="blog-search" data-blog-search role="search">
+        <input
+          class="input blog-search__field"
+          type="search"
+          name="query"
+          placeholder="Search posts"
+          aria-label="Search posts"
+          autocomplete="off"
+          data-blog-search-input
+        />
+      </form>
+
+        {posts.length > 0 ? (
+          <div class="post-list" data-post-list>
+            {posts.map((post, index) => {
+              const slug = post.id.replace(/\.mdx?$/, "");
+              const date = post.data.pubDate.toLocaleDateString("en", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              });
+
+              return (
+                <a
+                  class="card post-row"
+                  href={`/blog/${slug}/`}
+                  data-post-row
+                  data-search={`${post.data.title} ${post.data.description} ${post.data.category} ${post.data.tags.join(" ")}`.toLowerCase()}
+                >
+                  <figure class="post-row__image">
+                    <img src={post.data.image} alt={post.data.imageAlt} loading={index === 0 ? "eager" : "lazy"} />
+                  </figure>
+                  <div class="post-row__content">
+                    <div class="card-body post-row__main">
+                      <p>{String(index + 1).padStart(2, "0")} / {date} · {post.data.category}</p>
+                      <h2 class="card-title">{post.data.title}</h2>
+                      <span>{post.data.description}</span>
+                      <em>Read article -&gt;</em>
+                    </div>
+                    <div class="post-row__tags">
+                      <TagList tags={post.data.tags} linked={false} />
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+            <p class="empty-note post-list__empty" data-blog-search-empty hidden>No posts match your search.</p>
+          </div>
+        ) : (
+          <p class="empty-note">No posts published yet.</p>
+        )}
+      </div>
+    </div>
+  </SiteGrid>
+</BaseLayout>
+
+<script>
+  const setupBlogSearch = () => {
+    const form = document.querySelector<HTMLFormElement>("[data-blog-search]");
+    const input = form?.querySelector<HTMLInputElement>("[data-blog-search-input]");
+    const count = form?.querySelector<HTMLElement>("[data-blog-search-count]");
+    const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-post-row]"));
+    const empty = document.querySelector<HTMLElement>("[data-blog-search-empty]");
+
+    if (!form || !input || input.dataset.searchBound === "true") return;
+    input.dataset.searchBound = "true";
+
+    const filterPosts = () => {
+      const query = input.value.trim().toLowerCase();
+      let visible = 0;
+
+      rows.forEach((row) => {
+        const matches = !query || (row.dataset.search ?? "").includes(query);
+        row.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      if (count) count.textContent = `${String(visible).padStart(2, "0")} shown`;
+      if (empty) empty.hidden = visible !== 0;
+    };
+
+    form.addEventListener("submit", (event) => event.preventDefault());
+    input.addEventListener("input", filterPosts);
+  };
+
+  document.addEventListener("astro:page-load", setupBlogSearch);
+  setupBlogSearch();
+</script>

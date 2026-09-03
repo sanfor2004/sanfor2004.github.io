@@ -1,5 +1,5 @@
 ---
-const { tags = [], linked = true } = Astro.props;
+const { tags = [], linked = true, basePath = "/tags" } = Astro.props;
 ---
 
 {
@@ -8,7 +8,7 @@ const { tags = [], linked = true } = Astro.props;
       {tags.map((tag: string) => (
         <li>
           {linked ? (
-            <a class="badge badge-outline badge-sm" href={`/tags/${tag.toLowerCase().replaceAll(" ", "-")}/`}>{tag}</a>
+            <a class="badge badge-outline badge-sm" href={`${basePath}/${tag.toLowerCase().replaceAll(" ", "-")}/`}>{tag}</a>
           ) : (
             <span class="badge badge-outline badge-sm">{tag}</span>
           )}

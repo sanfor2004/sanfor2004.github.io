@@ -5,11 +5,6 @@
     && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (supportsCursor) {
-    let targetX = window.innerWidth / 2;
-    let targetY = window.innerHeight / 2;
-    let cursorX = targetX;
-    let cursorY = targetY;
-
     const getCursor = () => document.querySelector<HTMLElement>("[data-site-cursor]");
     const setInteractiveState = (target: EventTarget | null) => {
       const isInteractive = target instanceof Element
@@ -17,20 +12,11 @@
       getCursor()?.classList.toggle("is-active", isInteractive);
     };
 
-    const renderCursor = () => {
-      cursorX += (targetX - cursorX) * 0.16;
-      cursorY += (targetY - cursorY) * 0.16;
-      const cursor = getCursor();
-      if (cursor) cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
-      requestAnimationFrame(renderCursor);
-    };
-
     const enableCursor = () => document.documentElement.classList.add("has-custom-cursor");
 
     window.addEventListener("pointermove", (event) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
       const cursor = getCursor();
+      if (cursor) cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
       cursor?.classList.add("is-visible");
       setInteractiveState(event.target);
     });
@@ -39,6 +25,5 @@
     document.addEventListener("astro:page-load", enableCursor);
 
     enableCursor();
-    renderCursor();
   }
 </script>

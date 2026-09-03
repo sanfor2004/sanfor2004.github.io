@@ -11,6 +11,7 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 );
 
 const featuredProjects = projects.slice(0, 7);
+const [identityRole, identityDomain] = site.identity.split(" — ");
 
 const experience = [
   {
@@ -95,7 +96,10 @@ const summaryRows = [
         </figure>
 
         <div class="about-intro">
-          <p class="about-intro__identity">Sanfor / {site.identity}</p>
+          <p class="about-intro__identity">
+            <span>Sanfor / {identityRole}</span>
+            <span>— {identityDomain}</span>
+          </p>
           <p>
             Ahmed is a Systems & Backend Engineer who builds reliable services, integrations, automation workflows, and database-backed applications. His work spans Node.js, Python, PHP, SQL, and C/C++, with hands-on focus on Linux, Docker, networking, performance, and production troubleshooting.
           </p>

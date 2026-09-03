@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">Reliable background job pipeline diagram</title>
+  <desc id="description">An editorial systems diagram showing an API, queue, workers, retry path, and database connected by orange lines.</desc>
+  <rect width="1600" height="1000" fill="#f7f0e5"/>
+  <g stroke="#cdbda8" stroke-width="2" opacity=".55">
+    <path d="M0 125h1600M0 250h1600M0 375h1600M0 500h1600M0 625h1600M0 750h1600M0 875h1600"/>
+    <path d="M200 0v1000M400 0v1000M600 0v1000M800 0v1000M1000 0v1000M1200 0v1000M1400 0v1000"/>
+  </g>
+  <g fill="#25170e" font-family="ui-monospace, monospace">
+    <text x="92" y="105" font-size="28">SYSTEM NOTE / 02</text>
+    <text x="92" y="172" font-size="62" font-family="Arial, sans-serif" font-weight="700">BACKGROUND JOB PIPELINE</text>
+  </g>
+  <g fill="#fffaf3" stroke="#25170e" stroke-width="6">
+    <rect x="95" y="350" width="240" height="160"/>
+    <rect x="470" y="350" width="240" height="160"/>
+    <rect x="845" y="275" width="260" height="160"/>
+    <rect x="845" y="515" width="260" height="160"/>
+    <rect x="1240" y="350" width="260" height="160"/>
+  </g>
+  <g fill="#25170e" font-family="ui-monospace, monospace" font-size="30" text-anchor="middle">
+    <text x="215" y="445">API</text>
+    <text x="590" y="445">QUEUE</text>
+    <text x="975" y="370">WORKER 01</text>
+    <text x="975" y="610">WORKER 02</text>
+    <text x="1370" y="445">DATABASE</text>
+  </g>
+  <g fill="none" stroke="#c9521f" stroke-width="12">
+    <path d="M335 430h120"/>
+    <path d="M710 430c70 0 65-75 120-75"/>
+    <path d="M710 430c70 0 65 165 120 165"/>
+    <path d="M1105 355c80 0 60 75 120 75"/>
+    <path d="M1105 595c80 0 60-165 120-165"/>
+    <path d="M975 690v105H590V525" stroke-dasharray="22 18"/>
+  </g>
+  <g fill="#c9521f">
+    <path d="m455 430-30-18v36zM830 355l-30-18v36zM830 595l-30-18v36zM1225 430l-30-18v36zM590 525l-18 30h36z"/>
+  </g>
+  <g fill="#76583f" font-family="ui-monospace, monospace" font-size="24">
+    <text x="92" y="895">IDEMPOTENCY / RETRIES / TIMEOUTS / OBSERVABILITY</text>
+    <text x="1180" y="895">SANFOR2004</text>
+  </g>
+</svg>

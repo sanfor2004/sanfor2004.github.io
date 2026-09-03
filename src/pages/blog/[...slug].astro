@@ -7,24 +7,51 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { site } from "../../site";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({ params: { slug: post.id.replace(/\.mdx?$/, "") }, props: { post } }));
+  const slugify = (value: string) => value.toLowerCase().replaceAll(" ", "-");
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  );
+  const articleSlugs = new Set(posts.map((post) => post.id.replace(/\.mdx?$/, "")));
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+
+  const articlePaths = posts.map((post) => ({
+    params: { slug: post.id.replace(/\.mdx?$/, "") },
+    props: { kind: "article" as const, post },
+  }));
+  const tagPaths = tags
+    .filter((tag) => !articleSlugs.has(slugify(tag)))
+    .map((tag) => ({
+      params: { slug: slugify(tag) },
+      props: {
+        kind: "tag" as const,
+        tag,
+        posts: posts.filter((post) => post.data.tags.some((postTag) => slugify(postTag) === slugify(tag))),
+      },
+    }));
+
+  return [...articlePaths, ...tagPaths];
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
-const slug = post.id.replace(/\.mdx?$/, "");
-const formattedDate = post.data.pubDate.toLocaleDateString("en", {
+const props = Astro.props;
+const isTagArchive = props.kind === "tag";
+const post = isTagArchive ? undefined : props.post;
+const article = post!;
+const tag = isTagArchive ? props.tag : undefined;
+const taggedPosts = isTagArchive ? props.posts : [];
+const renderedPost = post ? await render(post) : undefined;
+const Content = renderedPost?.Content;
+const slug = post?.id.replace(/\.mdx?$/, "");
+const formattedDate = post?.data.pubDate.toLocaleDateString("en", {
   year: "numeric",
   month: "long",
   day: "numeric",
 });
-const updatedDate = (post.data.updatedDate ?? post.data.pubDate).toLocaleDateString("en", {
+const updatedDate = (post?.data.updatedDate ?? post?.data.pubDate)?.toLocaleDateString("en", {
   year: "numeric",
   month: "long",
   day: "numeric",
 });
-const structuredData = {
+const structuredData = post ? {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: post.data.title,
@@ -34,40 +61,87 @@ const structuredData = {
   author: { "@type": "Person", name: site.author, url: site.url },
   publisher: { "@type": "Person", name: site.author, url: site.url },
   mainEntityOfPage: new URL(`/blog/${slug}/`, site.url).href,
+  image: new URL(post.data.image, site.url).href,
   keywords: post.data.tags,
-};
+} : undefined;
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} type="article" structuredData={structuredData}>
-  <SiteGrid as="article" class="writing-article">
-    <div class="container-page">
-      <header class="writing-article__header">
-        <AsciiLabel text={post.data.category} mark="note" />
-        <h1>{post.data.title}</h1>
-        <p>{post.data.description}</p>
-      </header>
+<BaseLayout
+  title={isTagArchive ? `Blog: ${tag}` : article.data.title}
+  description={isTagArchive ? `Blog posts about ${tag} by Sanfor.` : article.data.description}
+  image={post?.data.image}
+  type={isTagArchive ? "website" : "article"}
+  structuredData={structuredData}
+>
+  {isTagArchive ? (
+    <SiteGrid as="section" class="writing-index">
+      <div class="container-page">
+        <div class="projects-index__lead">
+          <AsciiLabel text={`Blog / ${tag}`} mark="03" />
+          <p class="projects-index__intro">Notes and articles filed under {tag}.</p>
+        </div>
 
-      <div class="writing-article__body">
-        <aside class="writing-article__meta" aria-label="Article metadata">
-          <div>
-            <h2>Published</h2>
-            <p><time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time></p>
+        <div class="projects-index__collection">
+          <div class="projects-index__collection-heading">
+            <p><a href="/blog/">All Posts</a> / {tag}</p>
+            <span>{String(taggedPosts.length).padStart(2, "0")} shown</span>
           </div>
-          <div>
-            <h2>Updated</h2>
-            <p>{updatedDate}</p>
-          </div>
-          <div>
-            <h2>Tags</h2>
-            <TagList tags={post.data.tags} />
-          </div>
-          <a href="/blog/">Back to writing -&gt;</a>
-        </aside>
+          <div class="post-list">
+            {taggedPosts.map((taggedPost, index) => {
+              const taggedSlug = taggedPost.id.replace(/\.mdx?$/, "");
+              const date = taggedPost.data.pubDate.toLocaleDateString("en", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              });
 
-        <div class="project-prose writing-prose prose">
-          <Content />
+              return (
+                <a class="card post-row" href={`/blog/${taggedSlug}/`}>
+                  <figure class="post-row__image">
+                    <img src={taggedPost.data.image} alt={taggedPost.data.imageAlt} loading={index === 0 ? "eager" : "lazy"} />
+                  </figure>
+                  <div class="post-row__content">
+                    <div class="card-body post-row__main">
+                      <p>{String(index + 1).padStart(2, "0")} / {date} · {taggedPost.data.category}</p>
+                      <h2 class="card-title">{taggedPost.data.title}</h2>
+                      <span>{taggedPost.data.description}</span>
+                      <em>Read article -&gt;</em>
+                    </div>
+                    <div class="post-row__tags"><TagList tags={taggedPost.data.tags} linked={false} /></div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
-  </SiteGrid>
+    </SiteGrid>
+  ) : (
+    <SiteGrid as="article" class="writing-article">
+      <div class="container-page">
+        <header class="writing-article__header">
+          <AsciiLabel text={article.data.category} mark="note" />
+          <h1>{article.data.title}</h1>
+          <p>{article.data.description}</p>
+        </header>
+
+        <figure class="writing-article__image">
+          <img src={article.data.image} alt={article.data.imageAlt} />
+        </figure>
+
+        <div class="writing-article__body">
+          <aside class="writing-article__meta" aria-label="Article metadata">
+            <div><h2>Published</h2><p><time datetime={article.data.pubDate.toISOString()}>{formattedDate}</time></p></div>
+            <div><h2>Updated</h2><p>{updatedDate}</p></div>
+            <div><h2>Tags</h2><TagList tags={article.data.tags} basePath="/blog" /></div>
+            <a href="/blog/">Back to writing -&gt;</a>
+          </aside>
+
+          <div class="project-prose writing-prose prose">
+            {Content && <Content />}
+          </div>
+        </div>
+      </div>
+    </SiteGrid>
+  )}
 </BaseLayout>
