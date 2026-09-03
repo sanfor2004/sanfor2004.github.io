@@ -5,9 +5,7 @@ const tracks = JSON.stringify(musicTracks);
 const hasTracks = musicTracks.length > 0;
 ---
 
-<div class="music-player-slot" data-music-player-slot transition:persist>
-  <div class="music-player__anchor" data-music-player-anchor aria-hidden="true"></div>
-<aside class="music-player is-floating" data-music-player data-tracks={tracks} aria-label="Persistent music player">
+<aside class="music-player" data-music-player data-tracks={tracks} aria-label="Persistent music player" transition:persist>
   <div class="music-player__inner container-page">
     <audio data-audio preload="metadata"></audio>
 
@@ -38,21 +36,7 @@ const hasTracks = musicTracks.length > 0;
     </label>
   </div>
 
-  {hasTracks && (
-    <dialog class="modal music-prompt" data-music-prompt aria-labelledby="music-prompt-title">
-      <div class="modal-box music-prompt__box">
-        <p class="music-prompt__label">AUDIO / 01</p>
-        <h2 id="music-prompt-title">Listen to music?</h2>
-        <p class="music-prompt__copy">Play a quiet classical piano soundtrack while you explore the site.</p>
-        <form method="dialog" class="modal-action music-prompt__actions">
-          <button class="btn music-prompt__button" value="no" data-music-decline>No</button>
-          <button class="btn music-prompt__button music-prompt__button--yes" type="button" data-music-accept>Yes, play</button>
-        </form>
-      </div>
-    </dialog>
-  )}
 </aside>
-</div>
 
 <script>
   const formatTime = (seconds: number) => {
@@ -79,32 +63,8 @@ const hasTracks = musicTracks.length > 0;
     const progress = player.querySelector<HTMLInputElement>("[data-progress]");
     const volume = player.querySelector<HTMLInputElement>("[data-volume]");
     const visualizer = player.querySelector<HTMLElement>("[data-visualizer]");
-    const musicPrompt = player.querySelector<HTMLDialogElement>("[data-music-prompt]");
-    const acceptMusic = player.querySelector<HTMLButtonElement>("[data-music-accept]");
-    const declineMusic = player.querySelector<HTMLButtonElement>("[data-music-decline]");
-    const siteCursor = document.querySelector<HTMLElement>("[data-site-cursor]");
-    const cursorHome = siteCursor?.parentElement;
-    const playerSlot = player.closest<HTMLElement>("[data-music-player-slot]");
-    const playerAnchor = playerSlot?.querySelector<HTMLElement>("[data-music-player-anchor]");
 
     if (!audio || !playButton || !prevButton || !nextButton || !title || !meta || !current || !duration || !progress || !volume || !visualizer) return;
-
-    let dockFrame = 0;
-    const syncPlayerPosition = () => {
-      if (!playerAnchor) return;
-      playerAnchor.style.height = `${player.offsetHeight}px`;
-      const anchorTop = playerAnchor.getBoundingClientRect().top;
-      player.classList.toggle("is-floating", anchorTop > window.innerHeight - player.offsetHeight);
-    };
-    const schedulePlayerPosition = () => {
-      cancelAnimationFrame(dockFrame);
-      dockFrame = requestAnimationFrame(syncPlayerPosition);
-    };
-
-    window.addEventListener("scroll", schedulePlayerPosition, { passive: true });
-    window.addEventListener("resize", schedulePlayerPosition);
-    new ResizeObserver(schedulePlayerPosition).observe(player);
-    schedulePlayerPosition();
 
     let trackIndex = Number(localStorage.getItem("sanfor.music.track") || 0);
     if (!tracks[trackIndex]) trackIndex = 0;
@@ -264,31 +224,6 @@ const hasTracks = musicTracks.length > 0;
       localStorage.setItem("sanfor.music.volume", volume.value);
     });
 
-    const rememberPromptChoice = () => sessionStorage.setItem("sanfor.music.prompt", "answered");
-
-    acceptMusic?.addEventListener("click", async () => {
-      rememberPromptChoice();
-      musicPrompt?.close();
-      try {
-        await startPlayback();
-      } catch {
-        audio.pause();
-        updatePlaybackLabel();
-      }
-    });
-
-    declineMusic?.addEventListener("click", rememberPromptChoice);
-    musicPrompt?.addEventListener("cancel", rememberPromptChoice);
-    musicPrompt?.addEventListener("close", () => {
-      if (siteCursor && cursorHome) cursorHome.append(siteCursor);
-    });
-
-    if (musicPrompt && !sessionStorage.getItem("sanfor.music.prompt")) {
-      requestAnimationFrame(() => {
-        musicPrompt.showModal();
-        if (siteCursor) musicPrompt.append(siteCursor);
-      });
-    }
   };
 
   initMusicPlayer();
