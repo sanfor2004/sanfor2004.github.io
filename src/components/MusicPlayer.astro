@@ -5,7 +5,9 @@ const tracks = JSON.stringify(musicTracks);
 const hasTracks = musicTracks.length > 0;
 ---
 
-<aside class="music-player" data-music-player data-tracks={tracks} aria-label="Persistent music player" transition:persist>
+<div class="music-player-slot" data-music-player-slot transition:persist>
+  <div class="music-player__anchor" data-music-player-anchor aria-hidden="true"></div>
+<aside class="music-player is-floating" data-music-player data-tracks={tracks} aria-label="Persistent music player">
   <div class="music-player__inner container-page">
     <audio data-audio preload="metadata"></audio>
 
@@ -50,6 +52,7 @@ const hasTracks = musicTracks.length > 0;
     </dialog>
   )}
 </aside>
+</div>
 
 <script>
   const formatTime = (seconds: number) => {
@@ -81,8 +84,27 @@ const hasTracks = musicTracks.length > 0;
     const declineMusic = player.querySelector<HTMLButtonElement>("[data-music-decline]");
     const siteCursor = document.querySelector<HTMLElement>("[data-site-cursor]");
     const cursorHome = siteCursor?.parentElement;
+    const playerSlot = player.closest<HTMLElement>("[data-music-player-slot]");
+    const playerAnchor = playerSlot?.querySelector<HTMLElement>("[data-music-player-anchor]");
 
     if (!audio || !playButton || !prevButton || !nextButton || !title || !meta || !current || !duration || !progress || !volume || !visualizer) return;
+
+    let dockFrame = 0;
+    const syncPlayerPosition = () => {
+      if (!playerAnchor) return;
+      playerAnchor.style.height = `${player.offsetHeight}px`;
+      const anchorTop = playerAnchor.getBoundingClientRect().top;
+      player.classList.toggle("is-floating", anchorTop > window.innerHeight - player.offsetHeight);
+    };
+    const schedulePlayerPosition = () => {
+      cancelAnimationFrame(dockFrame);
+      dockFrame = requestAnimationFrame(syncPlayerPosition);
+    };
+
+    window.addEventListener("scroll", schedulePlayerPosition, { passive: true });
+    window.addEventListener("resize", schedulePlayerPosition);
+    new ResizeObserver(schedulePlayerPosition).observe(player);
+    schedulePlayerPosition();
 
     let trackIndex = Number(localStorage.getItem("sanfor.music.track") || 0);
     if (!tracks[trackIndex]) trackIndex = 0;
