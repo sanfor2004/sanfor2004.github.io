@@ -2372,6 +2372,10 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   border-bottom: var(--border-width) solid var(--color-border);
 }
 
+.writing-article > .container-page {
+  background: var(--color-bg-secondary);
+}
+
 .writing-article__header {
   border-bottom: var(--border-width) solid var(--color-border);
   padding-block: clamp(2rem, 4vw, 3.5rem) clamp(1.75rem, 3vw, 2.75rem);
@@ -2404,6 +2408,7 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   display: grid;
   grid-template-columns: minmax(14rem, 0.35fr) minmax(0, 1fr);
   gap: clamp(2rem, 6vw, 6rem);
+  min-width: 0;
   padding-block: clamp(3rem, 7vw, 6rem);
 }
 
@@ -2411,6 +2416,7 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   display: grid;
   align-content: start;
   gap: 2rem;
+  min-width: 0;
   font-size: 0.76rem;
 }
 
@@ -2440,6 +2446,16 @@ html[data-theme="sanfor-dark"] .blog-search__field {
 
 .writing-prose :where(li) {
   margin-block: 0.35rem;
+}
+
+.writing-prose {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.writing-prose :where(pre) {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .contact-page {
@@ -2965,6 +2981,20 @@ html[data-theme="sanfor-dark"] .blog-search__field {
 
   .post-row em {
     text-align: left;
+  }
+
+  .writing-article__body {
+    gap: 2rem;
+    padding-block: 2.25rem 3.5rem;
+  }
+
+  .writing-article__meta {
+    gap: 1.25rem;
+  }
+
+  .writing-article__meta .badge {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .contact-link-row {
