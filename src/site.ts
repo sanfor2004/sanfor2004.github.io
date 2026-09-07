@@ -11,8 +11,7 @@ export const site = {
     { label: "GitHub", href: "https://github.com/sanfor2004" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/sanfor2004/" },
     { label: "TryHackMe", href: "https://tryhackme.com/p/sanfor2004" },
-    { label: "Discord", href: "https://discord.com/users/sanfor.2004", display: "sanfor.2004" },
-  ],
+  ] as Array<{ label: string; href: string; display?: string }>,
 };
 
 export const navItems = [
