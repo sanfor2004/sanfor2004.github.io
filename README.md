@@ -7,6 +7,7 @@ Personal portfolio and technical blog for `sanfor2004`, built with Astro, React 
 - [Portfolio & Writing Handbook](docs/PORTFOLIO-HANDBOOK.md): product idea, audience, page strategy, architecture, content templates, and publishing workflow.
 - [Brand Guide](docs/BRAND-GUIDE.md): naming, voice, logo use, colors, typography, layout, imagery, and motion.
 - [AGENTS.md](AGENTS.md): instructions for coding and editorial agents, validation, and publishing boundaries.
+- [Social Media Launch Framework](social_media_launch_framework.md): reusable instructions to inspect any target project, write complete problem/method/result posts, and create branded preview images and carousel slides.
 
 ## What Is Included
 

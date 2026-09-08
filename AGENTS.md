@@ -105,6 +105,8 @@ npm run preview
 
 ## SEO and integrations
 
+For social launch or campaign requests, read [social_media_launch_framework.md](social_media_launch_framework.md) completely and follow its execution workflow. Use the explicitly requested project, or the active workspace by default. Produce finished copy and actual image files using that project's evidence, logo, and assets. An instruction to edit the framework does not itself request a campaign run. Keep external publication separate from preparation and follow the user's authorization.
+
 - Preserve canonical URLs, descriptions, social images, RSS discovery, and appropriate structured data.
 - Check generated routes, archives, sitemap, and RSS when changing collections or routing.
 - Coordinate domain changes across site configuration, Astro configuration, robots.txt, and URL assumptions.

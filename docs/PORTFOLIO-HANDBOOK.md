@@ -236,6 +236,8 @@ There is no application database, authentication service, CMS, newsletter delive
 
 ## 8. Discovery, analytics, and assets
 
+Use the [Social Media Launch Framework](../social_media_launch_framework.md) to generate a project campaign. It requires inspecting the target project, finished platform-specific copy explaining the problem, method, and result, and rendered preview images using the project's own branding and assets. It also defines a complete article, carousel, suggested distribution sequence, and evidence/asset handoff. The framework is portable to other repositories and does not publish to social accounts when executed.
+
 The layout supplies titles, descriptions, canonical URLs, Open Graph/Twitter cards, RSS discovery, large-image preview permission, and default ProfilePage/Person structured data. Articles provide BlogPosting data, author links, social image alternatives and optional dimensions, and publication/modification metadata; projects provide CreativeWork data. A sitemap integration and robots.txt are configured.
 
 Google Analytics is included in the layout. Presence of the script does not prove accurate navigation events or conversion tracking. Check internal navigation when changing analytics, and keep private information out of events.
