@@ -58,11 +58,14 @@ const structuredData = post ? {
   description: post.data.description,
   datePublished: post.data.pubDate.toISOString(),
   dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
-  author: { "@type": "Person", name: site.author, url: site.url },
+  author: { "@type": "Person", name: site.author, url: new URL("/about/", site.url).href },
   publisher: { "@type": "Person", name: site.author, url: site.url },
   mainEntityOfPage: new URL(`/blog/${slug}/`, site.url).href,
   image: new URL(post.data.image, site.url).href,
   keywords: post.data.tags,
+  url: new URL(`/blog/${slug}/`, site.url).href,
+  inLanguage: "en",
+  articleSection: post.data.category,
 } : undefined;
 ---
 
@@ -70,6 +73,12 @@ const structuredData = post ? {
   title={isTagArchive ? `Blog: ${tag}` : article.data.title}
   description={isTagArchive ? `Blog posts about ${tag} by Sanfor.` : article.data.description}
   image={post?.data.image}
+  imageAlt={post?.data.imageAlt}
+  imageWidth={post?.data.imageWidth}
+  imageHeight={post?.data.imageHeight}
+  publishedTime={post?.data.pubDate.toISOString()}
+  modifiedTime={(post?.data.updatedDate ?? post?.data.pubDate)?.toISOString()}
+  articleSection={post?.data.category}
   type={isTagArchive ? "website" : "article"}
   structuredData={structuredData}
 >
@@ -126,11 +135,12 @@ const structuredData = post ? {
         </header>
 
         <figure class="writing-article__image">
-          <img src={article.data.image} alt={article.data.imageAlt} />
+          <img src={article.data.image} alt={article.data.imageAlt} width={article.data.imageWidth} height={article.data.imageHeight} fetchpriority="high" decoding="async" />
         </figure>
 
         <div class="writing-article__body">
           <aside class="writing-article__meta" aria-label="Article metadata">
+            <div><h2>Author</h2><a href="/about/" rel="author">{site.author}</a></div>
             <div><h2>Published</h2><p><time datetime={article.data.pubDate.toISOString()}>{formattedDate}</time></p></div>
             <div><h2>Updated</h2><p>{updatedDate}</p></div>
             <div><h2>Tags</h2><TagList tags={article.data.tags} basePath="/blog" /></div>

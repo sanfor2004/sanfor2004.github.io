@@ -1,15 +1,18 @@
 ---
 title: "360 Vision"
-description: "A Next.js application for creating, publishing, and viewing interactive 360 panorama tours."
+description: "A local Next.js studio for authoring interactive 360 property tours with hotspots, floor plans, and JSON storage."
 pubDate: 2026-08-27
+updatedDate: 2026-09-09
 tags: ["Next.js", "TypeScript", "Three.js", "Cybersecurity", "Product Engineering"]
 status: "Active project"
 role: "Project owner and developer"
-stack: ["Next.js 16", "React 19", "TypeScript", "Prisma", "SQLite", "Auth.js", "Three.js", "Photo Sphere Viewer", "Sharp", "Zod"]
+stack: ["Next.js 16", "React 19", "TypeScript", "Three.js", "Photo Sphere Viewer", "Sharp", "Zod", "Local JSON"]
 repo: "https://github.com/sanfor2004/360vesion"
 ---
 
-360 Vision is a web application for authoring and viewing interactive 360 panorama tours. The local project documentation describes two main surfaces: a browser-based studio for placing hotspots and a viewer for public tour playback.
+360Vision is a single-owner local application for authoring and viewing interactive real-estate tours. Its dashboard manages local projects, Studio edits scenes and hotspots, and Viewer connects panorama exploration with optional property maps.
+
+Read the full engineering article: [360Vision: Building a 360° Virtual Tour Studio in Next.js](/blog/360vision-nextjs-virtual-tour-studio/).
 
 ## What It Does
 
@@ -17,21 +20,22 @@ repo: "https://github.com/sanfor2004/360vesion"
 - Supports multi-scene tours with a start scene and per-scene camera framing.
 - Stores hotspots by yaw and pitch angles instead of pixels, which helps markers stay accurate across responsive image sizes.
 - Provides hotspot types for information panels, links, scene transitions, and media.
-- Includes creator-facing surfaces such as dashboard, public profiles, an explore feed, and tour visibility states.
+- Supports optional multi-floor plans with responsive scene navigation points.
+- Includes a local dashboard, autosave, project copying, JSON download, and automatic tour navigation.
 - Uses server-side image processing to create full, mobile, and thumbnail panorama variants.
 
 ## Engineering Notes
 
-The project is built with Next.js, React, TypeScript, Prisma, Auth.js, Three.js, Photo Sphere Viewer, Sharp, and Zod. Its data model separates tour metadata, scenes, image assets, and hotspots, which makes the authoring studio and viewer share one domain shape.
+The project uses Next.js, React, strict TypeScript, Three.js, Photo Sphere Viewer, Sharp, and Zod. Shared types and runtime schemas keep tour metadata, scenes, image assets, hotspots, and floor plans consistent between the editor and viewer. Each tour is stored in a readable JSON file through a temporary-file-and-rename write strategy.
 
 From a software engineering perspective, the interesting constraint is that panorama interactions are spatial, not page-like. Hotspots need to be stored as angles so they remain stable when images are resized or re-encoded.
 
 ## Security Notes
 
-The app includes authentication, user sessions, upload validation, and draft/public/unlisted visibility. A production deployment would still need careful review of secrets, persistent storage, content validation, image processing limits, and account/session configuration.
+The current application has no authentication, accounts, or publication states. Its local write endpoints are intended for a single owner and should not be exposed directly on a public network. Uploads are validated and processed locally. A complete backup includes both tour JSON files and uploaded assets; JSON download alone does not bundle media.
 
 ## Next Improvements
 
-- Add automated tests around tour validation and visibility rules.
-- Document deployment options for persistent uploads and production databases.
-- Add more sample tours for onboarding and regression testing.
+- Complete media-aware package import/export.
+- Improve destructive-action confirmation and broken-reference validation.
+- Add scene reordering and broaden accessibility and responsive checks.

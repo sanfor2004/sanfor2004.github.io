@@ -2458,6 +2458,24 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   overflow-x: auto;
 }
 
+.writing-prose figure {
+  margin: 2rem 0;
+}
+
+.writing-prose figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--border-width) solid var(--color-border);
+}
+
+.writing-prose figcaption {
+  margin-top: 0.75rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
 .contact-page {
   min-height: calc(100svh - 4.5rem);
   border-bottom: var(--border-width) solid var(--color-border);

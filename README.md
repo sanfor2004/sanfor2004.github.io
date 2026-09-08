@@ -2,25 +2,33 @@
 
 Personal portfolio and technical blog for `sanfor2004`, built with Astro, React islands, Tailwind CSS 4, and daisyUI 5 for free hosting on GitHub Pages.
 
+## Portfolio Documentation
+
+- [Portfolio & Writing Handbook](docs/PORTFOLIO-HANDBOOK.md): product idea, audience, page strategy, architecture, content templates, and publishing workflow.
+- [Brand Guide](docs/BRAND-GUIDE.md): naming, voice, logo use, colors, typography, layout, imagery, and motion.
+- [AGENTS.md](AGENTS.md): instructions for coding and editorial agents, validation, and publishing boundaries.
+
 ## What Is Included
 
 - Home, About, Projects, Learning, Blog, Contact, and tag pages.
 - Content collections for Markdown-based projects and blog posts.
-- A first project writeup for 360 Vision based on defensible project facts.
+- Markdown project writeups and technical articles based on project evidence.
 - RSS feed, sitemap integration, robots.txt, canonical URLs, Open Graph metadata, and structured data.
 - GitHub Actions workflow for deploying the `main` branch to GitHub Pages.
 - Sanfor logo, favicon, and brand banner assets copied into `public/`.
 - Public contact links only; direct private contact details should be added only when intentionally approved for this site.
-- A business-style landing page with reusable Astro and React UI components.
+- A warm editorial landing page, original art gallery, persistent music player, and light/dark themes.
 
 ## Local Development
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
 Open the local URL printed by Astro.
+
+CI uses Node 22. On Windows, use `npm.cmd` when PowerShell blocks `npm.ps1`.
 
 ## Verify
 
@@ -33,13 +41,14 @@ The `build` script runs `astro check` before generating the static site in `dist
 
 ## UI Components
 
-- `src/components/ui/SectionHeader.astro` provides consistent section headings and spacing.
-- `src/components/react/BusinessPanels.tsx` provides React-powered metrics and clickable service panels inspired by React Bits interaction patterns.
-- `src/components/PostCard.astro` renders fully clickable blog and project cards.
+- `SiteGrid.astro` and `AsciiLabel.astro` provide shared structure and technical labels.
+- `ProjectEntry.astro` renders project cards; `PostCard.astro` is used on project tag archives.
+- `MusicPlayer.astro` persists audio across internal navigation.
+- `BusinessPanels.tsx` and `ui/SectionHeader.astro` remain available but are not used by current pages.
 
 ## Astro Docs MCP
 
-This repository includes a project-local Codex MCP configuration at `.codex/config.toml` for the official Astro Docs MCP server.
+An optional local configuration can connect to the official Astro Docs MCP server. `.codex/` is ignored and is not part of this tracked checkout.
 
 - Server: `Astro Docs`
 - URL: `https://mcp.docs.astro.build/mcp`
@@ -55,6 +64,8 @@ Create a Markdown file in `src/content/blog`.
 ---
 title: "Post Title"
 description: "One sentence summary for SEO and cards."
+image: "/images/writing/background-job-pipeline.svg"
+imageAlt: "An API feeds a queue connected to workers, a retry path, and a database."
 pubDate: 2026-08-27
 category: "Learning"
 tags: ["Programming", "Cybersecurity"]
@@ -63,7 +74,7 @@ tags: ["Programming", "Cybersecurity"]
 Write the post here.
 ```
 
-Set `draft: true` in frontmatter to keep a post out of production builds.
+Choose a relevant image and accurate alt text. Set `draft: true` to exclude unfinished posts from generated routes, including local development. Future dates do not schedule publication. See the handbook for complete templates.
 
 ## Add A Project
 

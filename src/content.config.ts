@@ -18,6 +18,8 @@ const blog = defineCollection({
     ...shared,
     image: z.string(),
     imageAlt: z.string(),
+    imageWidth: z.number().int().positive().optional(),
+    imageHeight: z.number().int().positive().optional(),
     category: z.string(),
   }),
 });
