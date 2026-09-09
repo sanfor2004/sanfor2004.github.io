@@ -110,7 +110,26 @@ For Reddit, use audience-specific drafts and verify destination rules before nam
 
 When evidence cannot support a requested angle, choose another true angle. If a channel is unsuitable, still provide a clearly labeled general draft when useful and explain the eligibility limitation outside the copy.
 
-Use a few relevant tags only where they fit. Do not assume every platform makes body URLs clickable or supports the same CTA placement. Avoid “link in bio” unless that destination is actually configured; provide upload/publishing notes separately.
+### Required platform-specific tags
+
+Include **Tags to use** for every post ID, including follow-ups. Select concrete tags from the target project's subject, implementation, audience, and the individual post's angle. Do not reuse this portfolio's tags automatically in other projects, add unrelated trending tags, or promise reach or virality.
+
+Use these editorial defaults, adapting to verified destination rules:
+
+| Platform | Required tag delivery and placement |
+| --- | --- |
+| LinkedIn | Select 2–3 relevant hashtags and include them at the end of each finished post. |
+| X | Select 1–2 relevant hashtags per standalone post. For a thread, place the selected tags in the final post unless a specific earlier post needs one. Count tags, spaces, numbering, and URLs in each post's length. |
+| Reddit | Supply relevant plain-language topic keywords and suggested post flair, explicitly conditional on the community offering and permitting it. Keep editorial keywords out of the copy and do not append a hashtag block. Confirm actual flair choices after selecting the community. |
+| Hacker News | Supply descriptive topic keywords for choosing a factual title, not a hashtag block or an invented tag field. Mark these as editorial only and keep them out of the author comment. |
+| DEV Community | Supply a short list of relevant native tag names separately for the article editor's tag field, not hashtags appended to the article. Verify current tag availability and limits before claiming publication readiness. |
+| Facebook | Select 1–3 relevant hashtags and include them at the end of the finished post. |
+| Instagram | Select 3–5 relevant hashtags and include them in the finished caption, not on every carousel slide. |
+| Cross-platform follow-up | Name the intended channels for each length and include their selected hashtags in the copy. Explain any adaptation for native-tag or community destinations; do not provide a universal hashtag block for every channel. |
+
+The counts above are campaign defaults, not platform limits or guaranteed optimization. Show the exact selected tags and where to use them, never just “add relevant hashtags.” Where hashtags are unsuitable, an explicit editorial-topics/flair entry satisfies the tag requirement; do not silently omit the platform.
+
+Do not assume every platform makes body URLs clickable or supports the same CTA placement. Avoid “link in bio” unless that destination is actually configured; provide upload/publishing notes separately.
 
 ## 6. Format every deliverable for direct use
 
@@ -121,6 +140,7 @@ For each ID, provide:
 3. **Attachment:** exact output image path and meaningful alt text, or an explicit text-only designation.
 4. **Publishing note:** any destination, formatting, or eligibility consideration.
 5. **Internal evidence:** brief pointers supporting the problem, method, and result.
+6. **Tags to use:** exact platform-specific hashtags, native tags, or editorial topics/conditional flair and their placement. Hashtags intended for publication must already appear inside the copy block; do not require the user to append them again.
 
 Treat numbering, headings, hashtags, and URLs as part of the final copy when checking lengths. Split oversized copy at a meaningful boundary. Preserve readability and meaning while adapting to a platform.
 
@@ -174,7 +194,7 @@ Save:
 
 - `README.md`: pack index, target project, inspected revision/date when available, completion status, and links to every deliverable.
 - `project-brief.md`: audience, positioning, current state, claims and supporting sources, unavailable facts.
-- `posts.md`: every finished post from section 5, grouped by ID, including the complete DEV article and carousel text.
+- `posts.md`: every finished post from section 5, grouped by ID, including the complete DEV article, carousel text, and platform-specific Tags to use entries with hashtags already included in applicable copy blocks.
 - `launch-plan.md`: the seven-day suggested sequence referencing those IDs.
 - `assets.md`: image descriptions, alt text, source/provenance, dimensions, and reproduction instructions.
 - `images/`: rendered previews and carousel slides.
@@ -189,6 +209,7 @@ Before reporting completion:
 - Verify the project identity, status, links, and ownership language against sources.
 - Check every standalone post for problem, method, and supported result; check the full arc for sequences.
 - Confirm all post IDs exist with actual copy and no unresolved variables or outline-only deliverables.
+- Confirm every ID has Tags to use with exact relevant selections and placement. Check that public hashtags match the guidance, native tags remain separate, and Reddit/HN editorial topics are not pasted into the public copy. Recount final copy after adding tags.
 - Check platform lengths and relevant eligibility where applicable; record anything unverified.
 - Ensure measurements are sourced and proposed work is not described as already shipped.
 - Open every exported visual; check text, logo fidelity, relevant assets, crop safety, contrast, and actual dimensions.

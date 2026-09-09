@@ -2,7 +2,11 @@
 
 Campaign: the Sanfor portfolio, not a separate 360Vision product launch. Copy is written in Ahmed's voice. Each copy block is ready to select; surrounding notes are not part of the post. External publication has not been performed. Image alt text is supplied in [assets.md](assets.md).
 
+Hashtags are already included in the applicable copy blocks; do not append them a second time. DEV tags belong in the editor's tag field. Reddit flair suggestions require checking the selected community; Reddit and Hacker News topic keywords are editorial notes, not text to paste. These selections are relevant to the content, not a claim of trending status or guaranteed reach.
+
 ## LI-01 — LinkedIn / introduce the portfolio
+
+Tags to use: `#SoftwareEngineering #BackendDevelopment #Portfolio` — included at the end of the post.
 
 Angle: show the reasoning behind the work. Attachment: [landscape preview](images/social-preview-landscape.png). Alt: Sanfor portfolio preview with its orange logo, a real home-page screenshot, and the headline The work. The thinking. The person.
 
@@ -24,11 +28,15 @@ The result is a place where a visitor can move from a project overview to the re
 My main focus is systems and backend engineering, Linux, networking, and performance. The art is there because it is part of me too.
 
 Explore the portfolio: https://sanfor2004.github.io/
+
+#SoftwareEngineering #BackendDevelopment #Portfolio
 ```
 
 Publishing note: use the main landscape attachment. This is an introduction, not a claim that the site launched today. Evidence: project collections, blog collections, site navigation, About/Art/Contact routes.
 
 ## LI-02 — LinkedIn / one source for several reading paths
+
+Tags to use: `#Astro #WebDevelopment #TechnicalWriting` — included at the end of the post.
 
 Angle: content architecture. Attachment: [carousel slide 3](images/carousel-03.png). Alt: Three connected portfolio sections: Projects for the build, Writing for the decisions, and About plus Art for the author.
 
@@ -46,11 +54,15 @@ The result is practical: the 360Vision writeup appears in Writing, relevant topi
 There is an important limit in the current implementation: a future date does not schedule publication. Draft filtering controls whether an entry is included. Small details like that belong in the documentation, because the next person editing content needs the real rule.
 
 Browse the writing: https://sanfor2004.github.io/blog/
+
+#Astro #WebDevelopment #TechnicalWriting
 ```
 
 Publishing note: this explains repository behavior, not measured traffic improvement. Evidence: `src/content.config.ts`, blog routes, RSS endpoint, sitemap integration.
 
 ## X-01 — X / four-post launch thread
+
+Tags to use: `#BuildInPublic #SoftwareEngineering` — included in post 4 for the whole thread; posts 1–3 need no additional hashtag block.
 
 Angle: context for engineering work. Attach [landscape preview](images/social-preview-landscape.png) to post 1; posts 2–4 are text only. Use LI-01's alt text.
 
@@ -76,11 +88,15 @@ Angle: context for engineering work. Attach [landscape preview](images/social-pr
 
 ```text
 4/4 My focus is systems and backend engineering, Linux, networking, and performance. Pick one project and follow the reasoning behind it: https://sanfor2004.github.io/
+
+#BuildInPublic #SoftwareEngineering
 ```
 
 Publishing note: publish sequentially as one thread. Evidence: current content inventory, navigation, and `src/site.ts`.
 
 ## X-02 — X / standalone announcement
+
+Tags to use: `#Portfolio #BuildInPublic` — included in the copy.
 
 Attachment: [square preview](images/social-preview-square.png). Alt: Sanfor's logo and home-page screenshot beneath The work. The thinking. The person.
 
@@ -88,11 +104,15 @@ Attachment: [square preview](images/social-preview-square.png). Alt: Sanfor's lo
 
 ```text
 A project list leaves the reasoning out. I built Sanfor to connect project writeups, engineering notes, and the person behind them. Seven projects and four articles are ready to explore: https://sanfor2004.github.io/
+
+#Portfolio #BuildInPublic
 ```
 
 Publishing note: an alternative to repeating the launch thread on the same day. Evidence: collections and connected routes.
 
 ## X-03 — X / technical follow-up
+
+Tags to use: `#Astro #WebDev` — included in the copy.
 
 Attachment: text only.
 
@@ -100,11 +120,15 @@ Attachment: text only.
 
 ```text
 Keeping article pages, topic lists, and feeds in sync can mean repeated work. Sanfor uses one Markdown entry to generate those reading paths with Astro. Explore the resulting notes: https://sanfor2004.github.io/blog/
+
+#Astro #WebDev
 ```
 
 Publishing note: technical angle for a later day. Evidence: content schema, blog routes, RSS endpoint.
 
 ## RD-01 — Reddit / project-story draft
+
+Tags to use: editorial topics `personal portfolio`, `project writeups`, `Astro`. Suggested flair: `Project Showcase` or `Feedback`, only if the selected community offers and permits that option. Choose one applicable flair in its composer; do not paste these keywords or hashtags into the body. Actual flair availability is unverified.
 
 Audience: builders discussing personal portfolios; community not selected or eligibility-verified. Attachment: optional [landscape preview](images/social-preview-landscape.png), LI-01 alt text. Use only in a community/thread that permits this kind of self-promotion.
 
@@ -134,6 +158,8 @@ Internal evidence: collection inventory, 360Vision article, background-job artic
 
 ## RD-02 — Reddit / technical-discussion draft
 
+Tags to use: editorial topics `Astro`, `content architecture`, `Markdown`, `static websites`. Suggested flair: `Discussion` or `Feedback`, only if offered and permitted by the selected community. Choose one applicable flair in its composer; do not paste these keywords or hashtags into the body. Actual flair availability is unverified.
+
 Audience: developers discussing static content architecture; community not selected or eligibility-verified. Attachment: text only.
 
 ### Copy to publish
@@ -162,6 +188,8 @@ Internal evidence: collection schema, dynamic blog/tag paths, RSS endpoint, layo
 
 ## HN-01 — Hacker News / regular-submission options
 
+Tags to use: editorial topics `Astro`, `personal websites`, `engineering writing`. Use these to select the relevant factual title below; do not append hashtags to the title/comment or treat this list as a submission tag field.
+
 This portfolio campaign is not framed as Show HN: its main offering is a portfolio and reading material. Official [Show HN guidance](https://news.ycombinator.com/showhn.html) directs reading material to regular submissions. No acceptance or placement is promised.
 
 ### Three title options
@@ -186,7 +214,9 @@ Internal evidence: current routes, content inventory, schemas. Publishing note: 
 
 ## DEV-01 — DEV Community / complete companion article
 
-Attachment: [landscape preview](images/social-preview-landscape.png), LI-01 alt text. Suggested tags: `astro`, `webdev`, `portfolio`, `writing`. Upload the local cover through the editor. The article below is a new campaign draft; it is not already published on the portfolio, so no duplicate canonical URL is asserted.
+Tags to use: `astro`, `webdev`, `portfolio`, `writing` — enter separately in the DEV editor's tag field, without `#`. Confirm these choices in the editor before publishing; do not append a hashtag block to the article.
+
+Attachment: [landscape preview](images/social-preview-landscape.png), LI-01 alt text. Upload the local cover through the editor. The article below is a new campaign draft; it is not already published on the portfolio, so no duplicate canonical URL is asserted.
 
 ### Copy to publish
 
@@ -258,6 +288,8 @@ Internal evidence: `src/site.ts`, collection schema, page routes, 360Vision arti
 
 ## FB-01 — Facebook / approachable portfolio introduction
 
+Tags to use: `#Portfolio #SoftwareEngineering` — included at the end of the post.
+
 Attachment: [square preview](images/social-preview-square.png), X-02 alt text.
 
 ### Copy to publish
@@ -274,11 +306,15 @@ There are currently seven project writeups and four articles, covering topics in
 My main focus is systems and backend engineering, but I wanted the site to show the person behind the code too.
 
 Take a look: https://sanfor2004.github.io/
+
+#Portfolio #SoftwareEngineering
 ```
 
 Internal evidence: content inventory, navigation, Art, and site identity. Publishing note: use the original post on your own profile/page; group rules require a separate check.
 
 ## IG-01 — Instagram / six-slide story
+
+Tags to use: `#SoftwareEngineering #Portfolio #Astro` — already included in the caption. Do not add a tag block to each slide.
 
 Upload these six slides in order. Headlines and supporting copy below match the image content; shared logo, step number, and footer are additional design elements.
 
@@ -309,12 +345,16 @@ Publishing note: the caption names a typeable address and does not assume a conf
 
 ## UP-01 — follow-up / invite useful feedback
 
+Tags to use: `#TechnicalWriting #Portfolio` — included in both versions. Use the short version for X and the medium version for LinkedIn or Facebook. These are not Reddit/HN-ready variants; adapt to community rules and remove the hashtag block before considering those destinations.
+
 Attachment: [portrait preview](images/social-preview-portrait.png). Alt: Portrait Sanfor campaign card combining the existing logo, project description, and actual home-page capture.
 
 ### Copy to publish — short
 
 ```text
 A project card cannot explain every tradeoff. Sanfor connects the overview with longer engineering notes, so readers can follow the reasoning. Which detail do you look for first? https://sanfor2004.github.io/
+
+#TechnicalWriting #Portfolio
 ```
 
 ### Copy to publish — medium
@@ -329,6 +369,8 @@ The result is a choice for the reader: scan the work, then go deeper into a deci
 I would like to make the next writeups more useful. When you open a case study, which detail do you look for first: the problem, the architecture, the tradeoffs, or the evidence that it works?
 
 Explore one example: https://sanfor2004.github.io/projects/360-vision/
+
+#TechnicalWriting #Portfolio
 ```
 
 Publishing note: select one length for a channel; this is a current lesson, not invented progress since launch. Internal evidence: project-to-article link and the 360Vision article's coordinate/backup sections.
