@@ -960,7 +960,7 @@ html[data-theme="sanfor-dark"] .theme-toggle__moon {
 
 .home-directory {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: var(--border-width) solid var(--color-border);
 }
 
@@ -1052,7 +1052,15 @@ html[data-theme="sanfor-dark"] .theme-toggle__moon {
 
 @media (min-width: 761px) and (max-width: 1080px) {
   .home-directory {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .home-directory a {
+    grid-column: span 2;
+  }
+
+  .home-directory a:nth-child(n + 4) {
+    grid-column: span 3;
   }
 
   .home-directory a:nth-child(3n) {
