@@ -48,6 +48,8 @@ References checked: [Google Article structured data](https://developers.google.c
 
 ## After authorized deployment
 
+The validation paragraph below records the 9 September article handoff. Its page count and music-persistence checks describe that earlier revision; the current shell does not mount music. See [Site Architecture](SITE-ARCHITECTURE.md) for current behavior.
+
 Local validation completed: production build generated 72 pages with zero Astro diagnostic errors, warnings, or hints. Browser checks at 390px and 1440px verified both themes, image decoding, article anchors and internal links, canonical/social/JSON-LD metadata, four-post indexing, filtering, and theme/music DOM persistence during navigation. The article was present in generated RSS and sitemap output. Documentation links and `git diff --check` passed. This does not substitute for live indexing or a fresh 360Vision application test.
 
 1. Confirm the live article, images, canonical URL, feed, and sitemap resolve.

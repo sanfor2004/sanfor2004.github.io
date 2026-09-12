@@ -5,6 +5,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { navItems, site } from "../site";
 
 const focusAreas = ["Systems programming", "Linux", "Backend architecture", "Networking", "Performance"];
+const directoryIcons = ["about", "projects", "writing", "art", "contact"];
 ---
 
 <BaseLayout title={site.title} description={site.description}>
@@ -34,7 +35,7 @@ const focusAreas = ["Systems programming", "Linux", "Backend architecture", "Net
 
       <nav id="home-navigation" class="home-directory" aria-label="Primary destinations">
         {navItems.map((item, index) => (
-          <a href={item.href}>
+          <a href={item.href} data-directory-icon={directoryIcons[index]}>
             <span>{String(index + 1).padStart(2, "0")} /</span>
             {item.label}
           </a>

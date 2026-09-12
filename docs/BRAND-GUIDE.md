@@ -1,12 +1,12 @@
 # Sanfor Brand Guide
 
-Baseline: 9 September 2026. This guide explains the existing identity and rules for extending it. **Direction** labels proposed conventions. It is a repository design guide, not a claim of trademark registration or an independent rights assessment.
+Baseline: 12 September 2026, inspected working tree. This guide explains the existing identity and rules for extending it. **Direction** labels proposed conventions. It is a repository design guide, not a claim of trademark registration or an independent rights assessment.
 
 See the [Portfolio Handbook](PORTFOLIO-HANDBOOK.md) for audience, editorial strategy, and publication workflow.
 
 ## 1. Brand idea
 
-Sanfor combines systems engineering precision with the individuality of a personal sketchbook. Technical labels, visible grid rails, clear typography, and restrained motion organize the work. Warm paper colors, orange accents, original drawings, and optional classical music give the experience personal character.
+Sanfor combines systems engineering precision with the individuality of a personal sketchbook. Technical labels, visible grid rails, clear typography, and restrained motion organize the work. Warm paper colors, orange accents, and original drawings give the experience personal character. Attributed classical recordings remain in the repository, but the player is not mounted.
 
 The brand should feel clear, capable, curious, and human. Credibility comes from specific work and thoughtful explanation. The design supports reading and exploration.
 
@@ -113,12 +113,17 @@ Most custom components use square corners, thin borders, visible alignment, larg
 | `SiteHeader` | Compact mark, uppercase navigation, native mobile disclosure |
 | `ProjectEntry` | Ownership, status, description, stack, and destination links |
 | Blog rows | Editorial headline and description paired with a cover |
+| Pattern blog articles | Standard article typography, preserved sketchbook cover, SVG structure diagram, and C++20 code blocks |
 | `ExperienceEntry` | Native disclosure for deeper professional detail |
 | `TagList` | Compact topic metadata with correct archive destinations |
 | `ThemeToggle` | Fixed square control with accessible state |
-| `MusicPlayer` | Optional atmosphere with explicit controls |
+| `MusicPlayer` | Retained in source but not mounted in the shared layout |
 
 Keep titles understandable without hover. Avoid nested links or buttons within clickable cards. Preserve focus visibility and usable touch targets.
+
+The writing index uses two columns on desktop with a JavaScript masonry enhancement and one column on mobile. Topic archives reuse the cards without that script. `/testblog/` is an unlisted layout prototype, not the source of truth for the current writing index.
+
+The pattern series is now English Markdown using the shared blog layout and standard code highlighting. Preserve readable code overflow and meaningful diagram alternatives in both themes; the removed Learning tab UI and catalog typography are no longer active.
 
 ## 8. Imagery and art direction
 
@@ -130,13 +135,15 @@ Alt text should explain essential content or meaning. Decorative duplicates can 
 
 Preserve artwork proportions where possible and review intentional crops on mobile. Record source and permissions for new imagery or recordings. Original drawing authorship does not imply ownership of depicted third-party characters, and public availability does not imply unrestricted reuse rights.
 
-## 9. Motion and audio
+Design-pattern covers use original AI-generated sketchbook scenes built around each lesson's real-life analogy. Keep them text-free, warm, hand-drawn, and distinct from the source repository's SVG structure diagrams. Composite the existing SVG logo after generation rather than asking a model to redraw it. The current 1600 × 900 WebP covers place the orange mark directly on the illustration: the earlier rectangular badge and border were removed at the owner's request. Per-image provenance and the editing history are recorded in [the asset README](../public/images/writing/patterns/README.md).
 
-Current motion includes split-panel page reveal, small hover shifts, image zoom, a square custom cursor on fine pointers, and spectrum bars. CSS includes reduced-motion rules; loader and cursor also handle the preference explicitly.
+## 9. Motion and dormant audio
 
-**Direction:** Keep motion brief and useful. Check reduced-motion behavior in the actual interaction: the audio visualizer uses JavaScript animation frames, so CSS alone does not establish that it stops.
+Current motion includes split-panel page reveal, small hover shifts, image zoom, and a square custom cursor on fine pointers. CSS includes reduced-motion rules; loader and cursor also handle the preference explicitly.
 
-Music begins through a user gesture. Keep pause, volume, seeking, and track information discoverable, and preserve playback across internal navigation. Audio must remain optional.
+**Direction:** Keep motion brief and useful. Check reduced-motion behavior in the actual interaction.
+
+The music player and attributed audio remain in source but are not mounted. If restored, music must begin through a user gesture, remain optional, and expose pause, volume, seeking, and track information.
 
 ## 10. Brand beyond the website
 

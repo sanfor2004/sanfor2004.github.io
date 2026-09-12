@@ -1,0 +1,107 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteGrid from "../components/SiteGrid.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((post, index) => ({
+    ...post.data,
+    href: `/blog/${post.id.replace(/\.mdx?$/, "")}/`,
+    number: String(index + 1).padStart(2, "0"),
+    date: post.data.pubDate.toLocaleDateString("en", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    }),
+  }));
+
+const featured = posts[0];
+const sideStories = posts.slice(1, 3);
+---
+
+<BaseLayout
+  title="TestBlog"
+  description="An unlisted visual prototype for Sanfor's writing index."
+  robots="noindex, nofollow"
+>
+  <SiteGrid as="section" class="test-blog" aria-labelledby="test-blog-title">
+    <div class="container-page">
+      <h1 id="test-blog-title" class="sr-only">TestBlog editorial layout</h1>
+
+      <header class="test-blog__ticker">
+        <p>
+          <strong><span aria-hidden="true">+</span> Latest notes</strong>
+          <small>Fresh from Sanfor’s engineering notebook</small>
+        </p>
+        <a href="#all-notes">View all <span aria-hidden="true">↓</span></a>
+      </header>
+
+      {featured && (
+        <section class="test-blog__spotlight" aria-label="Highlighted writing">
+          <a class="test-blog__featured" href={featured.href}>
+            <figure class="test-blog__media">
+              <img src={featured.image} alt={featured.imageAlt} loading="eager" />
+            </figure>
+            <div class="test-blog__featured-panel">
+              <p class="test-blog__eyebrow">
+                <span>{featured.category}</span>
+                {featured.number} / {featured.date}
+              </p>
+              <h2>{featured.title}</h2>
+              <p class="test-blog__byline">
+                <img src="/images/ahmed-abdelaziz.png" alt="" width="28" height="28" />
+                Sanfor
+                <span aria-hidden="true">→</span>
+              </p>
+            </div>
+          </a>
+
+          <div class="test-blog__side-list">
+            {sideStories.map((post) => (
+              <a class="test-blog__side-card" href={post.href}>
+                <figure class="test-blog__media">
+                  <img src={post.image} alt={post.imageAlt} loading="lazy" />
+                </figure>
+                <div>
+                  <p class="test-blog__eyebrow"><span>{post.category}</span> {post.number}</p>
+                  <h2>{post.title}</h2>
+                  <p class="test-blog__side-meta">{post.date}<span aria-hidden="true">→</span></p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section id="all-notes" class="test-blog__archive" aria-labelledby="all-notes-title">
+        <header>
+          <div>
+            <p class="test-blog__section-mark">:: archive / {String(posts.length).padStart(2, "0")}</p>
+            <h2 id="all-notes-title">All notes</h2>
+          </div>
+          <p>Systems, projects, experiments, and lessons—kept simple and inspectable.</p>
+        </header>
+
+        <div class="test-blog__grid">
+          {posts.map((post) => (
+            <a class="test-blog__story" href={post.href}>
+              <figure class="test-blog__media">
+                <img src={post.image} alt={post.imageAlt} loading="lazy" />
+              </figure>
+              <div class="test-blog__story-body">
+                <p class="test-blog__eyebrow"><span>{post.category}</span> {post.number} / {post.date}</p>
+                <h3>{post.title}</h3>
+                <p class="test-blog__description">{post.description}</p>
+                <div class="test-blog__story-footer">
+                  <p><img src="/images/ahmed-abdelaziz.png" alt="" width="28" height="28" /> Sanfor</p>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </SiteGrid>
+</BaseLayout>

@@ -10,6 +10,7 @@ Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, and art archive. I
 
 - Read [README.md](README.md) for local operation.
 - Read [Portfolio Handbook](docs/PORTFOLIO-HANDBOOK.md) for product, content, route, and publication behavior.
+- Read [Site Architecture](docs/SITE-ARCHITECTURE.md) for build flow, pattern articles, browser state, and maintenance paths.
 - Read [Brand Guide](docs/BRAND-GUIDE.md) for visual or public-copy work.
 - Inspect the relevant implementation. Proposed direction in documentation is not shipped functionality.
 - Check `git status --short` and preserve unrelated user changes.
@@ -24,12 +25,16 @@ This is an Astro static site at `https://sanfor2004.github.io`, using TypeScript
 | Shared shell, SEO, analytics, client router | `src/layouts/BaseLayout.astro` |
 | Content schema/loaders | `src/content.config.ts` |
 | Authored articles/projects | `src/content/blog/`, `src/content/projects/` |
+| Pattern articles | `src/content/blog/design-pattern-*.md`, `src/content/blog/design-patterns-overview.md` |
+| Stable series identities and legacy redirects | `src/data/design-pattern-series.mjs` |
+| Article, asset, link, and C++ verification | `scripts/verify-pattern-posts.mjs` |
 | Routes | `src/pages/` |
 | Shared UI | `src/components/` |
 | Themes and styling | `src/styles.css` |
 | Music and attribution | `src/music.ts`, `public/audio/README.md` |
 | Assets | `public/` |
 | Deployment | `.github/workflows/deploy.yml` |
+| Prepared campaign, outside the site build | `Markting/` |
 
 Portfolio writeups describe separate projects; do not assume their source code exists here.
 
@@ -39,6 +44,7 @@ Portfolio writeups describe separate projects; do not assume their source code e
 npm ci
 npm run dev
 npm run lint
+npm run verify:patterns
 npm run build
 npm run preview
 ```
@@ -58,7 +64,7 @@ npm run preview
 - Make focused changes without incidental dependency additions or broad formatting.
 - Use patch-based edits. Do not fix source issues in generated output or dependencies.
 - Preserve published URLs and root-relative paths for this root user Pages site.
-- Collections currently load Markdown only; do not assume MDX support.
+- Blog and project collections load Markdown only. Learning and its MDX integration have been removed; do not restore them incidentally.
 - Check references before deleting apparently unused components or styles.
 
 ## Client navigation and state
@@ -68,7 +74,8 @@ npm run preview
 - Initialize page DOM behavior on appropriate Astro lifecycle events, commonly `astro:page-load`.
 - Guard against duplicate listeners and initialization on the same element.
 - Avoid stale references to nodes replaced by navigation; inspect persistence before choosing a lifecycle strategy.
-- Preserve music `transition:persist` and playback continuity when changing the shell.
+- MusicPlayer and MusicPrompt are not mounted. Do not restore them incidentally. If audio is restored, preserve `transition:persist` and verify playback continuity.
+- The layout retains document language/direction support, but current articles are English. Former Arabic lesson URLs redirect to the corresponding English articles.
 - Preserve theme state and accessible toggle labels across navigation.
 - Handle blocked or malformed localStorage in new or modified storage code.
 - Keep audio user-initiated and clean up animation/audio resources when a changed lifecycle requires it.
@@ -90,6 +97,17 @@ npm run preview
 - Ground technical claims in appropriate primary evidence when needed; local facts can be established from source files.
 - Keep private information and secrets out of content, assets, logs, and browser code.
 
+## Pattern article maintenance
+
+- The series is 24 English Markdown posts: one overview and 23 individual patterns. Titles use `Pattern Name (Creational Pattern)`, `(Structural Pattern)`, or `(Behavioral Pattern)`.
+- Keep the overview linked to every pattern, and preserve backlinks, related-article links, repository links, code, expected output, and image explanations in each post.
+- The source material is the owner's separate `23-Design-Patterns` repository. Published C++ snippets are actual examples from that repository, not the former four-language printing scaffold.
+- `src/data/design-pattern-series.mjs` supplies stable identities and 48 legacy redirects. Keep old Learning URLs as redirects, excluded from the sitemap; do not recreate the removed section.
+- Covers and SVG diagrams live in `public/images/writing/patterns/`. Preserve its README and SOURCE-LICENSE.txt. Original cover paths under `public/images/learning/patterns/` remain as compatibility assets.
+- Edit articles directly; there is no lesson generator or MDX wrapper. Build does not require another checkout.
+- Run `npm run verify:patterns` when changing the series. It checks publication structure and compiles the exact displayed C++20 code when a compiler is available; CI requires one. Use a Visual Studio developer shell for MSVC. Temporary output uses a unique `tmp/pattern-posts-*` directory removed after the run.
+- Stdout checks validate the demonstrated scenarios, not every possible input or challenge. Preserve limitations on concurrency, ownership, and external effects.
+
 ## Brand, accessibility, and assets
 
 - Preserve Sanfor/SANFOR naming and role unless the user requests a change.
@@ -109,6 +127,7 @@ For social launch or campaign requests, read [social_media_launch_framework.md](
 
 - Preserve canonical URLs, descriptions, social images, RSS discovery, and appropriate structured data.
 - Check generated routes, archives, sitemap, and RSS when changing collections or routing.
+- `/testblog/` is an unlisted but generated visual prototype using published blog entries. Preserve its `noindex, nofollow` metadata and sitemap exclusion unless its publication scope is explicitly changed. It is not a private draft preview.
 - Coordinate domain changes across site configuration, Astro configuration, robots.txt, and URL assumptions.
 - Do not replace analytics identifiers or add tracking as incidental cleanup.
 - Forms must have real submission behavior before displaying delivery success.
@@ -120,7 +139,9 @@ For documentation-only changes, check relative links, paths, examples, factual c
 
 For code/content changes, run `npm run build` when dependencies are available. Inspect generated routes when changing slugs, tags, drafts, or schemas. Add tests for meaningful behavior, not merely to mirror implementation.
 
-For visible changes, review affected pages at mobile and desktop widths in both themes. Check keyboard access, wrapping, image loading, overflow, and reduced motion. Shared-shell changes also require internal navigation, theme continuity, and music persistence checks. State any unavailable browser verification.
+Pattern changes additionally require `npm run verify:patterns` as described above. The ignored GoF PDF is private and must never be published or committed.
+
+For visible changes, review affected pages at mobile and desktop widths in both themes. Check keyboard access, wrapping, image loading, overflow, and reduced motion. Shared-shell changes also require internal navigation, language/direction, and theme continuity checks; check music persistence only if the player is mounted. State any unavailable browser verification.
 
 Review the final diff and report what changed, validation, and relevant unresolved limitations.
 
@@ -128,12 +149,13 @@ Review the final diff and report what changed, validation, and relevant unresolv
 
 This baseline is not a standing request to fix everything:
 
-- Blog search queries its count inside the form although the count is outside it.
-- `BusinessPanels`, `MusicPrompt`, `PageHeader`, `SectionHeader`, and older style families appear unused; verify references before cleanup.
+- Blog search now queries the count at document scope. Its search and masonry enhancement exists only on `/blog/`, not topic archives or `/testblog/`.
+- `BusinessPanels`, `MusicPlayer`, `MusicPrompt`, `IllustrationSlot`, `PageHeader`, and `SectionHeader` have no current consumers; verify references before cleanup.
 - IBM Plex Mono is named without an import; `--font-serif` is undefined.
 - Loader reveal depends on JavaScript.
-- Some music/theme storage accesses are unguarded.
+- The theme toggle click writes localStorage without a guard before applying the theme; layout restoration catches storage errors. Dormant music storage accesses are also unguarded.
 - Optional project images and updated dates are not fully surfaced on detail pages.
+- The deployment workflow uses the Ubuntu runner's C++ compiler for the article examples; there are no Go, Java, or Python example toolchain steps.
 
 Update these notes when the implementation changes.
 

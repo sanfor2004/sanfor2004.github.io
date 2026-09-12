@@ -12,3 +12,5 @@ pnpm-debug.log*
 Thumbs.db
 .astro-dev*.log
 .codex/
+/Design Patterns Elements of Reusable Object-Oriented Software.pdf
+/tmp/

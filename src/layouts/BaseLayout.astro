@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import AsciiSignal from "../components/AsciiSignal.astro";
-import MusicPlayer from "../components/MusicPlayer.astro";
 import PageLoader from "../components/PageLoader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import SiteHeader from "../components/SiteHeader.astro";
@@ -22,6 +21,10 @@ interface Props {
   articleSection?: string;
   type?: string;
   structuredData?: Record<string, unknown>;
+  lang?: "en" | "ar";
+  dir?: "ltr" | "rtl";
+  alternates?: Array<{ lang: string; href: string }>;
+  robots?: string;
 }
 
 const {
@@ -36,6 +39,10 @@ const {
   articleSection,
   type = "website",
   structuredData,
+  lang = "en",
+  dir = lang === "ar" ? "rtl" : "ltr",
+  alternates = [],
+  robots = "max-image-preview:large",
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, site.url);
@@ -61,7 +68,7 @@ const defaultStructuredData = {
 ---
 
 <!doctype html>
-<html lang="en" data-theme="sanfor">
+<html lang={lang} dir={dir} data-theme="sanfor">
   <head>
     <!-- Google tag (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-7B8D7CCSRQ"></script>
@@ -76,11 +83,13 @@ const defaultStructuredData = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="robots" content="max-image-preview:large" />
+    <meta name="robots" content={robots} />
     <meta name="author" content={site.author} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical.href} />
+    {alternates.map((alternate) => <link rel="alternate" hreflang={alternate.lang} href={new URL(alternate.href, site.url).href} />)}
+    {alternates.length > 0 && <link rel="alternate" hreflang="x-default" href={new URL(alternates.find((item) => item.lang === "en")?.href ?? alternates[0].href, site.url).href} />}
     <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -88,7 +97,7 @@ const defaultStructuredData = {
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={imageUrl.href} />
     <meta property="og:site_name" content={site.title} />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={lang === "ar" ? "ar_EG" : "en_US"} />
     {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
     {imageWidth && <meta property="og:image:width" content={String(imageWidth)} />}
     {imageHeight && <meta property="og:image:height" content={String(imageHeight)} />}
@@ -123,16 +132,31 @@ const defaultStructuredData = {
         }
       })();
     </script>
+    <script is:inline>
+      (() => {
+        const syncDocumentLanguage = () => {
+          const content = document.querySelector("main[data-page-lang]");
+          if (!(content instanceof HTMLElement)) return;
+          document.documentElement.lang = content.dataset.pageLang || "en";
+          document.documentElement.dir = content.dataset.pageDir === "rtl" ? "rtl" : "ltr";
+        };
+
+        syncDocumentLanguage();
+        if (!window.__sanforLanguageSync) {
+          window.__sanforLanguageSync = true;
+          document.addEventListener("astro:page-load", syncDocumentLanguage);
+        }
+      })();
+    </script>
     <ClientRouter />
     <title>{pageTitle}</title>
   </head>
   <body class="site-shell antialiased">
     <PageLoader />
     {!isHome && <SiteHeader />}
-    <main id="content">
+    <main id="content" data-page-lang={lang} data-page-dir={dir}>
       <slot />
     </main>
-    <MusicPlayer />
     <AsciiSignal />
     <SiteFooter />
     <ThemeToggle />

@@ -6,17 +6,19 @@
   "scripts": {
     "dev": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check && cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "verify:patterns": "node scripts/verify-pattern-posts.mjs",
     "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "lint": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-satteri": "^0.4.1",
     "@astrojs/react": "^6.0.4",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource/inter": "^5.3.0",
     "@tailwindcss/vite": "^4.1.12",
-    "astro": "^7.2.8",
+    "astro": "^7.3.2",
     "cross-env": "^10.0.0",
     "daisyui": "^5.0.50",
     "react": "^19.2.8",

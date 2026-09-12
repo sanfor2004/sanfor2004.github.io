@@ -88,12 +88,35 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   const setupBlogSearch = () => {
     const form = document.querySelector<HTMLFormElement>("[data-blog-search]");
     const input = form?.querySelector<HTMLInputElement>("[data-blog-search-input]");
-    const count = form?.querySelector<HTMLElement>("[data-blog-search-count]");
+    const count = document.querySelector<HTMLElement>("[data-blog-search-count]");
+    const list = document.querySelector<HTMLElement>("[data-post-list]");
     const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-post-row]"));
     const empty = document.querySelector<HTMLElement>("[data-blog-search-empty]");
 
-    if (!form || !input || input.dataset.searchBound === "true") return;
+    if (!form || !input || !list || input.dataset.searchBound === "true") return;
     input.dataset.searchBound = "true";
+
+    let layoutFrame = 0;
+    const layoutPosts = () => {
+      cancelAnimationFrame(layoutFrame);
+      layoutFrame = requestAnimationFrame(() => {
+        const isTwoColumns = window.matchMedia("(min-width: 761px)").matches;
+        list.classList.remove("post-list--masonry");
+        rows.forEach((row) => row.style.removeProperty("grid-row-end"));
+
+        if (!isTwoColumns) return;
+
+        const columnGap = Number.parseFloat(getComputedStyle(list).columnGap) || 20;
+        const cardHeights = rows
+          .filter((row) => !row.hidden)
+          .map((row) => ({ row, height: row.getBoundingClientRect().height }));
+
+        list.classList.add("post-list--masonry");
+        cardHeights.forEach(({ row, height: cardHeight }) => {
+          row.style.gridRowEnd = `span ${Math.ceil(cardHeight + columnGap)}`;
+        });
+      });
+    };
 
     const filterPosts = () => {
       const query = input.value.trim().toLowerCase();
@@ -107,10 +130,24 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 
       if (count) count.textContent = `${String(visible).padStart(2, "0")} shown`;
       if (empty) empty.hidden = visible !== 0;
+      layoutPosts();
     };
 
     form.addEventListener("submit", (event) => event.preventDefault());
     input.addEventListener("input", filterPosts);
+    rows.forEach((row) => {
+      const image = row.querySelector("img");
+      if (image && !image.complete) image.addEventListener("load", layoutPosts, { once: true });
+    });
+
+    const resizeObserver = new ResizeObserver(layoutPosts);
+    resizeObserver.observe(list);
+    document.addEventListener("astro:before-swap", () => {
+      cancelAnimationFrame(layoutFrame);
+      resizeObserver.disconnect();
+    }, { once: true });
+    document.fonts.ready.then(layoutPosts);
+    layoutPosts();
   };
 
   document.addEventListener("astro:page-load", setupBlogSearch);
