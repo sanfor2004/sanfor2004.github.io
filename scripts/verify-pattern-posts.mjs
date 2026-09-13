@@ -6,7 +6,7 @@ import path from "node:path";
 import { designPatterns, learningRedirects, patternOverview, patternArticlePath } from "../src/data/design-pattern-series.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const read = (file) => readFile(path.join(root, file), "utf8");
+const read = async (file) => (await readFile(path.join(root, file), "utf8")).replaceAll("\r\n", "\n");
 const overview = await read("src/content/blog/design-patterns-overview.md");
 assert.equal(designPatterns.length, 23);
 assert.equal(Object.keys(learningRedirects).length, 48);
@@ -16,11 +16,17 @@ const compiler = ["g++", "clang++", "cl"].find((command) => {
   const result = spawnSync(command, command === "cl" ? [] : ["--version"], { encoding: "utf8" });
   return !result.error;
 });
+const python = ["python", "python3"].find((command) => {
+  const result = spawnSync(command, ["--version"], { encoding: "utf8" });
+  return !result.error && result.status === 0;
+});
 if (process.env.CI && !compiler) throw new Error("CI requires a C++20 compiler to verify the published examples.");
+if (process.env.CI && !python) throw new Error("CI requires Python to verify the published examples.");
 
 await mkdir(path.join(root, "tmp"), { recursive: true });
 const temporary = await mkdtemp(path.join(root, "tmp", "pattern-posts-"));
 let compiled = 0;
+let pythonPassed = 0;
 function run(command, args) {
   const result = spawnSync(command, args, { cwd: temporary, encoding: "utf8" });
   assert.equal(result.status, 0, `${command} failed:\n${result.stdout}\n${result.stderr}`);
@@ -42,9 +48,14 @@ try {
     await access(path.join(root, `public/images/writing/patterns/diagrams/${pattern.slug}.svg`));
     assert.ok(post.includes(`image: "/images/writing/patterns/${pattern.slug}.webp"`));
     assert.match(post, /## Reading the illustration/);
-    const code = post.match(/## Modern C\+\+20 Example\s+```cpp\n([\s\S]*?)\n```/)?.[1];
-    const expected = post.match(/## Example Output\s+```text\n([\s\S]*?)\n```/)?.[1];
+    const pythonCode = post.match(/## Python Example\s+[\s\S]*?```python\n([\s\S]*?)\n```/)?.[1];
+    const pythonExpected = post.match(/## Python Output\s+```text\n([\s\S]*?)\n```/)?.[1];
+    const code = post.match(/## C\+\+20 Example\s+```cpp\n([\s\S]*?)\n```/)?.[1];
+    const expected = post.match(/## C\+\+20 Output\s+```text\n([\s\S]*?)\n```/)?.[1];
     assert.ok(code && expected, `Missing code or expected output: ${pattern.slug}`);
+    assert.ok(pythonCode && pythonExpected, `Missing Python code or expected output: ${pattern.slug}`);
+    assert.ok(post.indexOf("## Python Example") < post.indexOf("## C++20 Example"), `Python must appear first: ${pattern.slug}`);
+    assert.ok(post.includes(`/python/main.py`), `Missing Python source link: ${pattern.slug}`);
     // Ignore fenced examples when resolving Markdown links: C++ lambdas also use []().
     const prose = post.replace(/```[^\n]*\n[\s\S]*?```/g, "");
     for (const [, href] of prose.matchAll(/\]\((\/[^)]+)\)/g)) {
@@ -65,9 +76,16 @@ try {
       assert.equal(run(binary, []), `${expected}\n`, `Output mismatch: ${pattern.slug}`);
       compiled += 1;
     }
+    if (python) {
+      const { writeFile } = await import("node:fs/promises");
+      const source = path.join(temporary, `${pattern.slug}.py`);
+      await writeFile(source, `${pythonCode}\n`, "utf8");
+      assert.equal(run(python, ["-I", "-X", "utf8", source]), `${pythonExpected}\n`, `Python output mismatch: ${pattern.slug}`);
+      pythonPassed += 1;
+    }
   }
 } finally {
   // Only remove the unique directory created by this run within the workspace's tmp directory.
   await rm(temporary, { recursive: true, force: true });
 }
-console.log(`Pattern series: 24 posts, 23 covers/diagrams, overview links and 48 redirects verified. C++ examples: ${compiled} passed, ${23 - compiled} skipped${compiler ? "" : " (no local compiler)"}.`);
+console.log(`Pattern series: 24 posts, 23 covers/diagrams, overview links and 48 redirects verified. Python: ${pythonPassed} passed, ${23 - pythonPassed} skipped. C++: ${compiled} passed, ${23 - compiled} skipped.`);

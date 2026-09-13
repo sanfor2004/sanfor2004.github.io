@@ -2670,6 +2670,11 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   border: var(--border-width) solid var(--color-border);
 }
 
+.writing-prose figure img[src*="/diagrams/"] {
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
 .writing-prose figcaption {
   margin-top: 0.75rem;
   color: var(--color-muted);

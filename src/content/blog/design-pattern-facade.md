@@ -6,15 +6,15 @@ imageAlt: "A hotel reception desk coordinates services from several departments.
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Structural Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Structural Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 10 of 23 · Structural patterns
 
-Offer a focused entry point to a complex subsystem without removing lower-level access. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Offer a focused entry point to a complex subsystem without removing lower-level access. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -43,11 +43,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/facade.svg" alt="Facade diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Facade: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/facade.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/facade.svg" alt="Facade sketch map: Client leads through Checkout::buy() to Stock / Payment / Shipping." loading="lazy" decoding="async" />
+  <figcaption>Facade: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/facade.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -64,16 +64,75 @@ Canonical roles in this example:
 - [`interface`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#interface) — The contract of operations and observable behavior offered to a caller. Here: `Checkout::buy`.
 - [`Client`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#client-pattern-role) — Code that uses an interface or collaborates with a pattern's objects. Here: `main`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/python/main.py) is shown first.
+
+```python
+class Stock:
+    def available(self, quantity):
+        return 0 < quantity <= 3
+
+
+class Payment:
+    def charge(self, amount_cents):
+        print("Charged", amount_cents, "cents")
+
+
+class Shipping:
+    def dispatch(self):
+        print("Dispatched")
+
+
+class Checkout:
+    def __init__(self):
+        self.stock = Stock()
+        self.payment = Payment()
+        self.shipping = Shipping()
+
+    def buy(self, quantity):
+        if not self.stock.available(quantity):
+            return False
+        self.payment.charge(quantity * 1000)
+        self.shipping.dispatch()
+        return True
+
+
+if __name__ == "__main__":
+    checkout = Checkout()
+    checkout.buy(2)
+    if not checkout.buy(4):
+        print("Unavailable")
+    if not checkout.buy(0):
+        print("Invalid quantity")
+```
+
+## Python Output
+
+```text
+Charged 2000 cents
+Dispatched
+Unavailable
+Invalid quantity
+```
+
+## Code Walkthrough
+
+Stock checks availability, Payment charges, Shipping dispatches, and Checkout presents the common workflow.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
+// Monetary amounts in this example are integer cents.
 #include <iostream>
 
 struct Stock {
     bool available(int quantity) const { return quantity > 0 && quantity <= 3; }
 };
 struct Payment {
-    void charge(int amount) const { std::cout << "Charged " << amount << '\n'; }
+    void charge(int amount_cents) const { std::cout << "Charged " << amount_cents << '\n'; }
 };
 struct Shipping {
     void dispatch() const { std::cout << "Dispatched\n"; }
@@ -97,7 +156,7 @@ int main() {
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 Charged 20
@@ -154,9 +213,19 @@ If charging succeeds but shipping fails, what guarantee can buy honestly provide
 
 Add a simulated shipping failure and design an explicit refund result rather than silently returning success.
 
+## Compare the two versions
+
+Both versions put the same small workflow behind `buy`. C++ stores service Objects by value; Python holds references. Neither example implements a transaction: a real shipping failure after payment needs an explicit recovery policy. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. What does buy fail to guarantee if shipping fails after payment?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [structural/facade/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/python/expected.txt). The C++20 code comes from [structural/facade/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/facade/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

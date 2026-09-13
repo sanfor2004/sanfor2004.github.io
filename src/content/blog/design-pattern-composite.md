@@ -6,15 +6,15 @@ imageAlt: "Shipping boxes contain smaller boxes and individual items in a nested
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Structural Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Structural Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 08 of 23 · Structural patterns
 
-Treat individual objects and nested groups through the same component interface. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Treat individual objects and nested groups through the same component interface. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -43,11 +43,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/composite.svg" alt="Composite diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Composite: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/composite.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/composite.svg" alt="Composite sketch map: Client::bytes() leads through Entry to File / Folder[Entry]." loading="lazy" decoding="async" />
+  <figcaption>Composite: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/composite.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -64,7 +64,65 @@ Canonical roles in this example:
 - [`Leaf`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#leaf) — A Component with no child Components. Here: `File`.
 - [`ownership`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#ownership) — Responsibility for keeping a resource alive and eventually releasing it. Here: `Folder::children_`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/python/main.py) is shown first.
+
+```python
+class File:
+    def __init__(self, size):
+        if size < 0:
+            raise ValueError("Negative size")
+        self.size = size
+
+    def bytes(self):
+        return self.size
+
+
+class Folder:
+    def __init__(self):
+        self.children = []
+
+    def add(self, child):
+        self.children.append(child)
+
+    def bytes(self):
+        return sum(child.bytes() for child in self.children)
+
+
+def main():
+    root = Folder()
+    print("Empty:", root.bytes(), "bytes")
+    images = Folder()
+    images.add(File(20))
+    root.add(File(10))
+    root.add(images)
+    print("Total:", root.bytes(), "bytes")
+    try:
+        File(-1)
+    except ValueError:
+        print("Negative size rejected")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Python Output
+
+```text
+Empty: 0 bytes
+Total: 30 bytes
+Negative size rejected
+```
+
+## Code Walkthrough
+
+Entry defines bytes. File returns its size; Folder owns children with [`std::unique_ptr`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#stdunique_ptr) and aggregates their results.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
 #include <iostream>
@@ -105,13 +163,18 @@ int main() {
     root.add(std::make_unique<File>(10));
     root.add(std::move(images));
     std::cout << "Total: " << root.bytes() << " bytes\n";
+    std::cout << "Empty: " << Folder{}.bytes() << " bytes\n";
+    try { const File invalid{-1}; }
+    catch (const std::invalid_argument&) { std::cout << "Negative size rejected\n"; }
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 Total: 30 bytes
+Empty: 0 bytes
+Negative size rejected
 ```
 
 ## When to Use
@@ -163,9 +226,19 @@ Why is add available on Folder rather than Entry? What would a File.add mean?
 
 Add an empty folder and a second nesting level; verify both totals and consider a wider size type.
 
+## Compare the two versions
+
+Python uses a list of Objects that offer `bytes`; C++ uses a common Entry Interface and exclusive Ownership with `unique_ptr`. Python references allow accidental shared children or cycles. Keep this example a tree; garbage collection does not make recursive traversal of a cycle safe. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. Why can an empty Folder return zero through the same Interface as File?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [structural/composite/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/python/expected.txt). The C++20 code comes from [structural/composite/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/structural/composite/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

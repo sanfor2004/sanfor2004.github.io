@@ -6,15 +6,15 @@ imageAlt: "Symbol cards are combined into a small expression using grammar rules
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Behavioral Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Behavioral Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 15 of 23 · Behavioral patterns
 
-Represent a small grammar as objects that evaluate expressions in a context. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Represent a small grammar as objects that evaluate expressions in a context. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -42,11 +42,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/interpreter.svg" alt="Interpreter diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Interpreter: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/interpreter.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/interpreter.svg" alt="Interpreter sketch map: Context leads through Both(Expression, Expression) to Role / nested Both." loading="lazy" decoding="async" />
+  <figcaption>Interpreter: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/interpreter.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -64,7 +64,49 @@ Canonical roles in this example:
 - [`Nonterminal Expression`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#nonterminal-expression) — An expression that combines child expressions according to a grammar rule. Here: `Both`.
 - `Context` — The evaluation data used by expressions; here it is the set of role names. `Context`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/python/main.py) is shown first.
+
+```python
+class Role:
+    def __init__(self, name):
+        self.name = name
+
+    def evaluate(self, context):
+        return self.name in context
+
+
+class Both:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def evaluate(self, context):
+        return self.left.evaluate(context) and self.right.evaluate(context)
+
+
+if __name__ == "__main__":
+    rule = Both(Role("editor"), Role("verified"))
+    for context in [set(), {"editor"}, {"editor", "verified"}]:
+        print(rule.evaluate(context))
+```
+
+## Python Output
+
+```text
+False
+False
+True
+```
+
+## Code Walkthrough
+
+Expression defines evaluation, Context supplies roles, Role tests membership, Both owns its child expressions.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
 #include <iostream>
@@ -103,7 +145,7 @@ int main() {
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 false
@@ -160,9 +202,19 @@ Where would precedence be handled if users typed editor AND verified OR admin?
 
 Add Either for OR and test a nested rule with three distinct contexts.
 
+## Compare the two versions
+
+Both examples build an expression tree directly; neither parses text. Python uses a set as Context and matching `evaluate` methods. C++ declares an Expression Interface. Use a direct boolean expression when rules do not need to be represented as data. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. Does this example parse text, or evaluate an already built tree?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [behavioral/interpreter/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/python/expected.txt). The C++20 code comes from [behavioral/interpreter/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/interpreter/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

@@ -6,15 +6,15 @@ imageAlt: "A support request passes through a sequence of handlers."
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Behavioral Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Behavioral Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 13 of 23 · Behavioral patterns
 
-Pass a request through an ordered chain until a handler processes it or the chain ends. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Pass a request through an ordered chain until a handler processes it or the chain ends. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -44,11 +44,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/chain-of-responsibility.svg" alt="Chain of Responsibility diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Chain of Responsibility: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/chain-of-responsibility.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/chain-of-responsibility.svg" alt="Chain of Responsibility sketch map: Request leads through Auth to Limit." loading="lazy" decoding="async" />
+  <figcaption>Chain of Responsibility: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/chain-of-responsibility.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -65,15 +65,76 @@ Canonical roles in this example:
 - [`Concrete Handler`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#concrete-handler) — A Handler implementing one particular processing rule. Here: `Auth, Limit`.
 - [`chain termination`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#chain-termination) — The rule for stopping a chain and deciding what happens after the last handler. Here: `Handler::handle`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/python/main.py) is shown first.
+
+```python
+class Request:
+    def __init__(self, authenticated, amount_cents):
+        self.authenticated = authenticated
+        self.amount_cents = amount_cents
+
+
+class Handler:
+    def __init__(self, next_handler=None):
+        self.next_handler = next_handler
+
+    def accepts(self, request):
+        raise NotImplementedError
+
+    def handle(self, request):
+        if not self.accepts(request):
+            return False
+        if self.next_handler is None:
+            return True
+        return self.next_handler.handle(request)
+
+
+class Auth(Handler):
+    def accepts(self, request):
+        return request.authenticated
+
+
+class Limit(Handler):
+    def accepts(self, request):
+        return 0 < request.amount_cents <= 10000
+
+
+if __name__ == "__main__":
+    chain = Auth(Limit())
+    for authenticated, amount_cents in [(False, 2000), (True, 20000),
+                                       (True, 2000), (True, 0), (True, 10000)]:
+        request = Request(authenticated, amount_cents)
+        print("Accepted" if chain.handle(request) else "Rejected")
+```
+
+## Python Output
+
+```text
+Rejected
+Rejected
+Accepted
+Rejected
+Accepted
+```
+
+## Code Walkthrough
+
+Handler owns its successor. Auth checks identity, Limit checks amount. The client chooses the chain order.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
+// Monetary amounts in this example are integer cents.
 #include <initializer_list>
 #include <iostream>
 #include <memory>
 #include <utility>
 
-struct Request { bool authenticated; int amount; };
+struct Request { bool authenticated; int amount_cents; };
 class Handler {
     std::unique_ptr<Handler> next_;
 protected:
@@ -92,7 +153,7 @@ public:
     using Handler::Handler;
 };
 class Limit final : public Handler {
-    bool accepts(const Request& request) const override { return request.amount > 0 && request.amount <= 100; }
+    bool accepts(const Request& request) const override { return request.amount_cents > 0 && request.amount_cents <= 100; }
 public:
     using Handler::Handler;
 };
@@ -103,7 +164,7 @@ int main() {
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 Rejected
@@ -160,9 +221,19 @@ What happens to an unauthenticated request if Limit is expensive and placed firs
 
 Add a maintenance-mode handler and verify that rejected requests never reach later checks.
 
+## Compare the two versions
+
+Both versions use a validation chain: each Handler may reject, or pass onward; reaching the end means success. Other chains stop at the first Handler that can fulfill a request. Python holds successor references; C++ owns them with `unique_ptr`. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. What does reaching the end of this chain mean, and when does a check stop it?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [behavioral/chain-of-responsibility/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/python/expected.txt). The C++20 code comes from [behavioral/chain-of-responsibility/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/chain-of-responsibility/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

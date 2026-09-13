@@ -6,15 +6,15 @@ imageAlt: "A furniture workshop assembles matching chairs, tables, and cabinets 
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Creational Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Creational Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 01 of 23 · Creational patterns
 
-Create compatible families of objects without coupling the client to concrete classes. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Create compatible families of objects without coupling the client to concrete classes. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -43,11 +43,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/abstract-factory.svg" alt="Abstract Factory diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Abstract Factory: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/abstract-factory.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/abstract-factory.svg" alt="Abstract Factory sketch map: render() leads through Theme to Button + Panel." loading="lazy" decoding="async" />
+  <figcaption>Abstract Factory: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/abstract-factory.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -64,7 +64,66 @@ Canonical roles in this example:
 - [`Concrete Product`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#concrete-product) — A particular implementation of a Product contract. Here: `DarkButton, LightButton, DarkPanel, LightPanel`.
 - [`Concrete Factory`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#concrete-factory) — An implementation that creates one matching Product family. Here: `DarkTheme, LightTheme`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/python/main.py) is shown first.
+
+```python
+class Button:
+    def __init__(self, theme):
+        self.theme = theme
+
+    def paint(self):
+        return self.theme + " button"
+
+
+class Panel:
+    def __init__(self, theme):
+        self.theme = theme
+
+    def paint(self):
+        return self.theme + " panel"
+
+
+class DarkTheme:
+    def button(self):
+        return Button("dark")
+
+    def panel(self):
+        return Panel("dark")
+
+
+class LightTheme:
+    def button(self):
+        return Button("light")
+
+    def panel(self):
+        return Panel("light")
+
+
+def render(theme):
+    print(theme.button().paint() + " + " + theme.panel().paint())
+
+
+if __name__ == "__main__":
+    render(DarkTheme())
+    render(LightTheme())
+```
+
+## Python Output
+
+```text
+dark button + dark panel
+light button + light panel
+```
+
+## Code Walkthrough
+
+Theme defines the family; DarkTheme and LightTheme create it. Button and Panel define product interfaces. render consumes those interfaces.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
 #include <iostream>
@@ -115,7 +174,7 @@ int main() {
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 dark button + dark panel
@@ -171,9 +230,19 @@ What changes when you add a new theme versus a new widget type? Trace every inte
 
 Add a high-contrast family. Then add a Slider product and compare the number of files or classes affected.
 
+## Compare the two versions
+
+Python uses matching method names instead of abstract base classes. C++ declares separate Button, Panel, and Theme Interfaces. Both create a family of products. Neither language automatically proves that the products match visually. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. Why does one Theme create both products?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [creational/abstract-factory/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/python/expected.txt). The C++20 code comes from [creational/abstract-factory/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/abstract-factory/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

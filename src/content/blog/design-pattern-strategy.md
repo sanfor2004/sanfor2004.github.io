@@ -6,15 +6,15 @@ imageAlt: "A traveler chooses between alternative routes to a destination."
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Behavioral Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Behavioral Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 21 of 23 · Behavioral patterns
 
-Package interchangeable algorithms behind one interface and choose among them by composition. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Package interchangeable algorithms behind one interface and choose among them by composition. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -42,11 +42,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/strategy.svg" alt="Strategy diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Strategy: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/strategy.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/strategy.svg" alt="Strategy sketch map: Checkout::total() leads through ShippingRule to standard / express lambda." loading="lazy" decoding="async" />
+  <figcaption>Strategy: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/strategy.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -63,9 +63,62 @@ Canonical roles in this example:
 - [`Strategy interface`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#strategy-interface) — The contract for interchangeable algorithms used by a Context. Here: `ShippingRule`.
 - [`Concrete Strategy`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#concrete-strategy) — A particular implementation of a Strategy interface, possibly a callable rather than a class. Here: `standard / express lambdas`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/python/main.py) is shown first.
+
+```python
+class Checkout:
+    def __init__(self, shipping_rule):
+        self.shipping_rule = shipping_rule
+
+    def total(self, subtotal_cents):
+        if subtotal_cents < 0:
+            raise ValueError("Negative subtotal")
+        return subtotal_cents + self.shipping_rule(subtotal_cents)
+
+
+def standard(subtotal_cents):
+    return 500
+
+
+def express(subtotal_cents):
+    return 0 if subtotal_cents >= 10000 else 1500
+
+
+def main():
+    print("Standard:", Checkout(standard).total(4000))
+    print("Express:", Checkout(express).total(4000))
+    print("Express boundary:", Checkout(express).total(10000))
+    try:
+        Checkout(standard).total(-1)
+    except ValueError:
+        print("Negative subtotal rejected")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Python Output
+
+```text
+Standard: 4500
+Express: 5500
+Express boundary: 10000
+Negative subtotal rejected
+```
+
+## Code Walkthrough
+
+Checkout is the context, ShippingRule the behavioral contract, and lambdas implement standard and express fees.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
+// Monetary amounts in this example are integer cents.
 #include <functional>
 #include <iostream>
 #include <stdexcept>
@@ -78,26 +131,34 @@ public:
     explicit Checkout(ShippingRule shipping) : shipping_(std::move(shipping)) {
         if (!shipping_) throw std::invalid_argument("Missing shipping rule");
     }
-    int total(int subtotal) const {
-        if (subtotal < 0) throw std::invalid_argument("Negative subtotal");
-        return subtotal + shipping_(subtotal);
+    int total(int subtotal_cents) const {
+        if (subtotal_cents < 0) throw std::invalid_argument("Negative subtotal");
+        return subtotal_cents + shipping_(subtotal_cents);
     }
 };
 int main() {
     const Checkout standard{[](int) { return 5; }};
-    const Checkout express{[](int subtotal) { return subtotal >= 100 ? 0 : 15; }};
+    const Checkout express{[](int subtotal_cents) { return subtotal_cents >= 100 ? 0 : 15; }};
     std::cout << "Standard: " << standard.total(40) << '\n';
     std::cout << "Express: " << express.total(40) << '\n';
     std::cout << "Express large: " << express.total(120) << '\n';
+    std::cout << "Express boundary: " << express.total(100) << '\n';
+    try { static_cast<void>(standard.total(-1)); }
+    catch (const std::invalid_argument&) { std::cout << "Negative subtotal rejected\n"; }
+    try { const Checkout missing{ShippingRule{}}; }
+    catch (const std::invalid_argument&) { std::cout << "Missing rule rejected\n"; }
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 Standard: 45
 Express: 55
 Express large: 120
+Express boundary: 100
+Negative subtotal rejected
+Missing rule rejected
 ```
 
 ## When to Use
@@ -151,9 +212,19 @@ How would replacing std::function with a template parameter affect [`runtime`](h
 
 Add free shipping for subtotals of at least 80 and test 79, 80 and 81.
 
+## Compare the two versions
+
+A Python function is the Concrete Strategy. C++ stores the same kind of callable in `std::function`; a template policy can instead select it at Compile time. Both examples choose the rule when constructing Checkout. Amounts are integer cents. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. Can this Checkout change its rule after construction through its public API?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [behavioral/strategy/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/python/expected.txt). The C++20 code comes from [behavioral/strategy/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/behavioral/strategy/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

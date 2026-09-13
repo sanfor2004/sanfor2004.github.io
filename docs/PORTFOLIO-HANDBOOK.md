@@ -54,7 +54,7 @@ The identity source is [src/site.ts](../src/site.ts). Security, automation, full
 | `/art/` | Fourteen artwork entries with captions and alternative text |
 | `/contact/` | Public profiles; no submission backend |
 | `/blog/design-patterns-overview/` | English overview linking all 23 pattern articles, categories, prerequisites, and reading order |
-| `/blog/design-pattern-<slug>/` | English pattern article with preserved cover, diagram, C++20 source, output, and related links |
+| `/blog/design-pattern-<slug>/` | English pattern article with preserved cover, sketch map, complete Python and C++20 examples and outputs, and related links |
 | Former `/learning/` URLs | Static redirects to the overview or corresponding English article; no Learning UI |
 | `/rss.xml` | Published blog metadata feed |
 | `/testblog/` | Unlisted writing-layout prototype; generated with `noindex, nofollow` and excluded from sitemap |
@@ -91,11 +91,11 @@ Alongside the 24-post design-pattern series, four articles cover a technical lea
 
 The series starts with `/blog/design-patterns-overview/`, followed by 23 English articles titled with the pattern name and its Creational, Structural, or Behavioral category. The overview explains prerequisites, category versus class/object scope, use cases, comparisons, and a linked reading order.
 
-The individual posts adapt the owner's `23-Design-Patterns` repository explanations and C++20 examples. Each includes the problem, a simple approach, responsibilities, implementation, expected output, use cases, trade-offs, and a challenge. All 23 earlier sketchbook covers are preserved, explained in the posts, and paired with the source repository's SVG diagrams.
+The individual posts adapt the owner's `23-Design-Patterns` repository explanations and runnable Python and C++20 examples. Python appears first, followed by its output, a walkthrough, then C++20 and its output. Each post explains the problem, roles, trade-offs, and a challenge. All 23 earlier sketchbook covers are preserved and paired with warm SVG maps of the examples' roles and flow.
 
 Learning has been removed from navigation, routes, components, and collections. Its 48 former hub and localized lesson URLs now redirect to the English series; redirects are excluded from the sitemap. The original image URLs remain available for compatibility, while articles use `public/images/writing/patterns/`.
 
-Article Markdown is the editing source; `src/data/design-pattern-series.mjs` records stable identities and redirects. There is no MDX lesson generator. The private GoF PDF remains ignored and unpublished; copied code and diagrams retain the source license notice.
+Article Markdown is the editing source; `src/data/design-pattern-series.mjs` records stable identities and redirects. Preserve each original `pubDate` and set the actual `updatedDate` when substantially revising an article. Keep both displayed examples and outputs synchronized with the source repository. There is no MDX lesson generator. The private GoF PDF remains ignored and unpublished; copied code and diagrams retain the source license notice.
 
 ### Art and contact
 
@@ -263,7 +263,7 @@ Audio attribution and stated licenses are documented in [public/audio/README.md]
 
 ## 9. Development and quality
 
-Use `npm ci`, `npm run dev`, and `npm run build`. The build runs `astro check` before generating `dist/`. `npm run lint` also runs `astro check`. `npm run verify:patterns` checks the 24 pattern posts, their assets, internal links, and 48 redirects. It compiles the 23 published C++20 examples with g++, clang++, or MSVC and compares stdout. Missing compilers are reported as local skips and fail CI. MSVC requires a Visual Studio developer shell with headers and libraries configured. CI uses the Ubuntu runner's compiler. There is no general unit-test script. Playwright supports the separate campaign tools, not a site-wide test suite.
+Use `npm ci`, `npm run dev`, and `npm run build`. The build runs `astro check` before generating `dist/`. `npm run lint` also runs `astro check`. `npm run verify:patterns` checks the 24 pattern posts, their assets, internal links, and 48 redirects. It runs the 23 displayed Python examples and compiles the 23 displayed C++20 examples with g++, clang++, or MSVC, comparing each output. Missing tools are reported as local skips and fail CI. MSVC requires a Visual Studio developer shell with headers and libraries configured. There is no general unit-test script. Playwright supports the separate campaign tools, not a site-wide test suite.
 
 On Windows, use `npm.cmd` when PowerShell blocks `npm.ps1`. CI specifies Node 22; check installed package engines when resolving compatibility. Report missing dependencies and failures accurately.
 

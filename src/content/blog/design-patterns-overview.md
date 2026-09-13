@@ -1,19 +1,20 @@
 ---
 title: "Design Patterns Overview (Creational, Structural, and Behavioral Patterns)"
-description: "Start here: all 23 GoF design patterns, their three categories, class and object scope, prerequisites, and illustrated C++20 articles."
+description: "Start here: all 23 GoF design patterns, their categories and scope, with illustrated Python and C++20 lessons."
 image: "/images/writing/patterns/overview.webp"
 imageAlt: "An open sketchbook becomes a workshop, modular bridges, and connected signal stations, illustrating creation, structure, and collaboration."
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "C++", "Architecture", "Software Engineering"]
+tags: ["Design Patterns", "Python", "C++", "Architecture", "Software Engineering"]
 draft: false
 ---
 
 Design patterns give us names for recurring design decisions: who creates an object, how components fit together, and who decides what happens next. Knowing a name is useful only when you can explain the problem it solves and the cost of adding it.
 
-This is the starting point for my 24-post series: this overview and one article for each of the 23 patterns. The articles are based on my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns), with its C++20 examples, participating classes, expected output, and practical limitations. I have brought the illustrations from my earlier learning collection into the blog so that each idea has both a familiar visual analogy and a concrete implementation.
+This is the starting point for my 24-post series: this overview and one article for each of the 23 patterns. The articles are based on my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns), with complete Python and C++20 examples, expected output for each, and practical limitations. Each article pairs a familiar cover illustration with a sketch map of its example's roles and flow.
 
 ## What is a design pattern?
 
@@ -34,7 +35,7 @@ You should be comfortable reading a small program with functions, classes, const
 - **Ownership and lifetime:** in the C++ examples, distinguish a value, a borrowed reference, `std::unique_ptr`, `std::shared_ptr`, and `std::weak_ptr`.
 - **Testing:** be able to predict output, try a boundary case, and explain what a small example does not test.
 
-The repository's [glossary](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md) explains the terms used in each article. You can read the prose without a compiler. To run the examples, use a C++20 compiler; the repository's combined build also needs CMake 3.20 or newer.
+The repository's [glossary](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md) explains the terms used in each article. You can read the prose without installing anything. Run the first example with Python 3.10 or newer; the C++20 version needs a C++20 compiler, and the repository's combined build needs CMake 3.20 or newer.
 
 ## Three categories: what part of the design changes?
 

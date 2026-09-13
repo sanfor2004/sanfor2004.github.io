@@ -114,7 +114,7 @@ Most custom components use square corners, thin borders, visible alignment, larg
 | `SiteHeader` | Compact mark, uppercase navigation, native mobile disclosure |
 | `ProjectEntry` | Ownership, status, description, stack, and destination links |
 | Blog rows | Editorial headline and description paired with a cover |
-| Pattern blog articles | Standard article typography, preserved sketchbook cover, SVG structure diagram, and C++20 code blocks |
+| Pattern blog articles | Standard article typography, preserved sketchbook cover, warm SVG sketch map, and Python and C++20 code blocks |
 | `ExperienceEntry` | Native disclosure for deeper professional detail |
 | `TagList` | Compact topic metadata with correct archive destinations |
 | `ThemeToggle` | Fixed square control with accessible state |

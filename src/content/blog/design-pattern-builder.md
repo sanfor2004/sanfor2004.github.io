@@ -6,15 +6,15 @@ imageAlt: "A sandwich moves through successive preparation stations, with each s
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Creational Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Creational Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 02 of 23 · Creational patterns
 
-Construct a complex object step by step while allowing different final representations. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Construct a complex object step by step while allowing different final representations. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -42,11 +42,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/builder.svg" alt="Builder diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Builder: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/builder.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/builder.svg" alt="Builder sketch map: Client leads through RequestBuilder to Request." loading="lazy" decoding="async" />
+  <figcaption>Builder: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/builder.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -63,7 +63,76 @@ Canonical roles in this example:
 - [`fluent interface`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#fluent-interface) — An interface shaped to read as a chain of calls; it does not by itself imply Builder. Here: `RequestBuilder.endpoint().timeout().retry()`.
 - [`constructor`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#constructor) — The special operation that initializes a new class instance. Here: `Request::Request`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/python/main.py) is shown first.
+
+```python
+class Request:
+    def __init__(self, endpoint, timeout=30, retry=False):
+        self.endpoint = endpoint
+        self.timeout = timeout
+        self.retry = retry
+
+    def describe(self):
+        print(f"{self.endpoint} timeout={self.timeout} retry={self.retry}")
+
+
+class RequestBuilder:
+    def __init__(self):
+        self.endpoint_value = ""
+        self.timeout_value = 30
+        self.retry_value = False
+
+    def endpoint(self, value):
+        self.endpoint_value = value
+        return self
+
+    def timeout(self, seconds):
+        self.timeout_value = seconds
+        return self
+
+    def retry(self, enabled):
+        self.retry_value = enabled
+        return self
+
+    def build(self):
+        if not self.endpoint_value or self.timeout_value <= 0:
+            raise ValueError("Invalid request")
+        return Request(self.endpoint_value, self.timeout_value, self.retry_value)
+
+
+def main():
+    RequestBuilder().endpoint("/orders").timeout(5).retry(True).build().describe()
+    try:
+        RequestBuilder().build()
+    except ValueError:
+        print("Invalid request rejected")
+    try:
+        RequestBuilder().endpoint("/orders").timeout(0).build()
+    except ValueError:
+        print("Zero timeout rejected")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Python Output
+
+```text
+/orders timeout=5 retry=True
+Invalid request rejected
+Zero timeout rejected
+```
+
+## Code Walkthrough
+
+RequestBuilder stores temporary choices and validates them. Request owns the finished values. The client chooses the order of optional steps.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
 #include <iostream>
@@ -103,7 +172,7 @@ int main() {
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 /orders timeout=5 retry=1
@@ -159,9 +228,19 @@ Does a fluent interface automatically make something a Builder? Explain where co
 
 Reject timeouts above 120 and demonstrate both the boundary value and the first rejected value.
 
+## Compare the two versions
+
+Named Python arguments often make a Builder unnecessary. This example keeps separate construction steps to show the intent. `build` creates a fresh Request; as in C++, calling the public Request constructor directly bypasses Builder validation. A GoF Director is optional here, and the example builds one representation. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. What happens if a caller bypasses build and calls Request directly?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [creational/builder/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/python/expected.txt). The C++20 code comes from [creational/builder/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/builder/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

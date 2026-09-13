@@ -9,7 +9,7 @@ Updated 13 September 2026 after the SEO, analytics, and shared article layout up
 3. Files in `src/pages/` define routes. Dynamic routes use `getStaticPaths()`; details call `render()`. Filtering and sorting are implemented in each route.
 4. [BaseLayout](../src/layouts/BaseLayout.astro) provides the document, metadata, styles, navigation, and browser enhancements.
 5. `npm run build` runs Astro diagnostics and generates static output in `dist/`. Files in `public/` are copied as supplied.
-6. GitHub Actions verifies the pattern articles and C++ examples, builds, uploads only dist, and deploys that artifact.
+6. GitHub Actions verifies the pattern articles and Python and C++ examples, builds, uploads only dist, and deploys that artifact.
 
 There is no application database, authentication, CMS, contact API, or server-side code execution. RSS is generated during the build. React is configured but no current page mounts a React island.
 
@@ -47,18 +47,18 @@ The old Learning hub, 46 localized MDX wrappers, three lesson components, catalo
 | Source | Responsibility |
 | --- | --- |
 | [Overview article](../src/content/blog/design-patterns-overview.md) | Categories, class/object scope, prerequisites, all 23 links, comparisons, reading order |
-| `src/content/blog/design-pattern-*.md` | Authored English explanations, complete C++20 source, expected output, images, and cross-links |
+| `src/content/blog/design-pattern-*.md` | Authored English explanations, complete Python and C++20 source and output, images, and cross-links |
 | [design-pattern-series.mjs](../src/data/design-pattern-series.mjs) | Stable names/categories/slugs and 48 legacy redirects |
 | [verify-pattern-posts.mjs](../scripts/verify-pattern-posts.mjs) | Publication structure, asset/link checks, and compilation/output checks |
 | [Pattern image provenance](../public/images/writing/patterns/README.md) | Original cover history, migration, and copied diagram attribution |
 
 Titles use `Pattern Name (Creational Pattern)`, `(Structural Pattern)`, or `(Behavioral Pattern)`. Blog category is Design Patterns. All articles link back to the overview, to related posts, and to the original repository source; individual posts also provide previous/next links.
 
-The articles adapt the owner's separate [23-Design-Patterns repository](https://github.com/sanfor2004/23-Design-Patterns). Their C++20 examples model actual collaborations, replacing the site's former four-language programs that only printed role names. The source remains external, but the published Markdown and diagrams are self-contained: builds do not read a neighboring checkout or fetch repository content.
+The articles adapt the owner's separate [23-Design-Patterns repository](https://github.com/sanfor2004/23-Design-Patterns). Each presents its complete Python example first and then its C++20 example, with separate expected outputs. The source remains external, but the published Markdown and diagrams are self-contained: builds do not read a neighboring checkout or fetch repository content.
 
 Edit the Markdown directly. There is no generator that can overwrite it. When changing code, keep its expected-output block synchronized and re-run verification. Preserve factual limits on ownership, thread safety, error handling, and external effects. Exact output checks cover demonstrated scenarios, not every input or challenge.
 
-All 23 old WebP covers were copied unchanged into `public/images/writing/patterns/`; the former `public/images/learning/patterns/` paths remain available for existing image links. The new directory also contains 23 SVG diagrams copied unchanged from the source repository, provenance, and SOURCE-LICENSE.txt. Covers illustrate analogies; diagrams describe code structure. The ignored purchased GoF PDF is private and is not part of the published assets.
+All 23 old WebP covers were copied unchanged into `public/images/writing/patterns/`; the former `public/images/learning/patterns/` paths remain available for existing image links. The directory also contains 23 warm SVG sketch maps shared with the source repository, provenance, and SOURCE-LICENSE.txt. Covers illustrate analogies; diagrams trace example roles and calls. The ignored purchased GoF PDF is private and is not part of the published assets.
 
 ## Legacy URLs
 
@@ -107,7 +107,7 @@ Files in public are served as supplied, without automatic responsive conversion.
 | `npm run build` | Astro diagnostics followed by static output |
 | `npm run preview` | Serve the generated build |
 
-The pattern verifier supports g++, clang++, and cl. MSVC must run inside a configured Visual Studio developer shell with headers and libraries available. If no compiler is detected, local structural checks run and compilation is reported as skipped; CI requires a compiler. It extracts the full C++ block from each post, builds it with C++20, compares stdout after normalizing CRLF, and removes its unique temporary directory under tmp. It does not run the deliberately incomplete naive snippets.
+The pattern verifier supports Python plus g++, clang++, and cl. MSVC must run inside a configured Visual Studio developer shell with headers and libraries available. Missing tools are reported as local skips; CI requires Python and a compiler. It extracts each complete Python and C++ block, runs it, compares stdout with its own expected-output block, and removes its unique temporary directory under tmp. It does not run the deliberately incomplete naive snippets.
 
 [deploy.yml](../.github/workflows/deploy.yml) runs on main pushes or manual dispatch. Its Ubuntu job configures Node 22, installs dependencies, runs pattern verification with the runner's C++ compiler, builds, and uploads dist. The old Go/Java/Python setup steps are removed. The dependent job deploys to github-pages; pages concurrency has cancel-in-progress false. Pages settings and live status are external.
 

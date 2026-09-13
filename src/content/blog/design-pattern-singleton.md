@@ -6,15 +6,15 @@ imageAlt: "One central fire-alarm panel receives reports from across a building.
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-11
-updatedDate: 2026-09-12
+updatedDate: 2026-09-14
 category: "Design Patterns"
-tags: ["Design Patterns", "Creational Patterns", "C++", "Software Engineering"]
+tags: ["Design Patterns", "Creational Patterns", "Python", "C++", "Software Engineering"]
 draft: false
 ---
 
 [Start with the design patterns overview](/blog/design-patterns-overview/) · Part 05 of 23 · Creational patterns
 
-Provide one controlled instance and a global access point—while understanding the coupling it creates. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/README.md), connecting the problem, participating classes, C++20 implementation, and the trade-offs that decide whether to use it.
+Provide one controlled instance and a global access point—while understanding the coupling it creates. This article follows the example in my [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/README.md), connecting the problem, participating classes, Python and C++20 implementations, and the trade-offs that decide whether to use it.
 
 ## The Problem
 
@@ -43,11 +43,11 @@ In the repository example, the same design idea addresses this software problem:
 
 ## Structure
 
-[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/diagram.md) · [Run the example](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/cpp/README.md)
+[Diagram](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/diagram.md) · [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/python/main.py) · [C++20 source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/cpp/main.cpp)
 
 <figure>
-  <img src="/images/writing/patterns/diagrams/singleton.svg" alt="Singleton diagram showing the participants and their relationships in the C++ example below." loading="lazy" decoding="async" />
-  <figcaption>Singleton: the code structure. Read the participant roles below alongside the arrows. <a href="/images/writing/patterns/diagrams/singleton.svg">Open the full-size diagram</a>.</figcaption>
+  <img src="/images/writing/patterns/diagrams/singleton.svg" alt="Singleton sketch map: Client A + B leads through Metrics::instance() to one Metrics." loading="lazy" decoding="async" />
+  <figcaption>Singleton: trace the example from caller through the pattern boundary to its collaborator or result. The arrows show flow, not ownership. <a href="/images/writing/patterns/diagrams/singleton.svg">Open the full-size diagram</a>.</figcaption>
 </figure>
 
 ```text
@@ -64,7 +64,51 @@ Canonical roles in this example:
 - [`global state`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#global-state) — Data reachable broadly across a program whose changes can affect distant code. Here: `Metrics::requests_`.
 - [`thread-safe initialization`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#thread-safe-initialization) — Initialization protected against concurrent construction; it does not make later operations thread-safe. Here: `static Metrics metrics`.
 
-## Modern C++20 Example
+## Python Example
+
+The complete [Python source](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/python/main.py) is shown first.
+
+```python
+class Metrics:
+    def __init__(self):
+        self.requests = 0
+
+    def record(self):
+        self.requests += 1
+
+
+# One shared instance under normal imports of this module.
+# This expresses shared access, not a ban on creating other Metrics objects.
+metrics = Metrics()
+
+
+def main():
+    first = metrics
+    second = metrics
+    first.record()
+    second.record()
+    print("Same instance:", first is second)
+    print("Requests:", metrics.requests)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Python Output
+
+```text
+Same instance: True
+Requests: 2
+```
+
+## Code Walkthrough
+
+Metrics controls its [`lifetime`](https://github.com/sanfor2004/23-Design-Patterns/blob/main/GLOSSARY.md#lifetime) and stores the count. instance returns a non-owning reference; callers must never delete it.
+
+Start at the final call in the Python example. Follow the middle role in the diagram and compare how the C++20 version handles the same responsibility.
+
+## C++20 Example
 
 ```cpp
 #include <iostream>
@@ -92,7 +136,7 @@ int main() {
 }
 ```
 
-## Example Output
+## C++20 Output
 
 ```text
 Same instance: true
@@ -148,9 +192,19 @@ Does thread-safe initialization make requests_ thread-safe? Identify the separat
 
 Refactor the example to inject a Metrics-like counter into two jobs, then test two isolated counters.
 
+## Compare the two versions
+
+Python uses one module-level instance, a common alternative to a strict Singleton Class. It does not prevent callers from constructing Metrics. C++ makes its constructor private and deletes copying. Shared mutable State complicates isolation in both; prefer passing a Dependency explicitly. Neither counter is thread-safe. The two examples express the same pattern responsibility; compare their setup and output before changing an input.
+
+## Check yourself
+
+1. How could one test leave counter State that affects the next test?
+2. When would the naive solution on this page be easier to maintain? Give a concrete example.
+3. Change one input in the Python example. Predict the output and explain which responsibility handles the change.
+
 ## Run and explore the example
 
-The complete code above comes from [creational/singleton/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
+The Python code comes from [python/main.py](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/python/main.py), with [expected output](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/python/expected.txt). The C++20 code comes from [creational/singleton/cpp/main.cpp](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/cpp/main.cpp). Follow the repository's [C++20 build instructions](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CPP_EXAMPLES.md) to compile it and compare the result with [expected.txt](https://github.com/sanfor2004/23-Design-Patterns/blob/main/creational/singleton/cpp/expected.txt). The output demonstrates this example's behavior; it does not cover every input or the challenge above.
 
 The source example and adapted explanation are © 2026 Sanfor2004, provided under the [MIT license](/images/writing/patterns/SOURCE-LICENSE.txt). The sketchbook cover is an illustration preserved from this site's original pattern lessons.
 

@@ -105,7 +105,7 @@ npm run preview
 - `src/data/design-pattern-series.mjs` supplies stable identities and 48 legacy redirects. Keep old Learning URLs as redirects, excluded from the sitemap; do not recreate the removed section.
 - Covers and SVG diagrams live in `public/images/writing/patterns/`. Preserve its README and SOURCE-LICENSE.txt. Original cover paths under `public/images/learning/patterns/` remain as compatibility assets.
 - Edit articles directly; there is no lesson generator or MDX wrapper. Build does not require another checkout.
-- Run `npm run verify:patterns` when changing the series. It checks publication structure and compiles the exact displayed C++20 code when a compiler is available; CI requires one. Use a Visual Studio developer shell for MSVC. Temporary output uses a unique `tmp/pattern-posts-*` directory removed after the run.
+- Run `npm run verify:patterns` when changing the series. It checks publication structure, runs the displayed Python code, and compiles the displayed C++20 code when tools are available; CI requires both. Use a Visual Studio developer shell for MSVC. Temporary output uses a unique `tmp/pattern-posts-*` directory removed after the run.
 - Stdout checks validate the demonstrated scenarios, not every possible input or challenge. Preserve limitations on concurrency, ownership, and external effects.
 
 ## Brand, accessibility, and assets

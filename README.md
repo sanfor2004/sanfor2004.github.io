@@ -13,7 +13,7 @@ Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, English design-pat
 ## What Is Included
 
 - Home, About, Projects, Blog, Art, Contact, and tag pages.
-- A 24-post English design-pattern series: an overview plus all 23 GoF patterns, preserving the earlier illustrations and adding the owner's C++20 examples and diagrams.
+- A 24-post English design-pattern series: an overview plus all 23 GoF patterns, with preserved covers, sketch maps, and complete Python and C++20 examples.
 - Content collections for Markdown-based projects and blog posts.
 - Markdown project writeups and technical articles based on project evidence.
 - RSS feed, sitemap integration, robots.txt, canonical URLs, Open Graph metadata, and structured data.
@@ -50,7 +50,7 @@ npm run build
 ```
 
 The `build` script runs `astro check` before generating the static site in `dist/`.
-`verify:patterns` checks all 24 series posts, images, internal links, and legacy redirects. It compiles the 23 published C++20 examples and compares their output when a compiler is available; CI requires a compiler. With MSVC, run from a Visual Studio developer shell so headers and libraries are available.
+`verify:patterns` checks all 24 series posts, images, internal links, and legacy redirects. It runs the 23 displayed Python examples and compiles the 23 displayed C++20 examples, comparing each with its output block. CI requires Python and a C++20 compiler. With MSVC, run from a Visual Studio developer shell so headers and libraries are available.
 
 Use `npm run preview` to serve the completed `dist/` build locally. There is no general `npm test` script or configured browser test suite.
 
@@ -59,6 +59,8 @@ Use `npm run preview` to serve the completed `dist/` build locally. There is no 
 The series starts at `/blog/design-patterns-overview/`. Each individual article uses `/blog/design-pattern-<slug>/` and a title such as **Abstract Factory (Creational Pattern)**. The overview links all 23 posts; each post links back, to related articles, and to the original repository source.
 
 Edit the Markdown files in `src/content/blog/` directly. Examples and diagrams were adapted from the owner's [23-Design-Patterns repository](https://github.com/sanfor2004/23-Design-Patterns); this site does not depend on a neighboring checkout at build time. Stable slugs and legacy redirect mappings live in `src/data/design-pattern-series.mjs`.
+
+Preserve an article's original `pubDate` when revising it, and set the actual revision date in `updatedDate`. Keep the displayed Python and C++20 code and output synchronized with their source files. Publish source-repository changes before website links to new source files go live.
 
 Learning is no longer a navigation destination or a content collection. Its 48 former hub/English/Arabic URLs redirect to the English blog series. No Arabic lesson UI remains. New covers and diagrams are in `public/images/writing/patterns/`; old cover URLs are retained for compatibility. Source attribution and image provenance are recorded beside the new assets.
 
