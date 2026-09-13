@@ -10,11 +10,12 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 );
 ---
 
-<BaseLayout title="Projects" description="Engineering case studies, backend decisions, systems notes, and project writeups by sanfor2004.">
+<BaseLayout title="Software Engineering Projects — Systems & Backend" description="Engineering case studies, backend decisions, systems notes, and project writeups by sanfor2004.">
   <SiteGrid as="section" class="projects-index">
     <div class="container-page">
       <div class="projects-index__lead">
         <AsciiLabel text="projects" mark="02" />
+        <h1 class="sr-only">Software engineering projects</h1>
         <p class="projects-index__intro">
           I build projects around real problems, then refine each system until it feels simple, useful, and reliable.
         </p>

@@ -4,10 +4,11 @@ import { navItems, site } from "../site";
 
 <footer>
   <div class="site-footer container-page">
-    <p>SANFOR / {site.identity}</p>
+    <p>{site.author} / SANFOR / {site.identity}</p>
     <nav aria-label="Footer navigation">
       {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
       <a href="/rss.xml">RSS</a>
+      <a href={site.contactPlaceholders.find((item) => item.label === "LinkedIn")!.href} rel="me">LinkedIn</a>
       <a href={site.github} rel="me noopener noreferrer">GitHub</a>
     </nav>
   </div>

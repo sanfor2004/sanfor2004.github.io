@@ -1,5 +1,6 @@
 ---
 title: "XCVE"
+seoTitle: "XCVE — Python CVE Lookup Command-Line Tool"
 description: "A Python utility for quickly searching CVE records by identifier."
 pubDate: 2023-07-23
 tags: ["Python", "Security", "CVE", "Developer Tools"]

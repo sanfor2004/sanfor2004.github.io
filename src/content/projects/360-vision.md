@@ -1,5 +1,10 @@
 ---
 title: "360 Vision"
+seoTitle: "360° Virtual Tour Studio with Next.js & Three.js"
+image: "/images/writing/360vision/cover.png"
+imageAlt: "360Vision studio cover showing the panorama viewer, property map, and room navigation."
+imageWidth: 1600
+imageHeight: 900
 description: "A local Next.js studio for authoring interactive 360 property tours with hotspots, floor plans, and JSON storage."
 pubDate: 2026-08-27
 updatedDate: 2026-09-09

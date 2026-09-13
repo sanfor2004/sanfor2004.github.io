@@ -1,5 +1,6 @@
 ---
 title: "Multi-Region Tag Translator"
+seoTitle: "Multi-Region Website Tag Localization with JavaScript & PHP"
 description: "A JavaScript project with PHP support for serving localized site tags across regions."
 pubDate: 2026-03-07
 tags: ["JavaScript", "PHP", "Internationalization", "Web"]

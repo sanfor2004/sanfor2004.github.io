@@ -1,0 +1,12 @@
+---
+import { site } from "../site";
+interface Props { pubDate: Date; updatedDate?: Date }
+const { pubDate, updatedDate } = Astro.props;
+const format = (date: Date) => date.toLocaleDateString("en", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+---
+<div class="writing-article__author">
+  <img src="/images/ahmed-abdelaziz.png" alt="" width="56" height="56" loading="lazy" decoding="async" />
+  <div><a href="/about/" rel="author">{site.author} / Sanfor</a><h2>Author</h2></div>
+</div>
+<div><h2>Published</h2><p><time datetime={pubDate.toISOString()}>{format(pubDate)}</time></p></div>
+{updatedDate && <div><h2>Updated</h2><p><time datetime={updatedDate.toISOString()}>{format(updatedDate)}</time></p></div>}

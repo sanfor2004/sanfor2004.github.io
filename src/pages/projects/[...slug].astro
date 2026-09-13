@@ -1,65 +1,61 @@
 ---
 import { getCollection, render } from "astro:content";
-import AsciiLabel from "../../components/AsciiLabel.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SiteGrid from "../../components/SiteGrid.astro";
+import ArticleFrame from "../../components/ArticleFrame.astro";
+import ArticleMeta from "../../components/ArticleMeta.astro";
+import RelatedContent from "../../components/RelatedContent.astro";
 import TagList from "../../components/TagList.astro";
 import { site } from "../../site";
+import { person } from "../../lib/seo";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects", ({ data }) => !data.draft);
   return projects.map((project) => ({ params: { slug: project.id.replace(/\.mdx?$/, "") }, props: { project } }));
 }
-
 const { project } = Astro.props;
 const { Content } = await render(project);
-const year = project.data.pubDate.getFullYear();
+const breadcrumbs = [{ name: "Home", href: "/" }, { name: "Projects", href: "/projects/" }, { name: project.data.title, href: Astro.url.pathname }];
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "CreativeWork",
-  headline: project.data.title,
+  "@type": project.data.repo ? "SoftwareSourceCode" : "CreativeWork",
+  name: project.data.title,
   description: project.data.description,
+  codeRepository: project.data.repo,
   datePublished: project.data.pubDate.toISOString(),
-  author: { "@type": "Person", name: site.author, url: site.url },
-  url: new URL(`/projects/${project.id.replace(/\.mdx?$/, "")}/`, site.url).href,
+  dateModified: (project.data.updatedDate ?? project.data.pubDate).toISOString(),
+  author: person,
+  url: new URL(Astro.url.pathname, site.url).href,
+  image: project.data.image ? new URL(project.data.image, site.url).href : undefined,
   keywords: project.data.tags,
 };
 ---
-
-<BaseLayout title={project.data.title} description={project.data.description} type="article" structuredData={structuredData}>
-  <SiteGrid as="article" class="project-detail">
-    <div class="container-page">
-      <header class="project-detail__header">
-        <AsciiLabel text="case study" mark="03" />
-        <h1>{project.data.title}</h1>
-        <p>{project.data.description}</p>
-        <div class="project-detail__links">
-          <span>{year}</span>
-          <span>{project.data.status}</span>
-          <span>{project.data.role}</span>
-          {project.data.repo && <a href={project.data.repo} rel="noopener noreferrer">GitHub -></a>}
-          {project.data.demo && <a href={project.data.demo} rel="noopener noreferrer">Live -></a>}
-        </div>
-      </header>
-
-      <section class="project-detail__body">
-        <aside class="project-detail__meta" aria-label="Project metadata">
-          <div>
-            <h2>Stack</h2>
-            <ul>
-              {project.data.stack.map((item) => <li>[{item}]</li>)}
-            </ul>
-          </div>
-          <div>
-            <h2>Tags</h2>
-            <TagList tags={project.data.tags} />
-          </div>
-        </aside>
-
-        <div class="prose project-prose">
-          <Content />
-        </div>
-      </section>
-    </div>
-  </SiteGrid>
+<BaseLayout
+  title={project.data.seoTitle ?? project.data.title}
+  description={project.data.description}
+  image={project.data.image}
+  imageAlt={project.data.imageAlt}
+  imageWidth={project.data.imageWidth}
+  imageHeight={project.data.imageHeight}
+  publishedTime={project.data.pubDate.toISOString()}
+  modifiedTime={project.data.updatedDate?.toISOString()}
+  type="article"
+  structuredData={structuredData}
+  breadcrumbs={breadcrumbs}
+  contentKind="project"
+  contentId={project.id}
+>
+  <ArticleFrame {...project.data} breadcrumbs={breadcrumbs}>
+    <Fragment slot="metadata">
+      <ArticleMeta pubDate={project.data.pubDate} updatedDate={project.data.updatedDate} />
+      <div><h2>Status</h2><p>{project.data.status}</p></div>
+      <div><h2>Role</h2><p>{project.data.role}</p></div>
+      {project.data.stack.length > 0 && <div><h2>Stack</h2><ul>{project.data.stack.map((item) => <li>{item}</li>)}</ul></div>}
+      {project.data.tags.length > 0 && <div><h2>Tags</h2><TagList tags={project.data.tags} /></div>}
+      {project.data.repo && <a href={project.data.repo} rel="noopener noreferrer">GitHub repository →</a>}
+      {project.data.demo && <a href={project.data.demo} rel="noopener noreferrer">Live demo →</a>}
+      <a href="/projects/">All projects →</a>
+    </Fragment>
+    <Content />
+    <RelatedContent id={project.id} tags={project.data.tags} />
+  </ArticleFrame>
 </BaseLayout>

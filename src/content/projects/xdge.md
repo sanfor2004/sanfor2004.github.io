@@ -1,5 +1,6 @@
 ---
 title: "XDGe"
+seoTitle: "XDGe — Python Reconnaissance & Discovery Utility"
 description: "A Python security research utility for direction discovery and dork-based reconnaissance workflows."
 pubDate: 2026-06-06
 tags: ["Python", "Security", "Research", "Automation"]

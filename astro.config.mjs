@@ -6,12 +6,13 @@ import { learningRedirects } from "./src/data/design-pattern-series.mjs";
 
 export default defineConfig({
   site: "https://sanfor2004.github.io",
+  trailingSlash: "always",
   redirects: learningRedirects,
   integrations: [
     react(),
     sitemap({ filter: (page) => {
       const pathname = new URL(page).pathname;
-      return pathname !== "/testblog/" && !pathname.startsWith("/learning/");
+      return !["/testblog/", "/404/", "/404.html"].includes(pathname) && !pathname.startsWith("/learning/");
     } }),
   ],
   vite: {

@@ -1,5 +1,6 @@
 ---
 title: "XGS"
+seoTitle: "XGS — Python Dork-Based Search Tool"
 description: "A Python tool for dork-based search across normal and onion websites, with an educational focus."
 pubDate: 2024-01-07
 tags: ["Python", "Security Research", "Search", "CLI"]

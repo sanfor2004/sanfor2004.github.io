@@ -1,0 +1,72 @@
+---
+import { site } from "../site";
+import { person, breadcrumbSchema, type Breadcrumb } from "../lib/seo";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  publishedTime?: string;
+  modifiedTime?: string;
+  articleSection?: string;
+  type?: string;
+  structuredData?: Record<string, unknown>;
+  lang?: "en" | "ar";
+  alternates?: Array<{ lang: string; href: string }>;
+  robots?: string;
+  breadcrumbs?: Breadcrumb[];
+}
+const {
+  title = site.title, description = site.description,
+  image = "/assets/brand/social-card.png",
+  imageAlt = image === "/assets/brand/social-card.png" ? "SANFOR — Ahmed Abdelaziz, systems and backend engineer" : undefined,
+  imageWidth = image === "/assets/brand/social-card.png" ? 1200 : undefined,
+  imageHeight = image === "/assets/brand/social-card.png" ? 630 : undefined,
+  publishedTime, modifiedTime, articleSection,
+  type = "website", structuredData, lang = "en", alternates = [],
+  robots = "index, follow, max-image-preview:large", breadcrumbs = [],
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url);
+if (!canonical.pathname.endsWith("/") && !/\.[^/]+$/.test(canonical.pathname)) canonical.pathname += "/";
+const pageTitle = title === site.title ? site.seoTitle : `${title} | Sanfor`;
+const imageUrl = new URL(image, canonical).href;
+const defaultData = canonical.pathname === "/" || canonical.pathname === "/about/"
+  ? { "@type": "ProfilePage", name: pageTitle, url: canonical.href, mainEntity: person }
+  : { "@type": "WebPage", name: pageTitle, description, url: canonical.href, author: person };
+const data = { "@context": "https://schema.org", "@graph": [structuredData ?? defaultData, ...(breadcrumbs.length ? [breadcrumbSchema(breadcrumbs)] : [])] };
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
+---
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+<meta name="author" content={site.author} />
+<link rel="canonical" href={canonical.href} />
+{alternates.map((item) => <link rel="alternate" hreflang={item.lang} href={new URL(item.href, canonical).href} />)}
+{alternates.length > 0 && <link rel="alternate" hreflang="x-default" href={new URL(alternates.find((item) => item.lang === "en")?.href ?? alternates[0].href, canonical).href} />}
+<link rel="alternate" type="application/rss+xml" title="Ahmed Abdelaziz / Sanfor — Technical articles" href="/rss.xml" />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonical.href} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:site_name" content="SANFOR" />
+<meta property="og:locale" content={lang === "ar" ? "ar_EG" : "en_US"} />
+{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+{imageWidth && <meta property="og:image:width" content={String(imageWidth)} />}
+{imageHeight && <meta property="og:image:height" content={String(imageHeight)} />}
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+{publishedTime && <meta property="article:author" content={`${site.url}/about/`} />}
+{articleSection && <meta property="article:section" content={articleSection} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+{googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+{bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+<script is:inline type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, "\\u003c")} />

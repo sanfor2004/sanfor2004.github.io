@@ -1,6 +1,6 @@
 # How the Sanfor site works
 
-Updated 12 September 2026 after migrating Learning into the blog. This describes the working tree, not live deployment. See the [handbook](PORTFOLIO-HANDBOOK.md) for editorial practice and [AGENTS.md](../AGENTS.md) for change discipline.
+Updated 13 September 2026 after the SEO, analytics, and shared article layout upgrade. This describes the working tree, not live deployment. See the [handbook](PORTFOLIO-HANDBOOK.md) for editorial practice and [AGENTS.md](../AGENTS.md) for change discipline.
 
 ## From source to a page
 
@@ -68,21 +68,21 @@ GitHub Pages receives static redirect HTML rather than application-server 301 re
 
 ## Shared shell and browser state
 
-BaseLayout mounts PageLoader, SiteHeader except on home, main#content, AsciiSignal (the horse drawing), SiteFooter, ThemeToggle, and SiteCursor. Home supplies skip-to-navigation; internal pages have skip-to-content. The mobile header uses a native details menu. Footer navigation reuses navItems and adds RSS/GitHub.
+BaseLayout mounts PageLoader, SiteHeader except on home, main#content, AsciiSignal (the horse drawing), SiteFooter, ThemeToggle, and SiteCursor. Home supplies skip-to-navigation; internal pages have skip-to-content. The mobile header uses a native details menu. Footer navigation reuses navItems and adds RSS, GitHub, and LinkedIn.
 
 ClientRouter replaces page DOM during internal navigation. Enhancements use Astro lifecycle events and initialization guards; new code should reacquire page-local nodes after swaps.
 
 | Behavior | Current implementation |
 | --- | --- |
 | Theme | sanfor-theme stores light/dark; restored initially and after swaps, defaulting to light |
-| Theme control | New buttons bind on page load; label and pressed state update; click-time localStorage write remains unguarded |
+| Theme control | New buttons bind on page load; label and pressed state update; storage reads/writes catch blocked access |
 | Language | Layout props and main data attributes synchronize document lang/dir on page load; current content is English |
 | Blog search | Case-insensitive substring match over title, description, category, tags; updates hidden cards, live count, and empty message |
 | Blog masonry | At 761px and wider, JS measures cards and assigns grid spans; recalculates on images, fonts, filtering, and resize; cleans observer/frame before swap |
 | Loader | Split-panel reveal, normal completion after 950ms; reduced motion finishes immediately |
 | Cursor | Square enhancement for fine pointers without reduced motion; queries current DOM on pointer events |
 
-Search does not inspect article bodies, persist in the URL, or run on topic/prototype pages. The shared loader still requires JavaScript to reveal content.
+Search does not inspect article bodies, persist in the URL, or run on topic/prototype pages. A noscript fallback hides the loader when JavaScript is disabled.
 
 MusicPlayer, MusicPrompt, BusinessPanels, IllustrationSlot, PageHeader, and ui/SectionHeader have no current consumers. Dormant music retains transition:persist, Web Audio, and track/volume storage. Audio files and attribution still ship because they are under public.
 
@@ -90,9 +90,9 @@ MusicPlayer, MusicPrompt, BusinessPanels, IllustrationSlot, PageHeader, and ui/S
 
 [styles.css](../src/styles.css) imports local Inter weights 400–800, Tailwind, and daisyUI. The sanfor light theme and sanfor-dark overrides supply semantic colors and the rail container. The [brand guide](BRAND-GUIDE.md) records visual conventions. The removed Learning styles do not define the blog series' appearance.
 
-BaseLayout derives canonical URLs from the pathname and site.url, resolves social images to absolute URLs, and defaults structured data to ProfilePage/Person. All blog details, including patterns, supply BlogPosting. Projects supply CreativeWork. RSS contains article metadata, not full bodies. Sitemap excludes the prototype and old Learning aliases.
+BaseLayout delegates metadata to SEO.astro, which derives trailing-slash canonical URLs from the pathname and Astro site origin. Home/About use ProfilePage/Person; other ordinary routes use WebPage. Blog details supply TechArticle; projects with repositories supply SoftwareSourceCode. BreadcrumbList accompanies nested entries. RSS contains article metadata and author names, not full bodies. Sitemap excludes the prototype, 404, and old Learning aliases. See [SEO](SEO.md).
 
-Google Analytics is embedded in the layout; there is no dedicated client-navigation analytics hook. Script presence does not establish accurate collection. Project detail pages still do not surface updatedDate or pass optional project images into social metadata.
+Analytics.astro enables the typed analytics helper only for production builds with a valid PUBLIC_GA_MEASUREMENT_ID. It handles astro:page-load and delegated discovery clicks. Google automatic history page views must be disabled in the stream settings; see [Analytics](ANALYTICS.md). ArticleFrame and ArticleMeta are shared by blog/project details; project covers and authored updated dates now surface. RelatedContent extends internal discovery; patterns preserve their existing authored related links and previous/next navigation.
 
 Files in public are served as supplied, without automatic responsive conversion. Markting contains a separate prepared campaign and reproduction tools; it is outside the site output. Its Playwright tools use installed Chrome and capture dist through a temporary loopback server. Historical campaign and article reports describe their dated runs, not current validation.
 

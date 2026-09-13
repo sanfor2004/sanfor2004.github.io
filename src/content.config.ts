@@ -4,6 +4,7 @@ import { z } from "zod";
 
 const shared = {
   title: z.string(),
+  seoTitle: z.string().optional(),
   description: z.string(),
   image: z.string().optional(),
   pubDate: z.coerce.date(),
@@ -29,6 +30,9 @@ const projects = defineCollection({
   schema: z.object({
     ...shared,
     status: z.string(),
+    imageAlt: z.string().optional(),
+    imageWidth: z.number().int().positive().optional(),
+    imageHeight: z.number().int().positive().optional(),
     role: z.string(),
     stack: z.array(z.string()).default([]),
     repo: z.url().optional(),

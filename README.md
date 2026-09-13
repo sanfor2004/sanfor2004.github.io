@@ -22,6 +22,14 @@ Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, English design-pat
 - Public contact links only; direct private contact details should be added only when intentionally approved for this site.
 - A warm editorial landing page, original art gallery, and light/dark themes.
 
+## SEO, Analytics, and Growth
+
+- [SEO and publishing](docs/SEO.md): metadata, Search Console/Bing setup, and publishing checklists.
+- [Analytics](docs/ANALYTICS.md): GA4 configuration, navigation tracking, privacy, and Realtime checks.
+- [Growth](docs/GROWTH.md): topic clusters, GitHub backlinks, and future resources.
+
+Set `PUBLIC_GA_MEASUREMENT_ID` in GitHub Actions repository variables before deploying to keep analytics enabled. Optional verification variables are documented in `.env.example`. Development does not load analytics; production builds without an ID remain fully functional.
+
 ## Local Development
 
 ```bash
@@ -64,7 +72,7 @@ The purchased GoF PDF remains private and ignored. Do not commit or publish it.
 - `MusicPlayer.astro` remains available in source but is not mounted in the shared layout.
 - `BusinessPanels.tsx`, `MusicPrompt`, `IllustrationSlot`, `PageHeader`, and `ui/SectionHeader.astro` remain available but are not used by current pages.
 
-The shared layout handles metadata, client navigation, theme restoration, document language/direction, the page loader, footer, horse illustration, and custom cursor. Blog search filters title, description, category, and tags in the browser; it does not search article bodies.
+The shared layout delegates metadata to `SEO.astro` and analytics to `Analytics.astro`, and handles, client navigation, theme restoration, document language/direction, the page loader, footer, horse illustration, and custom cursor. Blog search filters title, description, category, and tags in the browser; it does not search article bodies.
 
 `/testblog/` is a generated visual prototype using published posts. It is unlisted, marked `noindex, nofollow`, and excluded from the sitemap; it is still publicly accessible when deployed.
 
@@ -118,13 +126,13 @@ draft: true
 Describe the project, constraints, tradeoffs, and future improvements.
 ```
 
-Replace the sample metadata with real project facts. Optional fields include `updatedDate`, `image`, `repo`, and `demo`; only add repository/demo URLs that exist. Remove `draft: true` when ready to publish.
+Replace the sample metadata with real project facts. Optional fields include `seoTitle`, `updatedDate`, `image`, `imageAlt`, `imageWidth`, `imageHeight`, `repo`, and `demo`; only add repository/demo URLs that exist. Remove `draft: true` when ready to publish.
 
 ## Edit Site Details
 
 - Update site-wide title, description, GitHub URL, and public contact links in `src/site.ts`.
 - Edit biography and experience text in `src/pages/about.astro`.
-- Replace `public/assets/brand/sanfor-linkedin-preview-2026.png` if you want a different Open Graph image.
+- The default Open Graph image is `public/assets/brand/social-card.png`; reproduce it with `node scripts/render-social-card.mjs`. The older banner is retained.
 
 ## GitHub Pages
 

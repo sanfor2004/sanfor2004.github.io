@@ -2522,6 +2522,23 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   padding-inline: 1rem;
 }
 
+.article-breadcrumbs {
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.article-breadcrumbs ol, .article-next-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+.article-breadcrumbs ol { list-style: none; padding: 0; margin: 0; }
+.article-breadcrumbs li + li::before { content: "/"; margin-right: 1rem; color: var(--color-muted); }
+.article-breadcrumbs a, .article-next-actions a { text-decoration: underline; text-underline-offset: 0.2em; }
+.article-discovery { margin-top: 2rem; padding-block: 1rem; border-top: 1px solid var(--color-border); }
+.topic-discovery { padding-inline: 1rem; }
+.topic-discovery > a { display: inline-block; margin-bottom: 1rem; text-decoration: underline; }
+
 .writing-article__header h1 {
   width: 100%;
   max-width: none;

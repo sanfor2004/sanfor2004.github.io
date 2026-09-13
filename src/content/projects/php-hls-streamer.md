@@ -1,5 +1,6 @@
 ---
 title: "PHP HLS Streamer"
+seoTitle: "PHP Video Streaming Backend with FFmpeg & HLS"
 description: "A minimal PHP streaming backend with FFmpeg and HLS output for iframe-ready playback."
 pubDate: 2026-06-10
 tags: ["PHP", "FFmpeg", "HLS", "Video"]

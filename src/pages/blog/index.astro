@@ -10,16 +10,21 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 );
 ---
 
-<BaseLayout title="Writing" description="Systems, backend, programming, and learning notes by Sanfor.">
+<BaseLayout title="Systems, Backend & C++ Engineering Articles" description="Systems, backend, programming, and learning notes by Sanfor.">
   <SiteGrid as="section" class="writing-index">
     <div class="container-page">
       <div class="projects-index__lead">
         <AsciiLabel text="Blogs" mark="03" />
+        <h1 class="sr-only">Systems, backend, and C++ articles</h1>
         <p class="projects-index__intro">
           I write about the systems I build, the problems I investigate, and the lessons worth keeping.
         </p>
       </div>
 
+      <nav class="article-discovery topic-discovery" aria-label="Writing topics">
+        <a href="/blog/design-patterns-overview/">Design Patterns in C++ — complete guide</a>
+        <TagList tags={[...new Set(posts.flatMap((post) => post.data.tags))].filter((tag) => posts.filter((post) => post.data.tags.includes(tag)).length >= 2)} basePath="/blog" />
+      </nav>
       <div class="projects-index__collection">
         <div class="projects-index__collection-heading">
           <p>All Posts</p>

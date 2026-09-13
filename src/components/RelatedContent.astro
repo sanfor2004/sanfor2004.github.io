@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+interface Props { id: string; tags: string[]; category?: string; showRelated?: boolean }
+const { id, tags, category, showRelated = true } = Astro.props;
+const related = (await getCollection("blog", ({ data }) => !data.draft))
+  .filter((post) => post.id !== id)
+  .map((post) => ({ post, score: post.data.tags.filter((tag) => tags.includes(tag)).length * 2 + (category && post.data.category === category ? 1 : 0) }))
+  .filter(({ score }) => score > 0)
+  .sort((a, b) => b.score - a.score || a.post.id.localeCompare(b.post.id))
+  .slice(0, 3);
+---
+{showRelated && related.length > 0 && <section class="article-discovery" aria-label="Related articles"><h2>Related articles</h2><ul>{related.map(({ post }) => <li><a href={`/blog/${post.id}/`}>{post.data.title}</a></li>)}</ul></section>}
+<nav class="article-discovery article-next-actions" aria-label="Explore Sanfor">
+  <a href="/projects/">Engineering projects</a><a href="/about/">About Ahmed</a><a href="/contact/">Contact</a>
+</nav>

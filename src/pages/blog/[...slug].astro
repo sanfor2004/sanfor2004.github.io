@@ -4,6 +4,11 @@ import AsciiLabel from "../../components/AsciiLabel.astro";
 import SiteGrid from "../../components/SiteGrid.astro";
 import TagList from "../../components/TagList.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArticleFrame from "../../components/ArticleFrame.astro";
+import ArticleMeta from "../../components/ArticleMeta.astro";
+import RelatedContent from "../../components/RelatedContent.astro";
+import { person } from "../../lib/seo";
+import { designPatterns, patternOverview } from "../../data/design-pattern-series.mjs";
 import { site } from "../../site";
 
 export async function getStaticPaths() {
@@ -41,24 +46,21 @@ const taggedPosts = isTagArchive ? props.posts : [];
 const renderedPost = post ? await render(post) : undefined;
 const Content = renderedPost?.Content;
 const slug = post?.id.replace(/\.mdx?$/, "");
-const formattedDate = post?.data.pubDate.toLocaleDateString("en", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
-const updatedDate = (post?.data.updatedDate ?? post?.data.pubDate)?.toLocaleDateString("en", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const pattern = designPatterns.find((item) => slug === `design-pattern-${item.slug}`);
+const seoTitle = post?.data.seoTitle ?? (pattern ? `${pattern.name} Design Pattern in C++` : slug === "design-patterns-overview" ? "23 Design Patterns in C++ — GoF Guide" : post?.data.title);
+const breadcrumbs = [
+  { name: "Home", href: "/" }, { name: "Blog", href: "/blog/" },
+  ...(pattern ? [{ name: "Design Patterns in C++", href: patternOverview }] : []),
+  { name: post?.data.title ?? tag ?? "Topic", href: Astro.url.pathname },
+];
 const structuredData = post ? {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
+  "@type": "TechArticle",
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.pubDate.toISOString(),
   dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
-  author: { "@type": "Person", name: site.author, url: new URL("/about/", site.url).href },
+  author: person,
   publisher: { "@type": "Person", name: site.author, url: site.url },
   mainEntityOfPage: new URL(`/blog/${slug}/`, site.url).href,
   image: new URL(post.data.image, site.url).href,
@@ -70,7 +72,10 @@ const structuredData = post ? {
 ---
 
 <BaseLayout
-  title={isTagArchive ? `Blog: ${tag}` : article.data.title}
+  title={isTagArchive ? `${tag} Engineering Articles` : seoTitle}
+  breadcrumbs={breadcrumbs}
+  contentKind={isTagArchive ? undefined : "article"}
+  contentId={slug}
   description={isTagArchive ? `Blog posts about ${tag} by Sanfor.` : article.data.description}
   image={post?.data.image}
   imageAlt={post?.data.imageAlt}
@@ -87,6 +92,7 @@ const structuredData = post ? {
       <div class="container-page">
         <div class="projects-index__lead">
           <AsciiLabel text={`Blog / ${tag}`} mark="03" />
+          <h1 class="sr-only">{tag} articles</h1>
           <p class="projects-index__intro">Notes and articles filed under {tag}.</p>
         </div>
 
@@ -126,37 +132,14 @@ const structuredData = post ? {
       </div>
     </SiteGrid>
   ) : (
-    <SiteGrid as="article" class="writing-article">
-      <div class="container-page">
-        <figure class="writing-article__image">
-          <img src={article.data.image} alt={article.data.imageAlt} width={article.data.imageWidth} height={article.data.imageHeight} fetchpriority="high" decoding="async" />
-        </figure>
-
-        <header class="writing-article__header">
-          <h1>{article.data.title}</h1>
-          <p>{article.data.description}</p>
-        </header>
-
-        <div class="writing-article__body">
-          <aside class="writing-article__meta" aria-label="Article metadata">
-            <div class="writing-article__author">
-              <img src="/images/ahmed-abdelaziz.png" alt="" width="56" height="56" loading="lazy" decoding="async" />
-              <div>
-                <a href="/about/" rel="author">{site.author}</a>
-                <h2>Author</h2>
-              </div>
-            </div>
-            <div><h2>Published</h2><p><time datetime={article.data.pubDate.toISOString()}>{formattedDate}</time></p></div>
-            <div><h2>Updated</h2><p>{updatedDate}</p></div>
-            <div><h2>Tags</h2><TagList tags={article.data.tags} basePath="/blog" /></div>
-            <a href="/blog/">Back to writing -&gt;</a>
-          </aside>
-
-          <div class="project-prose writing-prose prose">
-            {Content && <Content />}
-          </div>
-        </div>
-      </div>
-    </SiteGrid>
+    <ArticleFrame {...article.data} breadcrumbs={breadcrumbs}>
+      <Fragment slot="metadata">
+        <ArticleMeta pubDate={article.data.pubDate} updatedDate={article.data.updatedDate} />
+        <div><h2>Tags</h2><TagList tags={article.data.tags} basePath="/blog" /></div>
+        <a href="/blog/">Back to writing →</a>
+      </Fragment>
+      {Content && <Content />}
+      <RelatedContent id={article.id} tags={article.data.tags} category={article.data.category} showRelated={!pattern} />
+    </ArticleFrame>
   )}
 </BaseLayout>

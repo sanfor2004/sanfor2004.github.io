@@ -16,10 +16,11 @@ The site helps visitors answer four questions: Who is Ahmed? What has he built? 
 | --- | --- |
 | Brand | Sanfor |
 | Display wordmark | SANFOR |
-| Full author name | Ahmed Abdelaziz Hanafy |
+| Primary SEO/author name | Ahmed Abdelaziz |
 | Short display name | Ahmed Abdelaziz |
 | Handle | sanfor2004 |
-| Role | Software Engineer — Systems & Backend |
+| Visible role | Software Engineer — Systems & Backend |
+| SEO positioning | Systems & Backend Software Engineer |
 | Site | https://sanfor2004.github.io |
 | Focus | Systems programming, backend architecture, Linux, networking, performance |
 | Public channels | GitHub, LinkedIn, TryHackMe |
@@ -127,8 +128,8 @@ Separate measurements from estimates and plans. Explain acronyms when needed. Do
 | `title`, `description`, `pubDate` | Required | Required |
 | `updatedDate` | Optional date | Optional date |
 | `image` | Required string | Optional string |
-| `imageAlt`, `category` | Required strings | Not declared |
-| `imageWidth`, `imageHeight` | Optional positive integer cover dimensions | Not declared |
+| `imageAlt`, `category` | Required strings | Optional `imageAlt`; no category |
+| `imageWidth`, `imageHeight` | Optional positive integer cover dimensions | Optional positive integers |
 | `tags` | String array, default `[]` | String array, default `[]` |
 | `draft` | Boolean, default `false` | Boolean, default `false` |
 | `status`, `role` | Not declared | Required strings |
@@ -137,7 +138,7 @@ Separate measurements from estimates and plans. Explain acronyms when needed. Do
 
 Blog and project filtering checks `draft`, not the current date. Future dates do not schedule publication. Drafts are excluded from generated routes and indexes, including ordinary local development. Previewing a draft requires Markdown review or an intentional temporary local publication setting; do not commit that temporary setting accidentally. `/testblog/` also excludes drafts.
 
-Blog and main project lists sort by `pubDate`; `updatedDate` does not move an entry to the top. Project tag archives retain collection order. The series overview supplies a stable reading order. Articles display updated dates, falling back to publication dates, and include them in structured data. Project detail pages currently do not surface `updatedDate` or pass their optional image to social metadata.
+Blog and main project lists sort by `pubDate`; `updatedDate` does not move an entry to the top. Project tag archives retain collection order. The series overview supplies a stable reading order. Articles and projects display updated dates only when authored; structured modification time can fall back to publication time. Project covers and social metadata support optional image alternatives and dimensions. Both collections support optional `seoTitle`.
 
 ### Blog starter
 
@@ -252,9 +253,9 @@ There is no application database, authentication service, CMS, newsletter delive
 
 Use the [Social Media Launch Framework](../social_media_launch_framework.md) to generate a project campaign. It requires inspecting the target project, finished platform-specific copy explaining the problem, method, and result, and rendered preview images using the project's own branding and assets. It also defines a complete article, carousel, suggested distribution sequence, and evidence/asset handoff. The framework is portable to other repositories and does not publish to social accounts when executed.
 
-The layout supplies titles, descriptions, canonical URLs, Open Graph/Twitter cards, RSS discovery, large-image preview permission, and default ProfilePage/Person structured data. Articles provide BlogPosting data, author links, social image alternatives and optional dimensions, and publication/modification metadata; projects provide CreativeWork data. Pattern posts use the same BlogPosting metadata as all other articles. RSS includes blog metadata only, including the 24 pattern posts, but not article bodies or projects. The sitemap excludes `/testblog/` and legacy Learning redirects; robots.txt allows crawling and points to the sitemap index.
+The shared SEO component supplies titles, descriptions, canonical URLs, social cards, verification tags, and RSS discovery. Home/About use ProfilePage/Person, other ordinary pages use WebPage, articles use TechArticle, and repository-backed projects use SoftwareSourceCode. Nested entries include BreadcrumbList. RSS includes published blog metadata and author names. The sitemap excludes `/testblog/`, 404, and legacy Learning redirects; robots.txt points to its index. See [SEO](SEO.md) for publishing checklists and Search Console/Bing setup.
 
-Google Analytics is included in the layout. Presence of the script does not prove accurate navigation events or conversion tracking. Check internal navigation when changing analytics, and keep private information out of events.
+Google Analytics loads only in production builds with a valid PUBLIC_GA_MEASUREMENT_ID. The helper tracks client navigation and real discovery actions without form/search content. Configure GitHub repository variables and disable automatic history measurement as described in [Analytics](ANALYTICS.md). Live collection must be verified by the owner.
 
 Images under `public/` are served as provided. Several gallery files are large. **Direction:** Optimize delivery sizes and formats while retaining original creative source assets where appropriate. This is not an existing automatic optimization pipeline.
 
@@ -278,11 +279,13 @@ These observations are not completed fixes or an instruction to change everythin
 - Older unused components and business/ASCII styles remain; check references before cleanup.
 - IBM Plex Mono is named without a bundled import, and the art heading references an undefined `--font-serif` token.
 - Project tag pages retain older presentation patterns.
-- The loader requires JavaScript to reveal content; consider progressive enhancement when improving resilience.
-- Theme restoration catches storage failures, but the toggle's click handler writes storage before applying the theme without catching errors. Dormant music storage is also unguarded.
+- A noscript fallback now hides the loader when JavaScript is disabled.
+- Theme restoration and toggle clicks catch storage failures. Dormant music storage remains unguarded.
 
 **Direction — near term:** Expand supported case studies, address small interaction gaps, optimize image delivery, and align auxiliary page styling.
 
-**Direction — later:** Add related articles, reading aids, or additional article series when content volume supports them. Newsletter delivery, external search, a CMS, or a backend require an explicit product reason.
+Related articles, pattern previous/next links, repeated topic links, and project closing actions are now implemented. See [Growth](GROWTH.md).
+
+**Direction — later:** Add additional article series when content volume supports them. Newsletter delivery, external search, a CMS, or a backend require an explicit product reason.
 
 Update this handbook when routes, schemas, workflow, or known gaps change. Keep proposals labeled until implemented.

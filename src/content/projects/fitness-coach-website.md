@@ -1,5 +1,6 @@
 ---
 title: "Fitness Coach Website"
+seoTitle: "Arabic Fitness Coaching Website with WhatsApp Booking"
 description: "An Arabic fitness coaching website with responsive motion, membership packages, and WhatsApp booking."
 pubDate: 2025-12-06
 tags: ["HTML", "Responsive Design", "Arabic", "Product Engineering"]

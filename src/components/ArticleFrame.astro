@@ -1,0 +1,29 @@
+---
+import SiteGrid from "./SiteGrid.astro";
+import Breadcrumbs from "./Breadcrumbs.astro";
+import type { Breadcrumb } from "../lib/seo";
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  breadcrumbs: Breadcrumb[];
+}
+const { title, description, image, imageAlt, imageWidth, imageHeight, breadcrumbs } = Astro.props;
+---
+<SiteGrid as="article" class="writing-article">
+  <div class="container-page">
+    {image && <figure class="writing-article__image"><img src={image} alt={imageAlt ?? ""} width={imageWidth} height={imageHeight} fetchpriority="high" decoding="async" /></figure>}
+    <header class="writing-article__header">
+      <Breadcrumbs items={breadcrumbs} />
+      <h1>{title}</h1>
+      <p>{description}</p>
+    </header>
+    <div class="writing-article__body">
+      <aside class="writing-article__meta" aria-label="Entry metadata"><slot name="metadata" /></aside>
+      <div class="project-prose writing-prose prose"><slot /></div>
+    </div>
+  </div>
+</SiteGrid>

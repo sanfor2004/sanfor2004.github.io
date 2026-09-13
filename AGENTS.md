@@ -22,7 +22,7 @@ This is an Astro static site at `https://sanfor2004.github.io`, using TypeScript
 | Concern | Source |
 | --- | --- |
 | Identity, contacts, navigation | `src/site.ts` |
-| Shared shell, SEO, analytics, client router | `src/layouts/BaseLayout.astro` |
+| Shared shell, SEO, analytics, client router | `src/layouts/BaseLayout.astro`, `src/components/SEO.astro`, `src/components/Analytics.astro` |
 | Content schema/loaders | `src/content.config.ts` |
 | Authored articles/projects | `src/content/blog/`, `src/content/projects/` |
 | Pattern articles | `src/content/blog/design-pattern-*.md`, `src/content/blog/design-patterns-overview.md` |
@@ -152,9 +152,9 @@ This baseline is not a standing request to fix everything:
 - Blog search now queries the count at document scope. Its search and masonry enhancement exists only on `/blog/`, not topic archives or `/testblog/`.
 - `BusinessPanels`, `MusicPlayer`, `MusicPrompt`, `IllustrationSlot`, `PageHeader`, and `SectionHeader` have no current consumers; verify references before cleanup.
 - IBM Plex Mono is named without an import; `--font-serif` is undefined.
-- Loader reveal depends on JavaScript.
-- The theme toggle click writes localStorage without a guard before applying the theme; layout restoration catches storage errors. Dormant music storage accesses are also unguarded.
-- Optional project images and updated dates are not fully surfaced on detail pages.
+- Loader reveal has a noscript fallback.
+- Theme toggle and restoration catch storage errors; dormant music storage remains unguarded.
+- Projects and blog details share ArticleFrame/ArticleMeta; optional project covers and updated dates are surfaced. SEO, analytics setup, and growth guidance are in docs/SEO.md, docs/ANALYTICS.md, and docs/GROWTH.md.
 - The deployment workflow uses the Ubuntu runner's C++ compiler for the article examples; there are no Go, Java, or Python example toolchain steps.
 
 Update these notes when the implementation changes.

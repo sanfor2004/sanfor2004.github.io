@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteGrid from "../components/SiteGrid.astro";
+import AsciiLabel from "../components/AsciiLabel.astro";
+---
+<BaseLayout title="Page Not Found" description="This page could not be found. Explore Sanfor's projects and technical writing." robots="noindex, follow">
+  <SiteGrid as="section" class="writing-article">
+    <div class="container-page writing-article__header">
+      <AsciiLabel text="not found" mark="404" />
+      <h1>Page not found</h1>
+      <p>The address may be incomplete or the page may have moved.</p>
+      <nav class="article-next-actions" aria-label="Find another page"><a href="/">Home</a><a href="/projects/">Projects</a><a href="/blog/">Blog</a></nav>
+    </div>
+  </SiteGrid>
+</BaseLayout>

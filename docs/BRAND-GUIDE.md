@@ -16,12 +16,13 @@ The brand should feel clear, capable, curious, and human. Credibility comes from
 | --- | --- |
 | Brand in prose and metadata | Sanfor |
 | Large display and compact navigation wordmark | SANFOR |
-| Full authorship | Ahmed Abdelaziz Hanafy |
+| Primary authorship / SEO | Ahmed Abdelaziz |
+| Alternate full name | Ahmed Abdelaziz Hanafy |
 | Short portrait/about heading | Ahmed Abdelaziz |
 | Account handle | sanfor2004 |
 | Role line | Software Engineer — Systems & Backend |
 
-Keep spelling consistent across copy, metadata, and social previews. Use the handle for accounts and the full name for formal authorship.
+Keep spelling consistent across copy, metadata, and social previews. Use the handle for accounts and Ahmed Abdelaziz for consistent authorship; retain the full name as an entity alias. SEO positioning is Systems & Backend Software Engineer; the existing visible role line remains valid.
 
 Write plainly and confidently. State what software does, what was tested, and what was learned. Technical shorthand belongs in labels and metadata; paragraphs should read naturally. Use short actions such as “Read article,” “Case study,” and “Contact.”
 
@@ -40,7 +41,7 @@ Write plainly and confidently. State what software does, what was tested, and wh
 | --- | --- | --- |
 | Logo | `public/assets/brand/logo.svg` | Home and navigation |
 | Favicon | `public/favicon.svg` | Browser identity and loader |
-| Social preview | `public/assets/brand/sanfor-linkedin-preview-2026.png` | Default social image |
+| Social preview | `public/assets/brand/social-card.png` | Default 1200 × 630 sharing card; earlier banner retained |
 | Portrait | `public/images/ahmed-abdelaziz.png` | About page |
 | Horse drawing | `public/images/art/Horse_Far_View.png` | Shared closing illustration |
 

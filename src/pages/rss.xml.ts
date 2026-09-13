@@ -9,7 +9,8 @@ export const GET: APIRoute = async (context) => {
   );
 
   return rss({
-    title: `${site.title} Blog`,
+    title: `${site.author} / Sanfor — Technical Articles`,
+    xmlns: { dc: "http://purl.org/dc/elements/1.1/" },
     description: site.description,
     site: context.site ?? new URL(site.url),
     items: posts.map((post) => ({
@@ -18,6 +19,7 @@ export const GET: APIRoute = async (context) => {
       pubDate: post.data.pubDate,
       link: `/blog/${post.id.replace(/\.mdx?$/, "")}/`,
       categories: post.data.tags,
+      customData: `<dc:creator>${site.author}</dc:creator>`,
     })),
   });
 };

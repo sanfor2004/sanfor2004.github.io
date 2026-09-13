@@ -1,9 +1,11 @@
 export const site = {
   title: "Sanfor",
+  seoTitle: "Ahmed Abdelaziz (Sanfor) — Systems & Backend Software Engineer",
+  jobTitle: "Systems & Backend Software Engineer",
   description:
-    "Ahmed Abdelaziz Hanafy, known as Sanfor, is a software engineer focused on systems programming, backend architecture, Linux, networking, and performance-minded software.",
+    "Systems and backend projects and technical writing by Ahmed Abdelaziz (Sanfor), covering C++, Linux, networking, architecture, and reliable software.",
   url: "https://sanfor2004.github.io",
-  author: "Ahmed Abdelaziz Hanafy",
+  author: "Ahmed Abdelaziz",
   handle: "sanfor2004",
   identity: "Software Engineer — Systems & Backend",
   github: "https://github.com/sanfor2004",
