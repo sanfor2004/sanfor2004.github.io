@@ -128,19 +128,24 @@ const structuredData = post ? {
   ) : (
     <SiteGrid as="article" class="writing-article">
       <div class="container-page">
-        <header class="writing-article__header">
-          <AsciiLabel text={article.data.category} mark="note" />
-          <h1>{article.data.title}</h1>
-          <p>{article.data.description}</p>
-        </header>
-
         <figure class="writing-article__image">
           <img src={article.data.image} alt={article.data.imageAlt} width={article.data.imageWidth} height={article.data.imageHeight} fetchpriority="high" decoding="async" />
         </figure>
 
+        <header class="writing-article__header">
+          <h1>{article.data.title}</h1>
+          <p>{article.data.description}</p>
+        </header>
+
         <div class="writing-article__body">
           <aside class="writing-article__meta" aria-label="Article metadata">
-            <div><h2>Author</h2><a href="/about/" rel="author">{site.author}</a></div>
+            <div class="writing-article__author">
+              <img src="/images/ahmed-abdelaziz.png" alt="" width="56" height="56" loading="lazy" decoding="async" />
+              <div>
+                <a href="/about/" rel="author">{site.author}</a>
+                <h2>Author</h2>
+              </div>
+            </div>
             <div><h2>Published</h2><p><time datetime={article.data.pubDate.toISOString()}>{formattedDate}</time></p></div>
             <div><h2>Updated</h2><p>{updatedDate}</p></div>
             <div><h2>Tags</h2><TagList tags={article.data.tags} basePath="/blog" /></div>

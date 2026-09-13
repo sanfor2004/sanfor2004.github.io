@@ -57,13 +57,13 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
                   data-post-row
                   data-search={`${post.data.title} ${post.data.description} ${post.data.category} ${post.data.tags.join(" ")}`.toLowerCase()}
                 >
+                  <h2 class="post-row__heading">{post.data.title}</h2>
                   <figure class="post-row__image">
                     <img src={post.data.image} alt={post.data.imageAlt} loading={index === 0 ? "eager" : "lazy"} />
                   </figure>
                   <div class="post-row__content">
                     <div class="card-body post-row__main">
                       <p>{String(index + 1).padStart(2, "0")} / {date} · {post.data.category}</p>
-                      <h2 class="card-title">{post.data.title}</h2>
                       <span>{post.data.description}</span>
                       <em>Read article -&gt;</em>
                     </div>
@@ -100,11 +100,11 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     const layoutPosts = () => {
       cancelAnimationFrame(layoutFrame);
       layoutFrame = requestAnimationFrame(() => {
-        const isTwoColumns = window.matchMedia("(min-width: 761px)").matches;
+        const isMultiColumn = window.matchMedia("(min-width: 761px)").matches;
         list.classList.remove("post-list--masonry");
         rows.forEach((row) => row.style.removeProperty("grid-row-end"));
 
-        if (!isTwoColumns) return;
+        if (!isMultiColumn) return;
 
         const columnGap = Number.parseFloat(getComputedStyle(list).columnGap) || 20;
         const cardHeights = rows

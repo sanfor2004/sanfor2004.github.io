@@ -89,13 +89,13 @@ The art heading references undefined `--font-serif`. Define an intentional token
 
 ## 6. Grid, spacing, and shape
 
-The layout uses vertical rails with an `80rem` maximum. `container-page` computes width from page padding and supplies gutters and side borders. `SiteGrid` supplies the wrapper.
+The layout uses vertical rails with an `80rem` maximum. `container-page` computes width from outer page spacing and supplies side borders, with no left or right padding. Individual components retain their own spacing where needed. `SiteGrid` supplies the wrapper.
 
 | Setting | Current value |
 | --- | --- |
 | Content maximum | `80rem` |
 | Page padding | `clamp(1rem, 3vw, 5rem)` |
-| Rail gutter | `clamp(0.9rem, 2vw, 1.5rem)` |
+| Component gutter | `clamp(0.9rem, 2vw, 1.5rem)`; applied by components, not `container-page` |
 | Border width | `1px` |
 | Main mobile breakpoint | `760px` |
 | Tablet music layout | `761px`–`1080px` |
@@ -121,7 +121,7 @@ Most custom components use square corners, thin borders, visible alignment, larg
 
 Keep titles understandable without hover. Avoid nested links or buttons within clickable cards. Preserve focus visibility and usable touch targets.
 
-The writing index uses two columns on desktop with a JavaScript masonry enhancement and one column on mobile. Topic archives reuse the cards without that script. `/testblog/` is an unlisted layout prototype, not the source of truth for the current writing index.
+The writing index uses three columns from 1100px, two from 761px, and one on mobile, with a JavaScript masonry enhancement for multiple columns. Topic archives retain the two-column desktop cards without that script. `/testblog/` is an unlisted layout prototype, not the source of truth for the current writing index.
 
 The pattern series is now English Markdown using the shared blog layout and standard code highlighting. Preserve readable code overflow and meaningful diagram alternatives in both themes; the removed Learning tab UI and catalog typography are no longer active.
 
