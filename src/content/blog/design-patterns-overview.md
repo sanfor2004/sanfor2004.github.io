@@ -1,8 +1,8 @@
 ---
 title: "Design Patterns Overview (Creational, Structural, and Behavioral Patterns)"
 description: "Start here: all 23 GoF design patterns, their three categories, class and object scope, prerequisites, and illustrated C++20 articles."
-image: "/images/writing/patterns/abstract-factory.webp"
-imageAlt: "A furniture workshop assembles matching chairs, tables, and cabinets as one coordinated family."
+image: "/images/writing/patterns/overview.webp"
+imageAlt: "An open sketchbook becomes a workshop, modular bridges, and connected signal stations, illustrating creation, structure, and collaboration."
 imageWidth: 1600
 imageHeight: 900
 pubDate: 2026-09-12
@@ -58,7 +58,12 @@ This distinction helps you ask where change happens. Must someone introduce a su
 
 ## Creational patterns
 
-The cover's furniture workshop illustrates a related family: choose the style once, then obtain matching pieces. In the [Abstract Factory example](/blog/design-pattern-abstract-factory/), those pieces become a button and a panel from the same theme. Other creational patterns address different construction pressures.
+<figure>
+  <img src="/images/writing/patterns/abstract-factory.webp" alt="A furniture workshop assembles matching chairs, tables, and cabinets as one coordinated family." width="1600" height="900" loading="lazy" decoding="async" />
+  <figcaption>Abstract Factory: choose the style once, then obtain matching furniture pieces as a related family.</figcaption>
+</figure>
+
+In the [Abstract Factory example](/blog/design-pattern-abstract-factory/), those pieces become a button and a panel from the same theme. Other creational patterns address different construction pressures.
 
 ### Abstract Factory
 
@@ -269,4 +274,6 @@ The aim of this series is to make those decisions explainable. Use the [complete
 
 The [23 Design Patterns repository](https://github.com/sanfor2004/23-Design-Patterns) is the source for the C++20 examples and adapted articles. It also contains [comparisons](https://github.com/sanfor2004/23-Design-Patterns/blob/main/COMPARISONS.md), a [cheat sheet](https://github.com/sanfor2004/23-Design-Patterns/blob/main/CHEATSHEET.md), and a [relationship map](https://github.com/sanfor2004/23-Design-Patterns/blob/main/PATTERN_MAP.md).
 
-All 23 sketchbook covers are preserved from the site's earlier learning collection. They illustrate analogies; the separate diagrams show the example's structure. Source code, adapted documentation, and diagrams retain the repository's [license notice](/images/writing/patterns/SOURCE-LICENSE.txt).
+The overview's dedicated cover opens a sketchbook onto three connected ideas: a workshop creates components, modular bridges combine them into structures, and signal stations exchange information. It introduces the three pattern families through a visual analogy, not a code diagram.
+
+All 23 individual pattern covers are preserved from the site's earlier learning collection. They illustrate analogies; the separate diagrams show the example's structure. The overview cover was generated separately for this introduction; [illustration provenance](/images/writing/patterns/README.md) records its creation. Source code, adapted documentation, and diagrams retain the repository's [license notice](/images/writing/patterns/SOURCE-LICENSE.txt).
