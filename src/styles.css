@@ -1581,6 +1581,7 @@ html[data-theme="sanfor-dark"] .theme-toggle__moon {
 
 .about-section__title {
   padding-block: clamp(1.5rem, 3vw, 2.5rem);
+  padding-left: 1rem;
   padding-right: clamp(1.5rem, 4vw, 4rem);
 }
 
@@ -2552,7 +2553,7 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   grid-template-columns: minmax(14rem, 0.35fr) minmax(0, 1fr);
   gap: clamp(2rem, 6vw, 6rem);
   min-width: 0;
-  padding-block: 0 clamp(3rem, 7vw, 6rem);
+  padding-block: 0;
 }
 
 .writing-article__meta {
@@ -2597,6 +2598,7 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   height: 56px;
   object-fit: cover;
   object-position: center 30%;
+  border: var(--border-width) solid var(--color-border);
   border-radius: 8px;
 }
 
@@ -3185,7 +3187,7 @@ html[data-theme="sanfor-dark"] .blog-search__field {
 
   .writing-article__body {
     gap: 2rem;
-    padding-block: 0 3.5rem;
+    padding-block: 0;
   }
 
   .writing-article__meta {
