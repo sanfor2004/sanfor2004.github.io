@@ -2952,6 +2952,10 @@ html[data-theme="sanfor-dark"] .blog-search__field {
     line-height: 1.25;
   }
 
+  .about-hero__grid {
+    padding-inline: var(--rail-gutter);
+  }
+
   .home-directory {
     grid-template-columns: 1fr;
   }
@@ -3070,6 +3074,11 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   .writing-index__header > p,
   .contact-page__header > p {
     padding-inline: 0;
+  }
+
+  .contact-page__header,
+  .contact-page__body {
+    padding-inline: var(--rail-gutter);
   }
 
   .about-list-section > :nth-child(2) {
