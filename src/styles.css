@@ -2573,6 +2573,10 @@ html[data-theme="sanfor-dark"] .blog-search__field {
   padding-block: 0;
 }
 
+.writing-article__body > .project-prose {
+  padding: 1rem 1rem clamp(3rem, 6vw, 5rem);
+}
+
 .writing-article__meta {
   display: grid;
   align-content: start;
@@ -3223,6 +3227,8 @@ html[data-theme="sanfor-dark"] .blog-search__field {
 
   .writing-article__meta {
     gap: 1.25rem;
+    border-right: 0;
+    border-bottom: var(--border-width) solid var(--color-border);
   }
 
   .writing-article__meta .badge {
