@@ -83,7 +83,7 @@ Seven writeups currently describe 360 Vision, PHP HLS Streamer, XDGe, Multi-Regi
 
 ### Writing
 
-Alongside the 24-post design-pattern series, four articles cover a technical learning loop, background job reliability, the AI/reference/review workflow behind Mint Woodland Pet, and the local 360Vision tour studio. The [360Vision article notes](360VISION-ARTICLE-NOTES.md) record its evidence, assets, and SEO handoff.
+Alongside the 24-post design-pattern series, eight articles cover a technical learning loop, background job reliability, the AI/reference/review workflow behind Mint Woodland Pet, the local 360Vision tour studio, a C++ Discord bot with DPP, beginner-oriented CMake, Redis internals, and a secure Electron shell for a statically exported Next.js interface. The [360Vision article notes](360VISION-ARTICLE-NOTES.md) record its evidence, assets, and SEO handoff.
 
 **Direction:** Make titles specific enough to reveal the question or result. Favor reproducible examples, explained failures, and explicit limits. Link to actual project evidence when an article describes personal work.
 

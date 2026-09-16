@@ -14,6 +14,7 @@ Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, English design-pat
 
 - Home, About, Projects, Blog, Art, Contact, and tag pages.
 - A 24-post English design-pattern series: an overview plus all 23 GoF patterns, with preserved covers, sketch maps, and complete Python and C++20 examples.
+- Eight additional engineering articles covering project work, learning practice, background jobs, C++ Discord bots, CMake, Redis internals, and Electron with Next.js.
 - Content collections for Markdown-based projects and blog posts.
 - Markdown project writeups and technical articles based on project evidence.
 - RSS feed, sitemap integration, robots.txt, canonical URLs, Open Graph metadata, and structured data.
