@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { learningRedirects } from "./src/data/design-pattern-series.mjs";
+import { shouldIncludeInSitemap } from "./src/lib/sitemap";
 
 export default defineConfig({
   site: "https://sanfor2004.github.io",
@@ -10,10 +11,7 @@ export default defineConfig({
   redirects: learningRedirects,
   integrations: [
     react(),
-    sitemap({ filter: (page) => {
-      const pathname = new URL(page).pathname;
-      return !["/testblog/", "/404/", "/404.html"].includes(pathname) && !pathname.startsWith("/learning/");
-    } }),
+    sitemap({ filter: shouldIncludeInSitemap }),
   ],
   vite: {
     plugins: [tailwindcss()],
