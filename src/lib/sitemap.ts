@@ -11,7 +11,7 @@ const redirectPathPrefixes = ["/learning/"];
 export function shouldIncludeInSitemap(page: string): boolean {
   const url = new URL(page);
 
-  if (url.origin !== "https://www.sanfor2004.com") return false;
+  if (url.origin !== "https://sanfor2004.com") return false;
   if (url.search || url.hash) return false;
   if (noIndexPaths.has(url.pathname)) return false;
   if (redirectPathPrefixes.some((prefix) => url.pathname.startsWith(prefix))) return false;
