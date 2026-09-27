@@ -4,7 +4,7 @@ export const site = {
   jobTitle: "Systems & Backend Software Engineer",
   description:
     "Systems and backend projects and technical writing by Ahmed Abdelaziz (Sanfor), covering C++, Linux, networking, architecture, and reliable software.",
-  url: "https://sanfor2004.github.io",
+  url: "https://www.sanfor2004.com",
   author: "Ahmed Abdelaziz",
   handle: "sanfor2004",
   identity: "Software Engineer — Systems & Backend",
