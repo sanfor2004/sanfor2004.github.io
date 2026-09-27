@@ -6,7 +6,7 @@ import { learningRedirects } from "./src/data/design-pattern-series.mjs";
 import { shouldIncludeInSitemap } from "./src/lib/sitemap";
 
 export default defineConfig({
-  site: "https://sanfor2004.com",
+  site: "http://sanfor2004.com",
   trailingSlash: "always",
   redirects: learningRedirects,
   integrations: [

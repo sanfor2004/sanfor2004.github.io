@@ -8,7 +8,7 @@ import { designPatterns, patternArticlePath, patternOverview } from "../src/data
 
 const root = resolve(process.argv[2] ?? "dist");
 const enabled = process.argv.includes("--analytics");
-const origin = "https://sanfor2004.com";
+const origin = "http://sanfor2004.com";
 const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp", ".woff2": "font/woff2", ".xml": "application/xml" };
 const server = createServer(async (req, res) => {
   try {
