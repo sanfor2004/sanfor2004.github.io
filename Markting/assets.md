@@ -17,7 +17,7 @@ All nine final images are PNG files rendered from editable HTML/CSS compositions
 ## Source assets
 
 - Existing logo: [logo.svg](../public/assets/brand/logo.svg), embedded without changing its geometry or orange strokes.
-- Site design: [styles.css](../src/styles.css) and [Brand Guide](../docs/BRAND-GUIDE.md).
+- Site design: [styles.css](../src/styles.css) and the design system in [AGENTS.md](../AGENTS.md) section 4.
 - [Home capture](source/captures/home.png) and [Writing capture](source/captures/writing.png): captured at 1440 × 1100 from the existing local static build.
 - Fonts: the project's installed `@fontsource/inter` files, weights 400 and 800; local Consolas fallback for metadata. No external font downloads occur during rendering.
 

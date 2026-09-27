@@ -47,7 +47,7 @@ The problem is an editorial rationale derived from what the site organizes, not 
 | Coordinates and JSON backup discussion | 360Vision blog article |
 | Optional music and persistent player | `src/components/MusicPlayer.astro`, BaseLayout |
 | Original art and author context | Art/About page data and brand guide |
-| Visual identity | `src/styles.css`, `public/assets/brand/logo.svg`, `docs/BRAND-GUIDE.md` |
+| Visual identity | `src/styles.css`, `public/assets/brand/logo.svg`, `AGENTS.md` section 4 |
 
 ## Boundaries and checks
 

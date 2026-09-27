@@ -4,6 +4,7 @@
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
 @import "@fontsource/inter/800.css";
+@import "@fontsource/instrument-serif/400-italic.css";
 @plugin "daisyui";
 @plugin "daisyui/theme" {
   name: "sanfor";
@@ -3703,4 +3704,56 @@ html[data-theme="sanfor-dark"] .test-blog {
   left: -1.5rem;
   bottom: -1.5rem;
   transform: rotate(18deg);
+}
+
+
+/* ===========================================================================
+   UI kit tokens — src/components/ui/, src/components/bits/, /ui-kit
+
+   The kit carries no palette of its own: every component is styled through
+   these names, which are aliases over the semantic tokens defined at the top
+   of this file. Retheme the site and the kit follows automatically, in both
+   sanfor and sanfor-dark. Nothing here changes how existing pages render.
+   ========================================================================= */
+
+:root {
+  --accent-bright: #e0652c;
+  --accent-soft: rgb(201 82 31 / 0.12);
+  --accent-line: rgb(201 82 31 / 0.40);
+  --color-danger: #b4302a;
+  --scrim-950: #1a1009;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --ease-quiet: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --shadow-pop: 0 8px 24px rgb(37 23 14 / 0.18);
+  --shadow-dialog: 0 24px 64px rgb(26 16 9 / 0.35);
+
+  /* Previously referenced but never defined (see AGENTS.md known gaps). */
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+}
+
+html[data-theme="sanfor-dark"] {
+  --accent-bright: #ffa06b;
+  --accent-soft: rgb(255 122 56 / 0.14);
+  --accent-line: rgb(255 122 56 / 0.42);
+  --color-danger: #e5706a;
+  --scrim-950: #000000;
+  --shadow-pop: 0 8px 24px rgb(0 0 0 / 0.5);
+  --shadow-dialog: 0 24px 64px rgb(0 0 0 / 0.65);
+}
+
+@theme inline {
+  --color-surface: var(--color-bg);
+  --color-surface-2: var(--color-bg-secondary);
+  --color-body: var(--color-text);
+  --color-subtle: var(--color-muted);
+  --color-line: var(--color-border);
+  --color-accent: var(--color-accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-paper-bright: var(--color-primary-content);
+  --font-serif: var(--font-serif);
 }

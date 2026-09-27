@@ -1,169 +1,468 @@
-# Repository Instructions for Agents
+# AGENTS.md — Sanfor
 
-## Scope and purpose
+Single source of truth for this repository: architecture, design system, content
+rules, SEO, and change discipline. There is no `docs/` tree — this file replaces it.
 
-These instructions apply throughout this repository. Follow the user's current request and applicable higher-priority instructions. This file guides coding and editorial work; it does not authorize unrelated refactors, external messages, publishing, or changes to the owner's identity.
+Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, and art archive. Its
+professional focus is systems and backend engineering, Linux, networking, and
+performance. Preserve factual accuracy, personal voice, and the visual identity
+described in §4.
 
-Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, and art archive. Its professional focus is systems and backend engineering, Linux, networking, and performance. Preserve factual accuracy, personal voice, and the established warm visual identity.
+---
 
-## Read before changing
+## 1. Scope
 
-- Read [README.md](README.md) for local operation.
-- Read [Portfolio Handbook](docs/PORTFOLIO-HANDBOOK.md) for product, content, route, and publication behavior.
-- Read [Site Architecture](docs/SITE-ARCHITECTURE.md) for build flow, pattern articles, browser state, and maintenance paths.
-- Read [Brand Guide](docs/BRAND-GUIDE.md) for visual or public-copy work.
-- Inspect the relevant implementation. Proposed direction in documentation is not shipped functionality.
+These instructions apply throughout the repository. They guide coding and editorial
+work. They do **not** authorize unrelated refactors, external messages, publishing,
+deployment, or changes to the owner's identity.
+
+Before changing anything:
+
+- Read the section of this file covering the area you're touching.
+- Inspect the actual implementation. Documented intent is not shipped behavior.
 - Check `git status --short` and preserve unrelated user changes.
 
-## Architecture and source of truth
+---
 
-This is an Astro static site at `https://sanfor2004.github.io`, using TypeScript, Tailwind CSS 4, daisyUI 5, and configured React integration. Current pages mostly use Astro markup and browser scripts. A server requirement is an architecture change for GitHub Pages.
+## 2. Stack and commands
 
-| Concern | Source |
-| --- | --- |
-| Identity, contacts, navigation | `src/site.ts` |
-| Shared shell, SEO, analytics, client router | `src/layouts/BaseLayout.astro`, `src/components/SEO.astro`, `src/components/Analytics.astro` |
-| Content schema/loaders | `src/content.config.ts` |
-| Authored articles/projects | `src/content/blog/`, `src/content/projects/` |
-| Pattern articles | `src/content/blog/design-pattern-*.md`, `src/content/blog/design-patterns-overview.md` |
-| Stable series identities and legacy redirects | `src/data/design-pattern-series.mjs` |
-| Article, asset, link, and C++ verification | `scripts/verify-pattern-posts.mjs` |
-| Routes | `src/pages/` |
-| Shared UI | `src/components/` |
-| Themes and styling | `src/styles.css` |
-| Music and attribution | `src/music.ts`, `public/audio/README.md` |
-| Assets | `public/` |
-| Deployment | `.github/workflows/deploy.yml` |
-| Prepared campaign, outside the site build | `Markting/` |
+An Astro static site deployed to GitHub Pages at `https://sanfor2004.github.io`
+(custom domain `sanfor2004.com`).
 
-Portfolio writeups describe separate projects; do not assume their source code exists here.
+| Layer | Choice |
+|---|---|
+| Framework | **Astro 7**, static output, `ClientRouter` for internal navigation |
+| Language | **TypeScript**, Astro strict, `@/*` → `src/*` |
+| Styling | **Tailwind 4** via the Vite plugin, plus `src/styles.css` |
+| Islands | **React 19** via `@astrojs/react` |
+| Components | daisyUI 5 (existing pages) + a **shadcn/ui-pattern** kit on Radix for new work |
+| Fonts | Inter + Instrument Serif, local via `@fontsource`; mono from the system stack |
 
-## Commands and environment
+There is no database, auth, CMS, contact API, or server-side execution. A server
+requirement is an architecture change, not a feature.
 
 ```sh
 npm ci
-npm run dev
-npm run lint
-npm run verify:patterns
-npm run build
-npm run preview
+npm run dev              # dev server; draft filtering still applies
+npm run lint             # astro check (diagnostics only, not ESLint)
+npm run verify:patterns  # design-pattern series checks
+npm run build            # astro check, then static output to dist/
+npm run preview          # serve the build
 ```
 
-- CI uses Node 22; inspect package engines for compatibility issues.
-- Use `npm.cmd` if Windows PowerShell blocks `npm.ps1`; do not change machine execution policy for routine npm use.
-- `lint` runs `astro check`. `build` runs that check and generates `dist/`.
-- There is no configured test script. Playwright availability does not imply a test suite.
-- Missing `cross-env` can indicate unavailable dependencies; inspect installation state.
-- Report unavailable checks and actual failures. Do not claim a successful build, test, or deployment without evidence.
+- CI uses Node 22. `package.json` declares no engines constraint.
+- Use `npm.cmd` if PowerShell blocks `npm.ps1`. Do not change execution policy.
+- `astro preview` runs as a **detached daemon on `::1` (IPv6) only** — connect to
+  `localhost:4321`, not `127.0.0.1:4321`, and stop it with `astro preview stop`.
+- Report unavailable checks and real failures. Never claim a successful build, test,
+  or deployment without evidence.
 
-## Implementation conventions
+---
 
-- Prefer Astro for static presentation; use hydrated React when interaction complexity warrants it.
-- Reuse components and semantic CSS tokens. Follow two-space indentation, double-quoted TypeScript strings, and existing semicolon style.
-- Keep text UTF-8. Read explicitly as UTF-8 when terminal punctuation appears corrupted; verify actual content before repairing apparent mojibake.
-- Make focused changes without incidental dependency additions or broad formatting.
-- Use patch-based edits. Do not fix source issues in generated output or dependencies.
-- Preserve published URLs and root-relative paths for this root user Pages site.
-- Blog and project collections load Markdown only. Learning and its MDX integration have been removed; do not restore them incidentally.
-- Check references before deleting apparently unused components or styles.
+## 3. Source of truth by concern
 
-## Client navigation and state
+| Concern | Source |
+|---|---|
+| Identity, contacts, navigation | `src/site.ts` |
+| Shared shell, SEO, analytics, router | `src/layouts/BaseLayout.astro`, `src/components/SEO.astro`, `src/components/Analytics.astro` |
+| Design tokens | `src/styles.css` (the `:root` block at the top) |
+| Component kit | `src/components/ui/`, `src/components/bits/` |
+| Kit gallery | `src/pages/ui-kit.astro` |
+| Content schema | `src/content.config.ts` |
+| Articles / projects | `src/content/blog/`, `src/content/projects/` |
+| Pattern series identities + legacy redirects | `src/data/design-pattern-series.mjs` |
+| Pattern verification | `scripts/verify-pattern-posts.mjs` |
+| Routes | `src/pages/` |
+| Sitemap filtering | `src/lib/sitemap.ts` |
+| Assets | `public/` |
+| Deployment | `.github/workflows/deploy.yml` |
+| Prepared campaign (outside the build) | `Markting/`, `social_media_launch_framework.md` |
 
-`BaseLayout` uses Astro `ClientRouter`. Enhancements must work on direct loads, internal navigation, and back/forward navigation.
+Portfolio writeups describe separate projects; do not assume their source exists here.
 
-- Initialize page DOM behavior on appropriate Astro lifecycle events, commonly `astro:page-load`.
-- Guard against duplicate listeners and initialization on the same element.
-- Avoid stale references to nodes replaced by navigation; inspect persistence before choosing a lifecycle strategy.
-- MusicPlayer and MusicPrompt are not mounted. Do not restore them incidentally. If audio is restored, preserve `transition:persist` and verify playback continuity.
-- The layout retains document language/direction support, but current articles are English. Former Arabic lesson URLs redirect to the corresponding English articles.
-- Preserve theme state and accessible toggle labels across navigation.
-- Handle blocked or malformed localStorage in new or modified storage code.
-- Keep audio user-initiated and clean up animation/audio resources when a changed lifecycle requires it.
+---
 
-## Content and editorial rules
+## 4. Design system
 
-- Never invent achievements, metrics, employment, clients, qualifications, project behavior, URLs, sources, or ownership claims.
-- Existing About metrics are published owner claims; preserve meaning and do not extrapolate.
-- Blog entries require `title`, `description`, `pubDate`, `image`, `imageAlt`, and `category`.
-- Optional `imageWidth` and `imageHeight` must be positive integers matching the actual cover; they supply layout dimensions and social metadata.
-- Projects require `title`, `description`, `pubDate`, `status`, and `role`.
-- Both support `tags`, `draft`, and optional `updatedDate`. Projects additionally support `stack`, optional `image`, `repo`, and `demo`.
-- Use `draft: true` for unfinished content unless publication-ready work is requested. Drafts are excluded from ordinary routes, including local development.
-- Future dates do not hide content. Publication filtering checks `draft`.
+### 4.1 The governing idea
+
+> **Art is soft, atmospheric and heavily textured. UI is sharp, thin and quiet.**
+
+A dithered hero is art; the panel on top of it is UI. Nothing is half of each.
+
+### 4.2 Palette
+
+Warm paper surfaces, dark brown text, burnt orange as the accent. Defined at the
+top of `src/styles.css` as a daisyUI theme plus semantic aliases.
+
+| Role | Token | Light (`sanfor`) | Dark (`sanfor-dark`) |
+|---|---|---|---|
+| Page background | `--color-bg` | `#E7C99F` | `#16110D` |
+| Secondary surface | `--color-bg-secondary` | `#DDBA89` | `#211810` |
+| Third surface | `--color-base-300` | `#C99E64` | `#352619` |
+| Main text | `--color-text` | `#25170E` | `#F7E9D8` |
+| Muted text | `--color-muted` | `#76583F` | `#C7AD92` |
+| Border | `--color-border` | mixed from base-300 + text | `#6A4C36` |
+| Accent / primary | `--color-accent` | `#C9521F` | `#FF7A38` |
+
+Light is the default. Use secondary surfaces to separate reading areas, main text
+for essential information, and orange for emphasis, links, focus and small marks.
+
+**Usage ratio: ~85% neutral, ~10% art, ≤5% accent.** Orange is a *signal*, not
+decoration. Never let colour carry meaning alone — pair it with a number or label,
+and check contrast for every new pairing in both themes.
+
+### 4.3 Typography
+
+| Role | Face | Notes |
+|---|---|---|
+| Body, UI, headings | **Inter** | weights 400–800, local via `@fontsource/inter` |
+| Labels, dates, badges, controls | mono stack | `--font-mono`, headed by IBM Plex Mono |
+| Home wordmark | Inter | uppercase, weight 800 |
+| Article prose | Inter | ~1.05rem / 1.8 line height |
+| Display accent italic | **Instrument Serif** | `--font-serif`, used by `/ui-kit` |
+
+> **IBM Plex Mono is named in `--font-mono` but not bundled**, so mono text renders
+> from the fallbacks. Importing it (or repointing the stack) changes the look of
+> every label on the site — do it deliberately, not as incidental cleanup.
+
+`--font-serif` is now defined; it was previously referenced but undefined.
+
+Reserve uppercase mono for short labels. Use the existing fluid `clamp()` patterns.
+
+### 4.4 Tokens are the only source of colour
+
+**Never hard-code a colour, radius, font or duration in a component or page.** The
+theme block at the top of `src/styles.css` drives the entire site; the 3,600 lines
+below it consume `--color-bg`, `--color-text`, `--color-accent`, `--color-border`,
+`--font-*`. Repointing the top repalettes everything.
+
+The **UI kit token layer** at the bottom of the same file aliases those semantic
+tokens into Tailwind utilities via `@theme inline`: `bg-surface`, `bg-surface-2`,
+`text-body`, `text-subtle`, `border-line`, `text-accent`, `bg-accent-soft`,
+`text-paper-bright`. The kit carries no palette of its own — it inherits the site's,
+so **a component never branches on light vs dark**, and retheming the site rethemes
+the kit.
+
+> **Hazard if you ever lighten the palette.** `styles.css` lightens and darkens
+> surfaces with `color-mix(in oklch, <colour>, white N%)`. Chrome treats a
+> *near-neutral* colour's OKLCH hue as **powerless**, so mixing two of them yields
+> hue `none`, which paints at hue 0 — visibly **pink**. The current tan
+> (`#E7C99F`, hue ≈ 76) is saturated enough that this never triggers; verified by
+> sampling the painted pixel, not the computed string, which can serialize `none`
+> while painting something else entirely. If the palette is ever moved toward a
+> low-chroma cream or grey, switch those mixes to `in srgb` or mix toward a hued
+> endpoint instead of bare `white`/`black`.
+
+### 4.5 Grid, shape, motion
+
+| Setting | Value |
+|---|---|
+| Content maximum | `80rem` |
+| Page padding | `clamp(1rem, 3vw, 5rem)` |
+| Component gutter | `clamp(0.9rem, 2vw, 1.5rem)` — applied by components, not `container-page` |
+| Border width | `1px` |
+| Mobile breakpoint | `760px` |
+| Radii | 2px / 4px / 8px (`--radius-sm/md/lg`) |
+
+`container-page` computes width from page spacing and supplies side borders with no
+inline padding; `SiteGrid` is the wrapper. Prefer boundaries and spacing over shadows
+— shadows are only for things that genuinely float (dialog, tooltip, swap deck).
+
+Motion is brief and useful: 150–300ms, `--ease-quiet` to enter, `--ease-move` to move.
+Everything must degrade under `prefers-reduced-motion`; check it in the real
+interaction, not just the CSS.
+
+### 4.6 Art direction
+
+Original drawings, editorial covers and warm surfaces. Portraits establish
+authorship; artwork adds personality. Do not present an illustration as a
+screenshot or a measured result.
+
+A CSS/SVG art layer ships in `src/components/bits/art.tsx` — `StippleField`,
+`Halftone`, `Grain`, `DecryptedText`. It is available to the kit but **not used by
+any site page**. Art layers are decorative: `aria-hidden`, `pointer-events: none`,
+and never the only thing carrying information.
+
+Design-pattern covers are original AI-generated sketchbook scenes built around each
+lesson's analogy — text-free, warm, hand-drawn, distinct from the source
+repository's SVG structure diagrams. Composite the existing SVG logo after
+generation rather than asking a model to redraw it. Per-image provenance is in
+`public/images/writing/patterns/README.md`.
+
+### 4.7 Logo and assets
+
+| Asset | Path |
+|---|---|
+| Logo | `public/assets/brand/logo.svg` |
+| Favicon | `public/favicon.svg` |
+| Social preview (1200×630) | `public/assets/brand/social-card.png` |
+| Portrait | `public/images/ahmed-abdelaziz.png` |
+| Closing illustration | `public/images/art/Horse_Far_View.png` |
+
+The SVG geometry is the source of truth. Do not redraw, stretch, rotate or auto-recolor
+it during layout work. Clear space: at least ¼ of the displayed mark height. The large
+home SANFOR heading is live text, not an image.
+
+### 4.8 Naming and voice
+
+| Context | Use |
+|---|---|
+| Brand in prose | Sanfor |
+| Display / nav wordmark | SANFOR |
+| Authorship / SEO | Ahmed Abdelaziz |
+| Alternate full name | Ahmed Abdelaziz Hanafy |
+| Handle | sanfor2004 |
+| Role line | Software Engineer — Systems & Backend |
+
+Write plainly and confidently. State what software does, what was tested, what was
+learned. Short actions: "Read article", "Case study", "Contact".
+
+| Purpose | Write | Avoid |
+|---|---|---|
+| Project | "A tool for creating interactive panorama tours." | "A revolutionary platform transforming everything." |
+| Article | "What failed when I retried the same job twice." | "The ultimate guide to perfect reliability." |
+| Limitation | "Mixed-DPI behavior still needs testing." | Unsupported claims of complete support |
+| Contact | "Discuss a project" | Unverified availability promises |
+
+---
+
+## 5. Component kit
+
+| Location | Contents |
+|---|---|
+| `src/components/ui/button.tsx` | `Button` — CVA variants, `asChild` |
+| `src/components/ui/primitives.tsx` | Card, Badge, Separator, Skeleton, Alert, Input, InputUnderline, Textarea, Label, Progress, Stat |
+| `src/components/ui/interactive.tsx` | Dialog, Tabs, Tooltip, Switch — Radix-backed |
+| `src/components/bits/CardSwap.tsx` | Stacked-card carousel (GSAP) |
+| `src/components/bits/CountUp.tsx` | Animated number |
+| `src/components/bits/art.tsx` | Halftone, StippleField, Grain, DecryptedText |
+| `src/pages/ui-kit.astro` | The gallery — noindex, excluded from the sitemap |
+
+The kit is **available but not yet adopted by site pages**. Existing pages still use
+their own Astro markup and the daisyUI components they were built with; the kit is
+for new work. Adopting it on an existing page is a deliberate redesign, not cleanup.
+
+Astro renders these React components to **static HTML with zero JavaScript** unless
+you add a `client:` directive — so `Badge`, `Card`, `Button` and friends cost nothing
+on a static page. Hydrate only what genuinely needs it.
+
+**Rules**
+
+- New interactive UI should use this kit. daisyUI is still installed and still used
+  by existing pages — leave that markup alone unless you are deliberately migrating it.
+- Prefer Astro for static presentation. Use a React island only when interaction
+  complexity warrants it, and hydrate as late as possible (`client:visible` over
+  `client:load`).
+- Components take `ReactNode` slots, not domain types.
+- Every interactive element is a real control with a visible focus ring, an accessible
+  name, and keyboard operation.
+- **If a component isn't on `/ui-kit`, it isn't finished.** Check changes there first.
+
+**React Bits adaptations.** The upstream components were modified to behave on a
+content site, and these properties must be preserved: the real value renders before
+hydration, animation starts on scroll-into-view, everything pauses off-screen and when
+the tab is hidden, and reduced motion collapses to a static state.
+
+---
+
+## 6. Routes and content
+
+| Route | Behavior |
+|---|---|
+| `/` | SANFOR entrance, five destinations from site config |
+| `/about/` | Biography, skills, experience, newest seven non-draft projects |
+| `/projects/`, `/projects/<slug>/` | Non-draft projects, newest first |
+| `/tags/<tag>/` | Project-only archive |
+| `/blog/` | Non-draft articles, metadata search, desktop masonry |
+| `/blog/<slug>/` | Article **or** blog topic archive — articles take precedence |
+| `/blog/design-patterns-overview/` | Entry point for the 24-post series |
+| `/blog/design-pattern-<slug>/` | One of 23 pattern articles |
+| `/art/`, `/contact/` | Image records; public profile links |
+| `/rss.xml` | Article metadata, not bodies |
+| `/ui-kit/` | Kit gallery — noindex, sitemap-excluded |
+| `/testblog/` | Unlisted layout prototype — noindex, sitemap-excluded |
+| Former `/learning/` | Redirect-only compatibility pages |
+
+### Frontmatter
+
+- **Blog** requires `title`, `description`, `pubDate`, `image`, `imageAlt`, `category`.
+  Optional `imageWidth` / `imageHeight` must be positive integers matching the real cover.
+- **Projects** require `title`, `description`, `pubDate`, `status`, `role`; optionally
+  `stack`, `image`, `repo`, `demo`.
+- Both support `tags`, `draft`, `updatedDate`.
+
+### Publication rules
+
+- `draft: true` hides content everywhere, including local dev. Future dates do **not**
+  hide anything — filtering checks `draft` only.
 - Preserve original `pubDate`; use an accurate `updatedDate` for substantive revisions.
-- Reuse tag spelling. Normalization only lowercases and replaces spaces; check collisions and punctuation.
-- Blog topic links use `/blog/<tag>/`; project topics use `/tags/<tag>/`. Articles take precedence over matching blog tag slugs.
+- Lists sort by `pubDate`, not `updatedDate`.
+- Tag normalization only lowercases and replaces literal spaces — punctuation survives,
+  and differently spelled tags can still collide. Reuse existing spellings.
+- Blog topics link `/blog/<tag>/`; project topics `/tags/<tag>/`.
+- Blog and project collections load **Markdown only**. MDX and the Learning section were
+  removed; do not restore them incidentally.
+
+### Editorial rules
+
+- **Never invent** achievements, metrics, employment, clients, qualifications, project
+  behavior, URLs, sources, or ownership claims.
+- Existing About metrics are published owner claims — preserve meaning, do not extrapolate.
 - Keep example frontmatter schema-valid and referenced assets real.
-- Ground technical claims in appropriate primary evidence when needed; local facts can be established from source files.
 - Keep private information and secrets out of content, assets, logs, and browser code.
+- Alt text explains essential meaning; decorative duplicates take empty alt. An image is
+  never the only source of an important explanation.
+- Record source and permissions for new imagery or audio. Public availability does not
+  establish reuse rights, and original drawing authorship does not imply ownership of
+  depicted third-party characters.
 
-## Pattern article maintenance
+---
 
-- The series is 24 English Markdown posts: one overview and 23 individual patterns. Titles use `Pattern Name (Creational Pattern)`, `(Structural Pattern)`, or `(Behavioral Pattern)`.
-- Keep the overview linked to every pattern, and preserve backlinks, related-article links, repository links, code, expected output, and image explanations in each post.
-- The source material is the owner's separate `23-Design-Patterns` repository. Published C++ snippets are actual examples from that repository, not the former four-language printing scaffold.
-- `src/data/design-pattern-series.mjs` supplies stable identities and 48 legacy redirects. Keep old Learning URLs as redirects, excluded from the sitemap; do not recreate the removed section.
-- Covers and SVG diagrams live in `public/images/writing/patterns/`. Preserve its README and SOURCE-LICENSE.txt. Original cover paths under `public/images/learning/patterns/` remain as compatibility assets.
-- Edit articles directly; there is no lesson generator or MDX wrapper. Build does not require another checkout.
-- Run `npm run verify:patterns` when changing the series. It checks publication structure, runs the displayed Python code, and compiles the displayed C++20 code when tools are available; CI requires both. Use a Visual Studio developer shell for MSVC. Temporary output uses a unique `tmp/pattern-posts-*` directory removed after the run.
-- Stdout checks validate the demonstrated scenarios, not every possible input or challenge. Preserve limitations on concurrency, ownership, and external effects.
+## 7. Design-pattern series
 
-## Brand, accessibility, and assets
+24 English Markdown posts: one overview plus 23 patterns. Titles use
+`Pattern Name (Creational Pattern)` / `(Structural Pattern)` / `(Behavioral Pattern)`;
+blog category is Design Patterns.
 
-- Preserve Sanfor/SANFOR naming and role unless the user requests a change.
-- Reuse `SiteGrid`, `container-page`, `AsciiLabel`, and existing component patterns.
-- Use semantic tokens such as `--color-bg`, `--color-text`, and `--color-accent`; inspect both themes.
-- Maintain warm surfaces, orange accents, thin borders, strong headings, mono metadata, original art, and restrained motion.
-- Preserve logo geometry and source artwork; do not automatically regenerate or overwrite them.
-- Keep meaningful headings, image alternatives, keyboard access, focus, and control names.
-- Do not nest links/buttons inside an encompassing card link.
-- Respect reduced motion and avoid reliance solely on hover, color, sound, or the custom pointer.
-- Size new assets for delivery. Files in `public/` do not receive automatic responsive optimization.
-- Preserve audio attribution and new asset provenance; public availability does not establish reuse rights.
+- Source material is the owner's separate `23-Design-Patterns` repository. Published
+  C++ snippets are real examples from it. Builds are self-contained — they do not read a
+  neighboring checkout or fetch anything.
+- Each post presents its complete Python example, then its C++20 example, each with its
+  own expected-output block. Keep code and expected output synchronized.
+- Keep the overview linked from every pattern, and preserve backlinks, related links,
+  repository links, images, and previous/next navigation.
+- `src/data/design-pattern-series.mjs` supplies stable identities and **48 legacy
+  redirects**. Old Learning URLs stay as redirects, excluded from the sitemap. GitHub
+  Pages serves static redirect HTML (refresh + link + canonical), not 301s. Validate
+  destinations after renaming any article.
+- Covers and SVG diagrams live in `public/images/writing/patterns/`; preserve its README
+  and `SOURCE-LICENSE.txt`. Original cover paths under `public/images/learning/patterns/`
+  remain as compatibility assets.
+- Edit the Markdown directly — there is no generator.
+- Run `npm run verify:patterns` on any series change. It checks structure, assets and
+  links, runs the Python, and compiles the C++20 where a toolchain exists (MSVC needs a
+  VS developer shell). Temporary output goes to a unique `tmp/pattern-posts-*` removed
+  after the run. Output checks cover the demonstrated scenarios only — preserve stated
+  limits on concurrency, ownership and external effects.
+- The ignored GoF PDF is private and must never be published or committed.
 
-## SEO and integrations
+---
 
-For social launch or campaign requests, read [social_media_launch_framework.md](social_media_launch_framework.md) completely and follow its execution workflow. Use the explicitly requested project, or the active workspace by default. Produce finished copy and actual image files using that project's evidence, logo, and assets. An instruction to edit the framework does not itself request a campaign run. Keep external publication separate from preparation and follow the user's authorization.
+## 8. Shared shell and browser state
 
-- Preserve canonical URLs, descriptions, social images, RSS discovery, and appropriate structured data.
-- Check generated routes, archives, sitemap, and RSS when changing collections or routing.
-- `/testblog/` is an unlisted but generated visual prototype using published blog entries. Preserve its `noindex, nofollow` metadata and sitemap exclusion unless its publication scope is explicitly changed. It is not a private draft preview.
-- Coordinate domain changes across site configuration, Astro configuration, robots.txt, and URL assumptions.
+`BaseLayout` mounts PageLoader, SiteHeader (except on home), `main#content`,
+AsciiSignal, SiteFooter, ThemeToggle, SiteCursor. Home supplies skip-to-navigation;
+internal pages skip-to-content.
+
+`ClientRouter` replaces page DOM on internal navigation. Enhancements must work on
+direct load, internal navigation, and back/forward:
+
+- Initialize on the right Astro lifecycle event, usually `astro:page-load`.
+- Guard against duplicate listeners and re-initialization on the same element.
+- Reacquire page-local nodes after swaps; never hold stale references.
+- Handle blocked or malformed `localStorage` in any new storage code.
+- Preserve theme state and accessible toggle labels across navigation.
+
+| Behavior | Implementation |
+|---|---|
+| Theme | `sanfor-theme` stores light/dark; restored initially and after swaps; defaults to light |
+| Blog search | Case-insensitive substring over title, description, category, tags; updates cards, live count, empty message. Does not read bodies, persist in the URL, or run on topic/prototype pages |
+| Blog masonry | ≥761px, JS measures cards and assigns grid spans; recalculates on images, fonts, filtering, resize; cleans up before swap |
+| Loader | Split-panel reveal, ~950ms; reduced motion finishes immediately; noscript hides it |
+| Cursor | Square enhancement for fine pointers without reduced motion |
+
+MusicPlayer, MusicPrompt, BusinessPanels, IllustrationSlot, PageHeader and
+`ui/SectionHeader.astro` have **no current consumers** — verify references before
+cleanup. Dormant music keeps `transition:persist`, Web Audio and track/volume storage.
+If audio is restored it must be user-initiated and expose pause, volume, seek and track
+information.
+
+---
+
+## 9. SEO, analytics, deployment
+
+- `SEO.astro` derives trailing-slash canonical URLs from the pathname and site origin.
+  Home/About use ProfilePage/Person; ordinary routes WebPage; blog details TechArticle;
+  projects with repos SoftwareSourceCode; BreadcrumbList accompanies nested entries.
+- Pass `robots="noindex, nofollow"` for unlisted pages **and** add the path to
+  `noIndexPaths` in `src/lib/sitemap.ts`. Both are required.
+- RSS carries article metadata and author names, not bodies.
+- `Analytics.astro` enables the typed helper only for production builds with a valid
+  `PUBLIC_GA_MEASUREMENT_ID`, handling `astro:page-load` and delegated discovery clicks.
+  Google automatic history page views must be **disabled** in stream settings or page
+  views double-count.
 - Do not replace analytics identifiers or add tracking as incidental cleanup.
-- Forms must have real submission behavior before displaying delivery success.
-- Keep public channels in site configuration. Add private contacts only when supplied or requested for publication.
+- Forms must have real submission behavior before showing delivery success.
+- Preserve published URLs and root-relative paths — this is a root user Pages site.
+- Coordinate domain changes across site config, Astro config, robots.txt and URL
+  assumptions.
+- `deploy.yml` runs on main pushes or manual dispatch: Node 22, install, pattern
+  verification with the runner's C++ compiler, build, upload `dist`, deploy to
+  github-pages. Pages concurrency has `cancel-in-progress: false`.
+- **Pushing to `main` deploys.** Push, publish or dispatch only when the task or session
+  explicitly authorizes it. Never send external messages without authorization.
 
-## Validation
+For campaign work, read `social_media_launch_framework.md` completely and follow its
+workflow. An instruction to edit that file is not a request to run a campaign. Keep
+external publication separate from preparation.
 
-For documentation-only changes, check relative links, paths, examples, factual consistency, and `git diff --check`. A build is generally unnecessary unless application or content loading behavior also changes.
+---
 
-For code/content changes, run `npm run build` when dependencies are available. Inspect generated routes when changing slugs, tags, drafts, or schemas. Add tests for meaningful behavior, not merely to mirror implementation.
+## 10. Conventions
 
-Pattern changes additionally require `npm run verify:patterns` as described above. The ignored GoF PDF is private and must never be published or committed.
-
-For visible changes, review affected pages at mobile and desktop widths in both themes. Check keyboard access, wrapping, image loading, overflow, and reduced motion. Shared-shell changes also require internal navigation, language/direction, and theme continuity checks; check music persistence only if the player is mounted. State any unavailable browser verification.
-
-Review the final diff and report what changed, validation, and relevant unresolved limitations.
-
-## Existing issues to inspect when relevant
-
-This baseline is not a standing request to fix everything:
-
-- Blog search now queries the count at document scope. Its search and masonry enhancement exists only on `/blog/`, not topic archives or `/testblog/`.
-- `BusinessPanels`, `MusicPlayer`, `MusicPrompt`, `IllustrationSlot`, `PageHeader`, and `SectionHeader` have no current consumers; verify references before cleanup.
-- IBM Plex Mono is named without an import; `--font-serif` is undefined.
-- Loader reveal has a noscript fallback.
-- Theme toggle and restoration catch storage errors; dormant music storage remains unguarded.
-- Projects and blog details share ArticleFrame/ArticleMeta; optional project covers and updated dates are surfaced. SEO, analytics setup, and growth guidance are in docs/SEO.md, docs/ANALYTICS.md, and docs/GROWTH.md.
-- The deployment workflow uses the Ubuntu runner's C++ compiler for the article examples; there are no Go, Java, or Python example toolchain steps.
-
-Update these notes when the implementation changes.
-
-## Repository and publishing discipline
-
-- Preserve user work and avoid destructive Git operations.
+- Two-space indentation, double-quoted TypeScript strings, existing semicolon style.
+- Keep text UTF-8. Read explicitly as UTF-8 when punctuation looks corrupted; verify
+  actual content before "repairing" apparent mojibake.
+- Make focused changes. No incidental dependency additions or broad reformatting.
+- Use patch-based edits. Do not fix source issues in generated output or dependencies.
+- Check references before deleting apparently unused components or styles.
 - Keep dependency changes intentional and lockfiles consistent.
 - Do not commit secrets, caches, browser profiles, or temporary verification artifacts.
-- Pushing to `main` triggers deployment. Push, publish, or dispatch only when authorized by the task or session.
-- Do not send external messages without authorization.
-- Keep these instructions and the handbook aligned with material architecture and workflow changes.
+- Never nest links or buttons inside an encompassing card link.
+- Do not rely solely on hover, colour, sound, or the custom pointer to convey anything.
+- Size assets for delivery — files in `public/` get no automatic optimization.
+
+---
+
+## 11. Validation
+
+**Documentation-only changes:** check relative links, paths, examples, factual
+consistency, and `git diff --check`. A build is usually unnecessary.
+
+**Code or content changes:** run `npm run build`. Inspect generated routes when
+changing slugs, tags, drafts or schemas. Series changes also require
+`npm run verify:patterns`.
+
+**Visible changes:** review affected pages at mobile and desktop widths **in both
+themes**. Check keyboard access, wrapping, image loading, overflow, and reduced motion.
+Shared-shell changes also require internal navigation and theme continuity checks.
+
+Screenshots are available without a browser extension — Playwright is a devDependency.
+Build, start `npm run preview`, and drive `localhost:4321`. Verify rendered pixels when
+a colour looks wrong; computed-style strings can serialize a hue as `none` while
+painting something quite different (§4.4).
+
+State any verification you could not perform. Review the final diff and report what
+changed, what you validated, and what remains unresolved.
+
+---
+
+## 12. Known gaps
+
+Not a standing request to fix everything — inspect when relevant.
+
+- Blog search and masonry exist only on `/blog/`, not topic archives or `/testblog/`.
+- `BusinessPanels`, `MusicPlayer`, `MusicPrompt`, `IllustrationSlot`, `PageHeader` and
+  `ui/SectionHeader.astro` have no consumers.
+- Dormant music storage is unguarded against blocked `localStorage`; the theme toggle
+  is guarded.
+- `/testblog/` is publicly reachable when deployed. It is a prototype, not a private
+  draft preview, and not the source of truth for the writing index.
+- The deploy workflow provides only a C++ toolchain for article examples — no Go, Java
+  or Python setup steps.
+- `Markting/` and `social_media_launch_framework.md` are prepared campaign material
+  outside the site build; their historical reports describe dated runs, not current
+  validation.
+
+Update this section when the implementation changes.
