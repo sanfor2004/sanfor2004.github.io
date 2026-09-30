@@ -1,15 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Container from "../components/Container.astro";
+import SiteHeader from "../components/SiteHeader.astro";
 ---
 
-<BaseLayout title="Redesign in progress">
-  <main class="bg-ink flex min-h-screen flex-col items-center justify-center gap-4 px-6 py-24 text-center">
-    <h1 class="font-display text-frost text-5xl leading-[0.95] font-extrabold tracking-tight sm:text-7xl">
-      Sanfor
-    </h1>
-
-    <p class="font-sans text-steel text-base sm:text-lg">
-      — redesign in progress
-    </p>
+<BaseLayout>
+  <SiteHeader />
+  <main class="bg-ink min-h-screen">
+    <Container></Container>
   </main>
 </BaseLayout>

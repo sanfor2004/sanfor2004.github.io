@@ -1,0 +1,40 @@
+---
+import Container from "./Container.astro";
+import { InteractiveHoverButton } from "./ui/interactive-hover-button";
+import { navItems } from "../site";
+
+const primaryLinks = navItems.slice(0, 3);
+---
+
+<header class="py-2">
+  <Container class="flex items-center justify-between">
+    <a href="/" class="inline-flex items-center gap-2">
+      <img
+        src="/assets/brand/logo.svg"
+        alt=""
+        width="56"
+        height="38"
+        class="h-8 w-auto"
+      />
+      <span class="font-display text-frost text-lg font-bold tracking-tight">
+        SANFOR
+      </span>
+    </a>
+
+    <nav aria-label="Primary" class="flex items-center gap-6">
+      <div class="hidden items-center gap-6 md:flex">
+        {
+          primaryLinks.map((item) => (
+            <a
+              href={item.href}
+              class="text-steel hover:text-frost ease-standard duration-(--duration-fast) text-sm font-medium transition-colors"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+      <InteractiveHoverButton>Book a Call</InteractiveHoverButton>
+    </nav>
+  </Container>
+</header>
