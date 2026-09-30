@@ -1,0 +1,167 @@
+---
+/**
+ * A "see more / see less" fold.
+ *
+ * The overflow is clipped by max-height rather than removed from the DOM, so
+ * in-page search still finds it. The hidden region is marked `inert` while
+ * folded so its links stay out of the tab order.
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+
+export interface Props {
+  /** Visible height in px while collapsed. */
+  collapsedHeight?: number;
+  moreLabel?: string;
+  lessLabel?: string;
+  /** Fade the clipped edge so it reads as continuing. */
+  fade?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const {
+  collapsedHeight = 160,
+  moreLabel = "See more",
+  lessLabel = "See less",
+  fade = true,
+  id = "ui-seemore-" + Math.random().toString(36).slice(2, 9),
+  class: className = "",
+} = Astro.props as Props;
+---
+
+<div
+  class={cx("ui-seemore", fade && "ui-seemore--fade", className)}
+  data-seemore
+  style={"--ui-seemore-h:" + collapsedHeight + "px"}
+>
+  <div class="ui-seemore-region" id={id} data-seemore-region>
+    <slot />
+  </div>
+
+  <button
+    type="button"
+    class="ui-seemore-toggle"
+    data-seemore-toggle
+    aria-expanded="false"
+    aria-controls={id}
+    data-more={moreLabel}
+    data-less={lessLabel}
+  >
+    <span data-seemore-label>{moreLabel}</span>
+    <Icon name="chevron-down" size={15} class="ui-seemore-icon" />
+  </button>
+</div>
+
+<style is:global>
+  .ui-seemore-region {
+    position: relative;
+    max-block-size: var(--ui-seemore-h, 160px);
+    overflow: hidden;
+    transition: max-block-size var(--duration-base) var(--ease-emphasized);
+  }
+
+  .ui-seemore-region.is-open {
+    /* A large cap rather than `none`, so the height stays transitionable. */
+    max-block-size: 200vh;
+  }
+
+  .ui-seemore--fade .ui-seemore-region:not(.is-open)::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 4rem;
+    pointer-events: none;
+    background-image: linear-gradient(to bottom, transparent, var(--ink));
+  }
+
+  .ui-seemore-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-block-start: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    margin-inline-start: -0.6rem;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--signal-text);
+    cursor: pointer;
+  }
+
+  .ui-seemore-toggle:hover {
+    background-color: color-mix(in srgb, var(--signal) 10%, transparent);
+  }
+
+  .ui-seemore-icon {
+    transition: transform var(--duration-base) var(--ease-emphasized);
+  }
+
+  .ui-seemore-toggle[aria-expanded="true"] .ui-seemore-icon {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-seemore-region,
+    .ui-seemore-icon {
+      transition-duration: 1ms;
+    }
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  if (!root.dataset.uiSeeMoreReady) {
+    root.dataset.uiSeeMoreReady = "1";
+
+    const sync = (wrapper: HTMLElement) => {
+      const region = wrapper.querySelector<HTMLElement>("[data-seemore-region]");
+      const toggle = wrapper.querySelector<HTMLButtonElement>("[data-seemore-toggle]");
+      if (!region || !toggle) return;
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      region.classList.toggle("is-open", open);
+      if (open) region.removeAttribute("inert");
+      else region.setAttribute("inert", "");
+      const label = toggle.querySelector("[data-seemore-label]");
+      if (label) label.textContent = open ? toggle.dataset.less! : toggle.dataset.more!;
+    };
+
+    /* Folded content starts inert; only fold at all if it actually overflows. */
+    const init = () => {
+      document.querySelectorAll<HTMLElement>("[data-seemore]").forEach((wrapper) => {
+        const region = wrapper.querySelector<HTMLElement>("[data-seemore-region]");
+        const toggle = wrapper.querySelector<HTMLButtonElement>("[data-seemore-toggle]");
+        if (!region || !toggle) return;
+        const overflows = region.scrollHeight > region.clientHeight + 4;
+        if (!overflows) {
+          toggle.hidden = true;
+          region.style.maxBlockSize = "none";
+          return;
+        }
+        sync(wrapper);
+      });
+    };
+
+    document.addEventListener("click", (event) => {
+      const toggle = (event.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-seemore-toggle]"
+      );
+      if (!toggle) return;
+      const wrapper = toggle.closest<HTMLElement>("[data-seemore]");
+      if (!wrapper) return;
+      toggle.setAttribute(
+        "aria-expanded",
+        String(toggle.getAttribute("aria-expanded") !== "true")
+      );
+      sync(wrapper);
+    });
+
+    init();
+    document.addEventListener("astro:page-load", init);
+  }
+</script>

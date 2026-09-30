@@ -1,0 +1,61 @@
+---
+/**
+ * Horizontal container. Three widths, one gutter.
+ *
+ * `prose` is a reading measure (68ch) and should wrap article text only.
+ * `content` (1200px) is the default page width. `wide` (1440px) is for full
+ * bleed rows - galleries, marquees, image grids.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  size?: "prose" | "content" | "wide" | "full";
+  as?: "div" | "section" | "header" | "footer" | "main" | "article" | "nav";
+  /** Drop the side gutter - for a child that manages its own padding. */
+  flush?: boolean;
+  class?: string;
+}
+
+const {
+  size = "content",
+  as: Tag = "div",
+  flush = false,
+  class: className = "",
+} = Astro.props as Props;
+
+const sizes = {
+  prose: "ui-container--prose",
+  content: "ui-container--content",
+  wide: "ui-container--wide",
+  full: "ui-container--full",
+} as const;
+---
+
+<Tag class={cx("ui-container", sizes[size], flush && "ui-container--flush", className)}>
+  <slot />
+</Tag>
+
+<style is:global>
+  .ui-container {
+    inline-size: 100%;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .ui-container--prose {
+    max-inline-size: var(--container-prose);
+  }
+  .ui-container--content {
+    max-inline-size: var(--container-content);
+  }
+  .ui-container--wide {
+    max-inline-size: var(--container-wide);
+  }
+  .ui-container--full {
+    max-inline-size: none;
+  }
+
+  .ui-container--flush {
+    padding-inline: 0;
+  }
+</style>

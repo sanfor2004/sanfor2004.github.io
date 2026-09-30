@@ -1,0 +1,80 @@
+---
+/**
+ * Ember backdrop.
+ *
+ * The only sanctioned use of the Ember palette outside the hero: a radial bloom
+ * behind a special moment (a CTA band, a featured card). Decorative and
+ * absolutely positioned; needs a positioned parent.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  /** How hot the bloom reads. */
+  intensity?: "subtle" | "medium" | "strong";
+  position?:
+    | "center"
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "top-right"
+    | "bottom-right"
+    | "bottom-left";
+  /** Bloom diameter as a percentage of the parent's larger axis. */
+  size?: number;
+  /** Blur in px. Softens banding on wide gradients. */
+  blur?: number;
+  class?: string;
+}
+
+const {
+  intensity = "medium",
+  position = "bottom-right",
+  size = 90,
+  blur = 0,
+  class: className = "",
+} = Astro.props as Props;
+
+const alphas = { subtle: 0.18, medium: 0.34, strong: 0.55 } as const;
+
+const positions = {
+  center: "50% 50%",
+  top: "50% 0%",
+  bottom: "50% 100%",
+  left: "0% 50%",
+  right: "100% 50%",
+  "top-right": "88% 12%",
+  "bottom-right": "88% 92%",
+  "bottom-left": "12% 92%",
+} as const;
+
+const style = [
+  "--ui-ember-alpha:" + alphas[intensity],
+  "--ui-ember-at:" + positions[position],
+  "--ui-ember-size:" + size + "%",
+  blur ? "--ui-ember-blur:" + blur + "px" : "",
+]
+  .filter(Boolean)
+  .join(";");
+---
+
+<div class={cx("ui-ember", className)} style={style} aria-hidden="true"></div>
+
+<style is:global>
+  .ui-ember {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(var(--ui-ember-blur, 0px));
+    background-image: radial-gradient(
+      ellipse var(--ui-ember-size, 90%) var(--ui-ember-size, 90%) at
+        var(--ui-ember-at, 88% 92%),
+      color-mix(in srgb, var(--ember-glow) calc(var(--ui-ember-alpha) * 100%), transparent) 0%,
+      color-mix(in srgb, var(--ember-primary) calc(var(--ui-ember-alpha) * 78%), transparent) 26%,
+      color-mix(in srgb, var(--ember-burnt) calc(var(--ui-ember-alpha) * 50%), transparent) 48%,
+      color-mix(in srgb, var(--ember-deep) calc(var(--ui-ember-alpha) * 26%), transparent) 68%,
+      transparent 85%
+    );
+  }
+</style>

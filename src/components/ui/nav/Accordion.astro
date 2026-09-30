@@ -1,0 +1,143 @@
+---
+/**
+ * Accordion container.
+ *
+ * Height is animated with `grid-template-rows: 0fr -> 1fr`, which transitions
+ * to the panel's real height without measuring anything in JavaScript and
+ * without ever clipping content at a wrong fixed height.
+ *
+ * `mode="single"` closes siblings when one opens; `multiple` leaves them alone.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  mode?: "single" | "multiple";
+  /** Hairline rules between items. */
+  dividers?: boolean;
+  class?: string;
+}
+
+const { mode = "multiple", dividers = true, class: className = "" } = Astro.props as Props;
+---
+
+<div
+  class={cx("ui-accordion", dividers && "ui-accordion--dividers", className)}
+  data-accordion
+  data-mode={mode}
+>
+  <slot />
+</div>
+
+<style is:global>
+  .ui-accordion {
+    inline-size: 100%;
+  }
+
+  .ui-accordion--dividers .ui-acc-item + .ui-acc-item {
+    border-block-start: 1px solid var(--border-hairline);
+  }
+
+  .ui-acc-heading {
+    margin: 0;
+  }
+
+  .ui-acc-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    inline-size: 100%;
+    padding: 1rem 0;
+    border: 0;
+    background: transparent;
+    text-align: start;
+    font-family: var(--type-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--frost);
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--motion-standard);
+  }
+
+  .ui-acc-trigger:hover {
+    color: var(--signal-text);
+  }
+
+  .ui-acc-icon {
+    flex: none;
+    color: var(--steel-text);
+    transition: transform var(--duration-base) var(--ease-emphasized);
+  }
+
+  .ui-acc-trigger[aria-expanded="true"] .ui-acc-icon {
+    transform: rotate(180deg);
+    color: var(--signal-text);
+  }
+
+  .ui-acc-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--duration-base) var(--ease-emphasized);
+  }
+
+  .ui-acc-panel.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .ui-acc-panel-inner {
+    overflow: hidden;
+  }
+
+  .ui-acc-panel-content {
+    padding-block-end: 1rem;
+    font-family: var(--type-sans);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--steel-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-acc-panel,
+    .ui-acc-icon,
+    .ui-acc-trigger {
+      transition-duration: 1ms;
+    }
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  if (!root.dataset.uiAccordionReady) {
+    root.dataset.uiAccordionReady = "1";
+
+    document.addEventListener("click", (event) => {
+      const trigger = (event.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-acc-trigger]"
+      );
+      if (!trigger) return;
+
+      const container = trigger.closest<HTMLElement>("[data-accordion]");
+      const item = trigger.closest<HTMLElement>(".ui-acc-item");
+      const panel = item?.querySelector<HTMLElement>(".ui-acc-panel");
+      if (!container || !panel) return;
+
+      const open = trigger.getAttribute("aria-expanded") === "true";
+
+      if (!open && container.dataset.mode === "single") {
+        container
+          .querySelectorAll<HTMLButtonElement>("[data-acc-trigger]")
+          .forEach((other) => {
+            if (other === trigger) return;
+            other.setAttribute("aria-expanded", "false");
+            other
+              .closest<HTMLElement>(".ui-acc-item")
+              ?.querySelector<HTMLElement>(".ui-acc-panel")
+              ?.classList.remove("is-open");
+          });
+      }
+
+      trigger.setAttribute("aria-expanded", String(!open));
+      panel.classList.toggle("is-open", !open);
+    });
+  }
+</script>

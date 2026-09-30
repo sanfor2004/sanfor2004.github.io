@@ -1,0 +1,122 @@
+---
+/**
+ * A boxed aside: note, tip, warning, danger. Also used inside articles.
+ *
+ * Each tone gets its own icon as well as its own colour, so the meaning does
+ * not depend on colour alone. Warning and danger render as `role="note"` too -
+ * they are prose asides, not live alerts; use `Toast` for something that
+ * happened just now.
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+import type { IconName } from "../icons/registry";
+
+export interface Props {
+  tone?: "info" | "tip" | "warning" | "danger";
+  title?: string;
+  /** Override the tone's default icon. */
+  icon?: IconName;
+  class?: string;
+}
+
+const { tone = "info", title, icon, class: className = "" } = Astro.props as Props;
+
+const icons: Record<string, IconName> = {
+  info: "info",
+  tip: "lightbulb",
+  warning: "triangle-alert",
+  danger: "circle-alert",
+};
+---
+
+<aside class={cx("ui-callout", "ui-callout--" + tone, className)} role="note">
+  <span class="ui-callout-icon" aria-hidden="true">
+    <Icon name={icon ?? icons[tone]} size={17} />
+  </span>
+  <div class="ui-callout-body">
+    {title && <p class="ui-callout-title">{title}</p>}
+    <div class="ui-callout-content">
+      <slot />
+    </div>
+  </div>
+</aside>
+
+<style is:global>
+  .ui-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border-default);
+    border-inline-start-width: 2px;
+    border-radius: var(--radius-lg);
+    background-color: var(--silk);
+  }
+
+  .ui-callout-icon {
+    flex: none;
+    line-height: 0;
+    margin-block-start: 0.1rem;
+  }
+
+  .ui-callout-body {
+    display: grid;
+    gap: 0.25rem;
+    min-inline-size: 0;
+  }
+
+  .ui-callout-title {
+    margin: 0;
+    font-family: var(--type-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--frost);
+  }
+
+  .ui-callout-content {
+    font-family: var(--type-sans);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--steel-text);
+  }
+
+  .ui-callout-content > :first-child {
+    margin-block-start: 0;
+  }
+  .ui-callout-content > :last-child {
+    margin-block-end: 0;
+  }
+
+  .ui-callout--info {
+    border-inline-start-color: var(--info);
+  }
+  .ui-callout--info .ui-callout-icon {
+    color: var(--info);
+  }
+
+  .ui-callout--tip {
+    border-inline-start-color: var(--signal);
+  }
+  .ui-callout--tip .ui-callout-icon {
+    color: var(--signal-text);
+  }
+
+  .ui-callout--warning {
+    border-inline-start-color: var(--warning);
+  }
+  .ui-callout--warning .ui-callout-icon {
+    color: var(--warning);
+  }
+
+  .ui-callout--danger {
+    border-inline-start-color: var(--danger);
+  }
+  .ui-callout--danger .ui-callout-icon {
+    color: var(--danger);
+  }
+
+  /* Inside prose the callout should sit in the flow like a paragraph. */
+  .prose-sanfor .ui-callout {
+    margin-block: 1.5rem;
+  }
+</style>

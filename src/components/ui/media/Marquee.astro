@@ -1,0 +1,125 @@
+---
+/**
+ * Infinite horizontal scroller for logos or thumbnails.
+ *
+ * The track is duplicated once and translated by exactly -50%, so the loop is
+ * seamless with no JavaScript. The duplicate is `aria-hidden` so screen readers
+ * hear the list once.
+ *
+ * Under reduced motion the animation is dropped entirely and the content
+ * becomes a normal wrapped row - not a paused strip with items off-screen.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  /** Seconds for one full pass. Larger is slower. */
+  duration?: number;
+  direction?: "left" | "right";
+  /** Pause while the pointer is over it. */
+  pauseOnHover?: boolean;
+  gap?: number;
+  /** Fade the left and right edges. */
+  fade?: boolean;
+  class?: string;
+}
+
+const {
+  duration = 40,
+  direction = "left",
+  pauseOnHover = true,
+  gap = 3,
+  fade = true,
+  class: className = "",
+} = Astro.props as Props;
+
+const style = [
+  "--ui-marquee-duration:" + duration + "s",
+  "--ui-marquee-gap:" + gap * 0.25 + "rem",
+  "--ui-marquee-direction:" + (direction === "left" ? "normal" : "reverse"),
+].join(";");
+---
+
+<div
+  class={cx("ui-marquee", pauseOnHover && "ui-marquee--pausable", fade && "ui-marquee--fade", className)}
+  style={style}
+>
+  <div class="ui-marquee-track">
+    <div class="ui-marquee-group">
+      <slot />
+    </div>
+    <div class="ui-marquee-group" aria-hidden="true">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .ui-marquee {
+    overflow: hidden;
+    inline-size: 100%;
+  }
+
+  .ui-marquee--fade {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 6%,
+      #000 94%,
+      transparent 100%
+    );
+  }
+
+  .ui-marquee-track {
+    display: flex;
+    inline-size: max-content;
+    gap: var(--ui-marquee-gap, 0.75rem);
+    animation: ui-marquee-scroll var(--ui-marquee-duration, 40s) linear infinite;
+    animation-direction: var(--ui-marquee-direction, normal);
+  }
+
+  .ui-marquee-group {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-marquee-gap, 0.75rem);
+    flex: none;
+  }
+
+  .ui-marquee--pausable:hover .ui-marquee-track,
+  .ui-marquee--pausable:focus-within .ui-marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* -50% is exactly one copy of the content plus one gap, which is why the
+     track carries the same gap as the groups. */
+  @keyframes ui-marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-50% - var(--ui-marquee-gap, 0.75rem) / 2));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-marquee {
+      overflow-x: auto;
+      mask-image: none;
+    }
+
+    .ui-marquee-track {
+      animation: none;
+      inline-size: 100%;
+      flex-wrap: wrap;
+    }
+
+    /* Drop the duplicate so nothing is announced or shown twice. */
+    .ui-marquee-group[aria-hidden="true"] {
+      display: none;
+    }
+
+    .ui-marquee-group {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>

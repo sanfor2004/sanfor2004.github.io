@@ -1,0 +1,108 @@
+---
+/**
+ * The "nothing here" panel: icon, title, one line of explanation, optional
+ * action slot.
+ *
+ * Always say what to do next - an empty state with no action is a dead end.
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+import type { IconName } from "../icons/registry";
+
+export interface Props {
+  title: string;
+  description?: string;
+  icon?: IconName;
+  /** `panel` draws a dashed box; `bare` sits directly on the page. */
+  variant?: "panel" | "bare";
+  size?: "sm" | "md";
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  icon = "search",
+  variant = "panel",
+  size = "md",
+  class: className = "",
+} = Astro.props as Props;
+---
+
+<div
+  class={cx("ui-empty", "ui-empty--" + variant, "ui-empty--" + size, className)}
+  role="status"
+>
+  <span class="ui-empty-icon" aria-hidden="true">
+    <Icon name={icon} size={size === "sm" ? 20 : 24} />
+  </span>
+  <p class="ui-empty-title">{title}</p>
+  {description && <p class="ui-empty-desc">{description}</p>}
+  {
+    Astro.slots.has("default") && (
+      <div class="ui-empty-actions">
+        <slot />
+      </div>
+    )
+  }
+</div>
+
+<style is:global>
+  .ui-empty {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .ui-empty--panel {
+    padding: 2.5rem 1.5rem;
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-xl);
+    background-color: color-mix(in srgb, var(--silk) 45%, transparent);
+  }
+
+  .ui-empty--sm.ui-empty--panel {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .ui-empty-icon {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    margin-block-end: 0.25rem;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--steel) 12%, transparent);
+    color: var(--steel-text);
+  }
+
+  .ui-empty-title {
+    margin: 0;
+    font-family: var(--type-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--frost);
+  }
+
+  .ui-empty--sm .ui-empty-title {
+    font-size: 0.9375rem;
+  }
+
+  .ui-empty-desc {
+    margin: 0;
+    max-inline-size: 42ch;
+    font-family: var(--type-sans);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--steel-text);
+  }
+
+  .ui-empty-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-block-start: 0.75rem;
+  }
+</style>

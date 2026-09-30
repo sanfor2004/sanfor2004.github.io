@@ -1,0 +1,74 @@
+---
+/**
+ * A row of social links.
+ *
+ * Renders a `<ul>` because it is a list of destinations; `label` names the
+ * group for assistive tech.
+ */
+import { cx } from "../cx";
+import SocialLink from "./SocialLink.astro";
+import type { BrandIconName } from "../icons/registry";
+
+export interface Social {
+  icon: BrandIconName;
+  href: string;
+  label: string;
+}
+
+export interface Props {
+  links: Social[];
+  size?: "sm" | "md" | "lg";
+  showLabels?: boolean;
+  /** Accessible name for the list. */
+  label?: string;
+  align?: "start" | "center" | "end";
+  class?: string;
+}
+
+const {
+  links,
+  size = "md",
+  showLabels = false,
+  label = "Social links",
+  align = "start",
+  class: className = "",
+} = Astro.props as Props;
+---
+
+<ul
+  class={cx("ui-socialrow", "ui-socialrow--" + align, className)}
+  aria-label={label}
+>
+  {
+    links.map((link) => (
+      <li>
+        <SocialLink
+          icon={link.icon}
+          href={link.href}
+          label={link.label}
+          showLabel={showLabels}
+          size={size}
+        />
+      </li>
+    ))
+  }
+</ul>
+
+<style is:global>
+  .ui-socialrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ui-socialrow--center {
+    justify-content: center;
+  }
+  .ui-socialrow--end {
+    justify-content: flex-end;
+  }
+</style>

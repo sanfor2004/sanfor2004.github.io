@@ -1,0 +1,106 @@
+---
+/**
+ * One-dimensional flex layout. The workhorse for "these things in a row/column
+ * with a consistent gap".
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  direction?: "row" | "column";
+  /** Gap in 0.25rem steps, matching Tailwind's spacing scale. */
+  gap?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16;
+  align?: "start" | "center" | "end" | "stretch" | "baseline";
+  justify?: "start" | "center" | "end" | "between" | "around";
+  wrap?: boolean;
+  /** Below this width a row becomes a column. */
+  collapseAt?: "none" | "sm" | "md";
+  as?: "div" | "ul" | "ol" | "nav" | "header" | "footer";
+  class?: string;
+}
+
+const {
+  direction = "column",
+  gap = 4,
+  align = "stretch",
+  justify = "start",
+  wrap = false,
+  collapseAt = "none",
+  as: Tag = "div",
+  class: className = "",
+} = Astro.props as Props;
+
+const aligns = {
+  start: "flex-start",
+  center: "center",
+  end: "flex-end",
+  stretch: "stretch",
+  baseline: "baseline",
+} as const;
+
+const justifies = {
+  start: "flex-start",
+  center: "center",
+  end: "flex-end",
+  between: "space-between",
+  around: "space-around",
+} as const;
+
+const style = [
+  "--ui-stack-dir:" + (direction === "row" ? "row" : "column"),
+  "--ui-stack-gap:" + gap * 0.25 + "rem",
+  "--ui-stack-align:" + aligns[align],
+  "--ui-stack-justify:" + justifies[justify],
+].join(";");
+---
+
+<Tag
+  class={cx(
+    "ui-stack",
+    wrap && "ui-stack--wrap",
+    collapseAt !== "none" && "ui-stack--collapse-" + collapseAt,
+    className
+  )}
+  style={style}
+>
+  <slot />
+</Tag>
+
+<style is:global>
+  .ui-stack {
+    display: flex;
+    flex-direction: var(--ui-stack-dir, column);
+    gap: var(--ui-stack-gap, 1rem);
+    align-items: var(--ui-stack-align, stretch);
+    justify-content: var(--ui-stack-justify, flex-start);
+    margin: 0;
+    padding: 0;
+  }
+
+  ul.ui-stack,
+  ol.ui-stack {
+    list-style: none;
+  }
+
+  /* Same reason as Grid: flex items also floor at their content width. */
+  .ui-stack > * {
+    min-inline-size: 0;
+  }
+
+  .ui-stack--wrap {
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .ui-stack--collapse-sm {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ui-stack--collapse-md {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

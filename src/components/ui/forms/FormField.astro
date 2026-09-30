@@ -1,0 +1,65 @@
+---
+/**
+ * Label + control + hint/error wrapper.
+ *
+ * Owns one id and derives the rest from it: `<label for>`, plus `-hint` and
+ * `-error` ids for the messages. Astro has no render props, so the control in
+ * the slot is given the same ids explicitly by the caller:
+ *
+ *   const id = "email";
+ *   <FormField label="Email" id={id} hint="Work address">
+ *     <Input id={id} describedBy={`${id}-hint`} />
+ *   </FormField>
+ *
+ * Passing `error` renders the message with `role="alert"`; set `invalid` on the
+ * control so the border and `aria-invalid` agree with it.
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+
+export interface Props {
+  label: string;
+  /** Id shared by the label and the control. Generated when omitted. */
+  id?: string;
+  hint?: string;
+  /** Message to show; also flips the control into its invalid state. */
+  error?: string;
+  required?: boolean;
+  /** Hide the label visually but keep it for assistive tech. */
+  hideLabel?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  id = "ui-field-" + Math.random().toString(36).slice(2, 9),
+  hint,
+  error,
+  required = false,
+  hideLabel = false,
+  class: className = "",
+} = Astro.props as Props;
+
+const hintId = hint ? id + "-hint" : undefined;
+const errorId = error ? id + "-error" : undefined;
+---
+
+<div class={cx("ui-formfield", className)}>
+  <label class={cx("ui-formfield-label", hideLabel && "sr-only")} for={id}>
+    {label}
+    {required && <span class="ui-formfield-required" aria-hidden="true">*</span>}
+  </label>
+
+  <slot />
+
+  {hint && !error && <p class="ui-formfield-hint" id={hintId}>{hint}</p>}
+
+  {
+    error && (
+      <p class="ui-formfield-error" id={errorId} role="alert">
+        <Icon name="circle-alert" size={14} />
+        <span>{error}</span>
+      </p>
+    )
+  }
+</div>

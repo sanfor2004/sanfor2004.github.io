@@ -1,0 +1,66 @@
+---
+/** Showcase-only: one anchored group of specimens. */
+import { cx } from "../ui/cx";
+import Heading from "../ui/typography/Heading.astro";
+import Text from "../ui/typography/Text.astro";
+
+export interface Props {
+  id: string;
+  title: string;
+  description?: string;
+  class?: string;
+}
+
+const { id, title, description, class: className = "" } = Astro.props as Props;
+---
+
+<section id={id} class={cx("kit-group", className)}>
+  <header class="kit-group-head">
+    <Heading as="h2" size="h2">{title}</Heading>
+    {description && <Text tone="muted" measure="prose">{description}</Text>}
+  </header>
+  <div class="kit-group-body">
+    <slot />
+  </div>
+</section>
+
+<style is:global>
+  .kit-group {
+    scroll-margin-block-start: 2rem;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-block-start: 1px solid var(--border-hairline);
+  }
+
+  .kit-group:first-of-type {
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .kit-group-head {
+    display: grid;
+    gap: 0.6rem;
+    margin-block-end: 2rem;
+  }
+
+  .kit-group-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.25rem;
+  }
+
+  .kit-subgroup {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .kit-subgroup-title {
+    margin: 0;
+    font-family: var(--type-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--steel-text);
+    padding-block-end: 0.5rem;
+    border-block-end: 1px solid var(--border-hairline);
+  }
+</style>

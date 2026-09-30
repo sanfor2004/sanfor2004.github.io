@@ -1,0 +1,99 @@
+---
+/**
+ * Framed image with a caption.
+ *
+ * `width` and `height` are required: without them the browser cannot reserve
+ * the box and the page jumps when the image lands. That single rule is most of
+ * what keeps CLS at zero.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  src: string;
+  alt: string;
+  /** Intrinsic pixel width. Required to reserve space. */
+  width: number;
+  /** Intrinsic pixel height. Required to reserve space. */
+  height: number;
+  caption?: string;
+  /** Crop to a ratio instead of the image's own. e.g. "16 / 9". */
+  ratio?: string;
+  /** Noise over the image. */
+  grain?: boolean;
+  /** Skip lazy-loading for an above-the-fold image. */
+  eager?: boolean;
+  radius?: "md" | "lg" | "xl" | "2xl";
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  caption,
+  ratio,
+  grain = false,
+  eager = false,
+  radius = "lg",
+  class: className = "",
+} = Astro.props as Props;
+
+const style = ["--ui-figure-radius: var(--radius-" + radius + ")", ratio ? "--ui-figure-ratio:" + ratio : ""]
+  .filter(Boolean)
+  .join(";");
+---
+
+<figure class={cx("ui-figure", className)} style={style}>
+  <div class={cx("ui-figure-frame", ratio && "ui-figure-frame--ratio", grain && "grain")}>
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      fetchpriority={eager ? "high" : undefined}
+    />
+  </div>
+  {caption && <figcaption class="ui-figure-caption">{caption}</figcaption>}
+</figure>
+
+<style is:global>
+  .ui-figure {
+    margin: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .ui-figure-frame {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--ui-figure-radius, var(--radius-lg));
+    background-color: var(--silk);
+  }
+
+  .ui-figure-frame--ratio {
+    aspect-ratio: var(--ui-figure-ratio, 16 / 9);
+  }
+
+  .ui-figure-frame img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .ui-figure-frame--ratio img {
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .ui-figure-caption {
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: var(--steel-text);
+  }
+</style>

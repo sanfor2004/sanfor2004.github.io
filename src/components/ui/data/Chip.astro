@@ -1,0 +1,155 @@
+---
+/**
+ * A filter or tech-stack chip.
+ *
+ * Three shapes depending on props, and the element follows the behaviour:
+ *  - `href` -> `<a>`, a navigable filter
+ *  - `removable` -> `<span>` wrapping a real `<button>` for the dismiss action
+ *  - otherwise -> `<span>`, a static label
+ *
+ * A removable chip does NOT remove itself; it dispatches a bubbling
+ * `chip:remove` CustomEvent carrying `{ value }` and lets the page decide.
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+import type { IconName } from "../icons/registry";
+
+export interface Props {
+  /** Identifier sent with the `chip:remove` event. Defaults to the label text. */
+  value?: string;
+  href?: string;
+  /** Selected filter state. */
+  active?: boolean;
+  removable?: boolean;
+  icon?: IconName;
+  size?: "sm" | "md";
+  /** Accessible name for the remove button, e.g. "Remove C++ filter". */
+  removeLabel?: string;
+  class?: string;
+}
+
+const {
+  value,
+  href,
+  active = false,
+  removable = false,
+  icon,
+  size = "md",
+  removeLabel = "Remove",
+  class: className = "",
+} = Astro.props as Props;
+
+const classes = cx(
+  "ui-chip",
+  "ui-chip--" + size,
+  active && "is-active",
+  href && "ui-chip--link",
+  className
+);
+---
+
+{
+  href ? (
+    <a class={classes} href={href} aria-current={active ? "true" : undefined}>
+      {icon && <Icon name={icon} size={size === "sm" ? 12 : 14} />}
+      <slot />
+    </a>
+  ) : (
+    <span class={classes} data-chip-value={value}>
+      {icon && <Icon name={icon} size={size === "sm" ? 12 : 14} />}
+      <slot />
+      {removable && (
+        <button type="button" class="ui-chip-remove" data-chip-remove aria-label={removeLabel}>
+          <Icon name="x" size={12} />
+        </button>
+      )}
+    </span>
+  )
+}
+
+<style is:global>
+  .ui-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--steel-text);
+    background-color: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: 9999px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color var(--duration-fast) var(--motion-standard),
+      border-color var(--duration-fast) var(--motion-standard),
+      background-color var(--duration-fast) var(--motion-standard);
+  }
+
+  .ui-chip--sm {
+    padding: 0.15em 0.6em;
+    font-size: 0.66rem;
+  }
+  .ui-chip--md {
+    padding: 0.28em 0.75em;
+  }
+
+  .ui-chip--link:hover {
+    color: var(--frost);
+    border-color: var(--border-strong);
+  }
+
+  .ui-chip.is-active {
+    color: var(--signal-text);
+    border-color: color-mix(in srgb, var(--signal) 50%, transparent);
+    background-color: color-mix(in srgb, var(--signal) 10%, transparent);
+  }
+
+  .ui-chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline-end: -0.25em;
+    padding: 0.1em;
+    border: 0;
+    border-radius: 9999px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity var(--duration-fast) var(--motion-standard);
+  }
+
+  .ui-chip-remove:hover {
+    opacity: 1;
+    color: var(--danger);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-chip,
+    .ui-chip-remove {
+      transition-duration: 1ms;
+    }
+  }
+</style>
+
+<script>
+  /* One delegated listener for every removable chip on the page. */
+  const root = document.documentElement;
+  if (!root.dataset.uiChipReady) {
+    root.dataset.uiChipReady = "1";
+    document.addEventListener("click", (event) => {
+      const button = (event.target as HTMLElement).closest("[data-chip-remove]");
+      if (!button) return;
+      const chip = button.closest(".ui-chip") as HTMLElement | null;
+      if (!chip) return;
+      chip.dispatchEvent(
+        new CustomEvent("chip:remove", {
+          bubbles: true,
+          detail: { value: chip.dataset.chipValue ?? chip.textContent?.trim() },
+        })
+      );
+    });
+  }
+</script>

@@ -1,0 +1,178 @@
+---
+/**
+ * Toast host + a tiny imperative API.
+ *
+ * Mount ONCE per page (the showcase and, later, the layout). Everything else
+ * calls the global:
+ *
+ *   window.sanforToast({ message: "Copied", tone: "success" });
+ *
+ * The region is `aria-live="polite"` so a toast is announced without stealing
+ * focus. Toasts are transient and must never be the only place important
+ * information appears.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  position?: "bottom-right" | "bottom-center" | "top-right" | "top-center";
+  class?: string;
+}
+
+const { position = "bottom-right", class: className = "" } = Astro.props as Props;
+---
+
+<div
+  class={cx("ui-toasts", "ui-toasts--" + position, className)}
+  data-toast-host
+  role="region"
+  aria-label="Notifications"
+  aria-live="polite"
+>
+</div>
+
+<style is:global>
+  .ui-toasts {
+    position: fixed;
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    pointer-events: none;
+    max-inline-size: min(26rem, 100vw);
+  }
+
+  .ui-toasts--bottom-right {
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    align-items: flex-end;
+  }
+  .ui-toasts--bottom-center {
+    inset-block-end: 0;
+    inset-inline: 0;
+    margin-inline: auto;
+    align-items: center;
+  }
+  .ui-toasts--top-right {
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    align-items: flex-end;
+  }
+  .ui-toasts--top-center {
+    inset-block-start: 0;
+    inset-inline: 0;
+    margin-inline: auto;
+    align-items: center;
+  }
+
+  .ui-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.7rem 0.9rem;
+    background-color: var(--silk-raised);
+    border: 1px solid var(--border-default);
+    border-inline-start-width: 2px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--elev-raised);
+    font-family: var(--type-sans);
+    font-size: 0.875rem;
+    color: var(--frost);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity var(--duration-base) var(--motion-standard),
+      transform var(--duration-base) var(--ease-emphasized);
+  }
+
+  .ui-toast.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .ui-toast--success {
+    border-inline-start-color: var(--success);
+  }
+  .ui-toast--error {
+    border-inline-start-color: var(--danger);
+  }
+  .ui-toast--info {
+    border-inline-start-color: var(--info);
+  }
+
+  .ui-toast-close {
+    margin-inline-start: auto;
+    border: 0;
+    background: transparent;
+    color: var(--steel-text);
+    cursor: pointer;
+    font-family: var(--type-mono);
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0.15rem 0.25rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .ui-toast-close:hover {
+    color: var(--frost);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-toast {
+      transition-duration: 1ms;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  declare global {
+    interface Window {
+      sanforToast?: (options: {
+        message: string;
+        tone?: "info" | "success" | "error";
+        duration?: number;
+      }) => void;
+    }
+  }
+
+  const host = document.querySelector<HTMLElement>("[data-toast-host]");
+
+  if (host && !window.sanforToast) {
+    window.sanforToast = ({ message, tone = "info", duration = 4000 }) => {
+      const toast = document.createElement("div");
+      toast.className = `ui-toast ui-toast--${tone}`;
+      toast.textContent = message;
+
+      const close = document.createElement("button");
+      close.type = "button";
+      close.className = "ui-toast-close";
+      close.setAttribute("aria-label", "Dismiss notification");
+      close.textContent = "×";
+      toast.append(close);
+
+      host.append(toast);
+      requestAnimationFrame(() => toast.classList.add("is-in"));
+
+      let timer = 0;
+      const dismiss = () => {
+        window.clearTimeout(timer);
+        toast.classList.remove("is-in");
+        toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+        /* transitionend never fires when reduced motion collapses the
+           transition to ~0ms, so guarantee removal. */
+        window.setTimeout(() => toast.remove(), 400);
+      };
+
+      close.addEventListener("click", dismiss);
+      /* Pause the countdown while the pointer is over the toast. */
+      toast.addEventListener("pointerenter", () => window.clearTimeout(timer));
+      toast.addEventListener("pointerleave", () => {
+        timer = window.setTimeout(dismiss, duration);
+      });
+
+      timer = window.setTimeout(dismiss, duration);
+    };
+  }
+</script>

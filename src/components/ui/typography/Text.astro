@@ -1,0 +1,77 @@
+---
+/**
+ * Body copy.
+ *
+ * `font="read"` switches to Sora, reserved for genuinely long reading blocks.
+ * Short UI copy stays in Space Grotesk.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  variant?: "lead" | "body" | "small";
+  font?: "sans" | "read";
+  tone?: "default" | "muted" | "subtle";
+  as?: "p" | "span" | "div" | "li";
+  balance?: boolean;
+  /** Cap the measure: `prose` is 68ch, a number is that many ch. */
+  measure?: "none" | "prose" | number;
+  class?: string;
+}
+
+const {
+  variant = "body",
+  font = "sans",
+  tone = "default",
+  as: Tag = "p",
+  balance = false,
+  measure = "none",
+  class: className = "",
+} = Astro.props as Props;
+
+const variants = {
+  lead: "text-lead",
+  body: "text-body",
+  small: "text-small",
+} as const;
+
+const tones = {
+  default: "text-frost",
+  muted: "text-steel",
+  subtle: "ui-text--subtle",
+} as const;
+
+const measureStyle =
+  measure === "none"
+    ? undefined
+    : "max-inline-size:" +
+      (measure === "prose" ? "var(--container-prose)" : measure + "ch");
+---
+
+<Tag
+  class={cx(
+    "ui-text",
+    variants[variant],
+    font === "read" ? "font-read" : "font-sans",
+    tones[tone],
+    balance && "ui-text--balance",
+    className
+  )}
+  style={measureStyle}
+>
+  <slot />
+</Tag>
+
+<style is:global>
+  .ui-text {
+    margin: 0;
+  }
+
+  /* Between frost and steel: dimmed body copy that is still body copy. */
+  .ui-text--subtle {
+    color: color-mix(in srgb, var(--frost) 72%, transparent);
+  }
+
+  .ui-text--balance {
+    text-wrap: balance;
+  }
+</style>

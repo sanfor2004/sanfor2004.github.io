@@ -1,0 +1,248 @@
+---
+/**
+ * Tabs, following the WAI-ARIA tabs pattern.
+ *
+ * Takes its items as data rather than slots so the tablist and the panels stay
+ * in sync; each panel's content comes from a named slot matching its id.
+ *
+ * Keyboard: Left/Right (or Up/Down when vertical) move between tabs, Home and
+ * End jump to the ends. The tablist is roving-tabindex, so Tab enters the
+ * active tab and then moves on to the panel - not through every tab.
+ */
+import { cx } from "../cx";
+
+export interface TabItem {
+  id: string;
+  label: string;
+}
+
+export interface Props {
+  tabs: TabItem[];
+  /** Id of the initially selected tab. Defaults to the first. */
+  active?: string;
+  orientation?: "horizontal" | "vertical";
+  /** `line` is an underline rail, `pill` is a filled segmented control. */
+  variant?: "line" | "pill";
+  /** Group id, needed when several Tabs appear on one page. */
+  name?: string;
+  class?: string;
+}
+
+const {
+  tabs,
+  active,
+  orientation = "horizontal",
+  variant = "line",
+  name = "ui-tabs-" + Math.random().toString(36).slice(2, 9),
+  class: className = "",
+} = Astro.props as Props;
+
+const selected = active ?? tabs[0]?.id;
+---
+
+<div
+  class={cx("ui-tabs", "ui-tabs--" + variant, "ui-tabs--" + orientation, className)}
+  data-tabs
+>
+  <div
+    class="ui-tabs-list"
+    role="tablist"
+    aria-orientation={orientation}
+    data-tabs-list
+  >
+    {
+      tabs.map((tab) => {
+        const isActive = tab.id === selected;
+        return (
+          <button
+            type="button"
+            class="ui-tab"
+            role="tab"
+            id={name + "-tab-" + tab.id}
+            aria-controls={name + "-panel-" + tab.id}
+            aria-selected={isActive ? "true" : "false"}
+            tabindex={isActive ? 0 : -1}
+            data-tab={tab.id}
+          >
+            {tab.label}
+          </button>
+        );
+      })
+    }
+  </div>
+
+  <div class="ui-tabs-panels">
+    {
+      tabs.map((tab) => (
+        <div
+          class="ui-tabs-panel"
+          role="tabpanel"
+          id={name + "-panel-" + tab.id}
+          aria-labelledby={name + "-tab-" + tab.id}
+          data-tab-panel={tab.id}
+          tabindex="0"
+          hidden={tab.id !== selected}
+        >
+          <slot name={tab.id} />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style is:global>
+  .ui-tabs--vertical {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+  }
+
+  .ui-tabs-list {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .ui-tabs--vertical .ui-tabs-list {
+    flex-direction: column;
+  }
+
+  .ui-tabs--line .ui-tabs-list {
+    border-block-end: 1px solid var(--border-hairline);
+  }
+
+  .ui-tabs--vertical.ui-tabs--line .ui-tabs-list {
+    border-block-end: 0;
+    border-inline-end: 1px solid var(--border-hairline);
+  }
+
+  .ui-tabs--pill .ui-tabs-list {
+    padding: 4px;
+    gap: 2px;
+    background-color: var(--silk);
+    border: 1px solid var(--border-hairline);
+    border-radius: 9999px;
+    inline-size: fit-content;
+  }
+
+  .ui-tab {
+    position: relative;
+    border: 0;
+    background: transparent;
+    font-family: var(--type-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--steel-text);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color var(--duration-fast) var(--motion-standard),
+      background-color var(--duration-fast) var(--motion-standard);
+  }
+
+  .ui-tabs--line .ui-tab {
+    padding: 0.6rem 0.85rem;
+  }
+
+  .ui-tabs--pill .ui-tab {
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+  }
+
+  .ui-tab:hover {
+    color: var(--frost);
+  }
+
+  .ui-tab[aria-selected="true"] {
+    color: var(--frost);
+  }
+
+  .ui-tabs--line .ui-tab[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -1px;
+    block-size: 2px;
+    background-color: var(--signal);
+  }
+
+  .ui-tabs--vertical.ui-tabs--line .ui-tab[aria-selected="true"]::after {
+    inset: 0 -1px 0 auto;
+    inline-size: 2px;
+    block-size: auto;
+  }
+
+  .ui-tabs--pill .ui-tab[aria-selected="true"] {
+    background-color: var(--signal);
+    color: var(--ink);
+  }
+
+  .ui-tabs-panels {
+    padding-block-start: 1.25rem;
+  }
+
+  .ui-tabs--vertical .ui-tabs-panels {
+    padding-block-start: 0;
+  }
+
+  /* The panel is focusable so keyboard users land on the content after the
+     tablist; it should not draw a ring when reached by mouse. */
+  .ui-tabs-panel:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-tab {
+      transition-duration: 1ms;
+    }
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  if (!root.dataset.uiTabsReady) {
+    root.dataset.uiTabsReady = "1";
+
+    const select = (container: HTMLElement, id: string, focus: boolean) => {
+      container.querySelectorAll<HTMLButtonElement>("[data-tab]").forEach((tab) => {
+        const isActive = tab.dataset.tab === id;
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
+        if (isActive && focus) tab.focus();
+      });
+      container.querySelectorAll<HTMLElement>("[data-tab-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.tabPanel !== id;
+      });
+    };
+
+    document.addEventListener("click", (event) => {
+      const tab = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-tab]");
+      const container = tab?.closest<HTMLElement>("[data-tabs]");
+      if (!tab || !container) return;
+      select(container, tab.dataset.tab!, false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const tab = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-tab]");
+      const container = tab?.closest<HTMLElement>("[data-tabs]");
+      if (!tab || !container) return;
+
+      const list = container.querySelector<HTMLElement>("[data-tabs-list]");
+      const vertical = list?.getAttribute("aria-orientation") === "vertical";
+      const tabs = Array.from(container.querySelectorAll<HTMLButtonElement>("[data-tab]"));
+      const index = tabs.indexOf(tab);
+
+      const prevKey = vertical ? "ArrowUp" : "ArrowLeft";
+      const nextKey = vertical ? "ArrowDown" : "ArrowRight";
+
+      let next = -1;
+      if (event.key === prevKey) next = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === nextKey) next = (index + 1) % tabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = tabs.length - 1;
+      else return;
+
+      event.preventDefault();
+      select(container, tabs[next].dataset.tab!, true);
+    });
+  }
+</script>

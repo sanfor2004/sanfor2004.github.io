@@ -1,0 +1,136 @@
+---
+/**
+ * The base surface every other card builds on.
+ *
+ * When `href` is set the whole card becomes one link. That is why the richer
+ * cards below put their title inside a stretched pseudo-element rather than
+ * nesting a second `<a>`: a link inside a link is invalid and unusable with a
+ * keyboard.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  href?: string;
+  external?: boolean;
+  /** `raised` is the lighter surface, `bare` has no fill at all. */
+  surface?: "silk" | "raised" | "bare";
+  padding?: "none" | "sm" | "md" | "lg";
+  radius?: "lg" | "xl" | "2xl";
+  /** Lift and brighten the border on hover. Implied by `href`. */
+  interactive?: boolean;
+  /** Noise texture over the surface. */
+  grain?: boolean;
+  as?: "div" | "article" | "li" | "section";
+  class?: string;
+}
+
+const {
+  href,
+  external = false,
+  surface = "silk",
+  padding = "md",
+  radius = "xl",
+  interactive,
+  grain = false,
+  as = "div",
+  class: className = "",
+} = Astro.props as Props;
+
+const isLink = Boolean(href);
+const lifts = interactive ?? isLink;
+const Tag = isLink ? "a" : as;
+
+const classes = cx(
+  "ui-card",
+  "ui-card--" + surface,
+  "ui-card--pad-" + padding,
+  "ui-card--radius-" + radius,
+  lifts && "ui-card--interactive",
+  grain && "grain",
+  className
+);
+---
+
+<Tag
+  class={classes}
+  href={href}
+  target={isLink && external ? "_blank" : undefined}
+  rel={isLink && external ? "noopener noreferrer" : undefined}
+>
+  <slot />
+</Tag>
+
+<style is:global>
+  .ui-card {
+    position: relative;
+    display: block;
+    border: 1px solid var(--border-hairline);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      transform var(--duration-base) var(--ease-emphasized),
+      border-color var(--duration-base) var(--motion-standard),
+      background-color var(--duration-base) var(--motion-standard),
+      box-shadow var(--duration-base) var(--motion-standard);
+  }
+
+  .ui-card--silk {
+    background-color: var(--silk);
+  }
+  .ui-card--raised {
+    background-color: var(--silk-raised);
+  }
+  .ui-card--bare {
+    background-color: transparent;
+  }
+
+  .ui-card--pad-none {
+    padding: 0;
+  }
+  .ui-card--pad-sm {
+    padding: 1rem;
+  }
+  .ui-card--pad-md {
+    padding: 1.35rem;
+  }
+  .ui-card--pad-lg {
+    padding: 2rem;
+  }
+
+  .ui-card--radius-lg {
+    border-radius: var(--radius-lg);
+  }
+  .ui-card--radius-xl {
+    border-radius: var(--radius-xl);
+  }
+  .ui-card--radius-2xl {
+    border-radius: var(--radius-2xl);
+  }
+
+  .ui-card--interactive:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: var(--elev-raised);
+  }
+
+  /* The lift is the affordance; keyboard users get the focus ring instead, so
+     mirror the border brighten for them too. */
+  .ui-card--interactive:focus-visible {
+    border-color: var(--signal);
+  }
+
+  /* `grain` paints at z-index 1, so card content needs its own layer. */
+  .ui-card.grain > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-card {
+      transition-duration: 1ms;
+    }
+    .ui-card--interactive:hover {
+      transform: none;
+    }
+  }
+</style>

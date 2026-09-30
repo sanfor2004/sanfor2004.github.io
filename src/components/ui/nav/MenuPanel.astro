@@ -1,0 +1,161 @@
+---
+/**
+ * The floating surface a mega menu is drawn on.
+ *
+ * Purely presentational - it owns the surface, border, shadow, grain and the
+ * optional two-column split and footer row. Positioning, open/close and focus
+ * management belong to whatever mounts it (the navbar).
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+
+export interface Props {
+  /** Fixed panel width in px. Mega panels are measured, not fluid. */
+  width?: number;
+  /** Width of the optional right-hand column in px. */
+  sideWidth?: number;
+  /** Heading above the side column. */
+  sideHeading?: string;
+  /** Full-width row pinned to the bottom. */
+  footerLabel?: string;
+  footerHref?: string;
+  grain?: boolean;
+  class?: string;
+}
+
+const {
+  width,
+  sideWidth = 172,
+  sideHeading,
+  footerLabel,
+  footerHref,
+  grain = true,
+  class: className = "",
+} = Astro.props as Props;
+
+const hasSide = Astro.slots.has("side");
+const style = [
+  width ? "inline-size:" + width + "px" : "",
+  "--ui-menupanel-side:" + sideWidth + "px",
+]
+  .filter(Boolean)
+  .join(";");
+---
+
+<div class={cx("ui-menupanel", grain && "grain", className)} style={style}>
+  <div class={cx("ui-menupanel-grid", hasSide && "ui-menupanel-grid--split")}>
+    <div class="ui-menupanel-main">
+      <slot />
+    </div>
+
+    {
+      hasSide && (
+        <div class="ui-menupanel-side">
+          {sideHeading && <p class="ui-menupanel-side-heading">{sideHeading}</p>}
+          <slot name="side" />
+        </div>
+      )
+    }
+  </div>
+
+  {
+    footerLabel && (
+      <a class="ui-menupanel-footer" href={footerHref ?? "#"}>
+        <span>{footerLabel}</span>
+        <Icon name="arrow-right" size={15} class="ui-menupanel-arrow" />
+      </a>
+    )
+  }
+</div>
+
+<style is:global>
+  .ui-menupanel {
+    position: relative;
+    padding: 0.75rem;
+    background-color: var(--silk);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--elev-overlay);
+  }
+
+  /* Keep content above the grain layer. */
+  .ui-menupanel.grain > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .ui-menupanel-grid {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .ui-menupanel-grid--split {
+    grid-template-columns: 1fr var(--ui-menupanel-side, 172px);
+  }
+
+  .ui-menupanel-side {
+    padding: 0.6rem 0.7rem;
+    border-inline-start: 1px solid var(--border-hairline);
+  }
+
+  .ui-menupanel-side-heading {
+    margin: 0 0 0.6rem;
+    font-family: var(--type-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--steel-text);
+  }
+
+  .ui-menupanel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-block-start: 0.5rem;
+    padding: 0.6rem 0.7rem;
+    border-block-start: 1px solid var(--border-hairline);
+    font-family: var(--type-sans);
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--signal-text);
+    text-decoration: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    transition: background-color var(--duration-fast) var(--motion-standard);
+  }
+
+  .ui-menupanel-footer:hover {
+    background-color: color-mix(in srgb, var(--steel) 12%, transparent);
+  }
+
+  .ui-menupanel-arrow {
+    transition: transform var(--duration-base) var(--ease-emphasized);
+  }
+
+  .ui-menupanel-footer:hover .ui-menupanel-arrow {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 640px) {
+    .ui-menupanel {
+      inline-size: 100% !important;
+    }
+    .ui-menupanel-grid--split {
+      grid-template-columns: 1fr;
+    }
+    .ui-menupanel-side {
+      border-inline-start: 0;
+      border-block-start: 1px solid var(--border-hairline);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-menupanel-footer,
+    .ui-menupanel-arrow {
+      transition-duration: 1ms;
+    }
+    .ui-menupanel-footer:hover .ui-menupanel-arrow {
+      transform: none;
+    }
+  }
+</style>

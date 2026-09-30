@@ -1,0 +1,32 @@
+---
+/** A keyboard key. Real keys only - use InlineCode for identifiers. */
+import { cx } from "../cx";
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props as Props;
+---
+
+<kbd class={cx("ui-kbd", className)}><slot /></kbd>
+
+<style is:global>
+  .ui-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 1.6em;
+    padding: 0.15em 0.4em;
+    font-family: var(--type-mono);
+    font-size: 0.8em;
+    line-height: 1.4;
+    color: var(--frost);
+    background-color: var(--silk-raised);
+    border: 1px solid var(--border-default);
+    /* The thicker bottom edge is what makes it read as a physical key. */
+    border-block-end-width: 2px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+</style>

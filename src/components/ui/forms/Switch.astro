@@ -1,0 +1,64 @@
+---
+/**
+ * A toggle.
+ *
+ * Built on a native checkbox rather than `role="switch"` on a div, so it
+ * submits with a form and works without JavaScript. `role="switch"` is added to
+ * the input so it is announced as on/off rather than checked/unchecked.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  label: string;
+  id?: string;
+  name?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  hint?: string;
+  /** Put the label before the control. */
+  labelFirst?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  id = "ui-switch-" + Math.random().toString(36).slice(2, 9),
+  name,
+  checked = false,
+  disabled = false,
+  hint,
+  labelFirst = false,
+  class: className = "",
+} = Astro.props as Props;
+
+const hintId = hint ? id + "-hint" : undefined;
+---
+
+<label
+  class={cx("ui-choice ui-switch", labelFirst && "ui-switch--label-first", className)}
+  for={id}
+>
+  <span class="ui-switch-track">
+    <input
+      type="checkbox"
+      role="switch"
+      id={id}
+      name={name}
+      checked={checked}
+      disabled={disabled}
+      aria-describedby={hintId}
+    />
+    <span class="ui-switch-thumb" aria-hidden="true"></span>
+  </span>
+  <span class="ui-choice-text">
+    <span class="ui-choice-label">{label}</span>
+    {hint && <span class="ui-choice-hint" id={hintId}>{hint}</span>}
+  </span>
+</label>
+
+<style is:global>
+  .ui-switch--label-first {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+</style>

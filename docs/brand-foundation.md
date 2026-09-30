@@ -12,7 +12,16 @@ identity now archived in `legacy/`.
 | Raw token values | `src/styles/tokens.css` |
 | Tailwind mapping, base styles, utilities | `src/styles/global.css` |
 | Live preview | `/styleguide/` (`src/pages/styleguide.astro`) |
+| **Components built on this** | **[`ui-kit.md`](./ui-kit.md)** — the component library, its own tokens (surfaces, radii, shadows, motion, z-index, containers, type scale) and the `/ui-kit/` showcase |
 | Archived old identity | `legacy/src/styles.css` |
+
+> **The kit extends these tokens.** `tokens.css` now also carries the UI-kit layer:
+> surfaces, borders, shadows, motion, z-index and section rhythm, plus two
+> accessibility variants — `--steel-text` and `--signal-text`. The brand values
+> `--steel` and `--signal` below are unchanged and remain correct for fills,
+> borders, focus rings and the logo; the `-text` variants are for `color:` only,
+> because the brand values fall just under WCAG AA as small text on a raised
+> surface. See [`ui-kit.md` §2](./ui-kit.md#2-tokens).
 
 ---
 

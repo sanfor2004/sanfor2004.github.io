@@ -1,0 +1,1677 @@
+---
+/**
+ * UI kit showcase.
+ *
+ * Internal reference: every component with its variants, sizes and states, plus
+ * the token sheet. `noindex` and excluded from the sitemap in `src/lib/sitemap.ts`.
+ *
+ * Hover and focus states cannot be screenshotted in a static page, so each
+ * specimen shows the resting state live and names the interactive behaviour in
+ * its note. Disabled, loading, error and success states are rendered for real.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+import Specimen from "../components/kit-docs/Specimen.astro";
+import KitGroup from "../components/kit-docs/KitGroup.astro";
+
+import Heading from "../components/ui/typography/Heading.astro";
+import Eyebrow from "../components/ui/typography/Eyebrow.astro";
+import Text from "../components/ui/typography/Text.astro";
+import Kbd from "../components/ui/typography/Kbd.astro";
+import InlineCode from "../components/ui/typography/InlineCode.astro";
+
+import Container from "../components/ui/layout/Container.astro";
+import Stack from "../components/ui/layout/Stack.astro";
+import Grid from "../components/ui/layout/Grid.astro";
+import GuideLines from "../components/ui/layout/GuideLines.astro";
+import GrainOverlay from "../components/ui/layout/GrainOverlay.astro";
+import EmberGlow from "../components/ui/layout/EmberGlow.astro";
+import Divider from "../components/ui/layout/Divider.astro";
+
+import Button from "../components/ui/actions/Button.astro";
+import TextLink from "../components/ui/actions/TextLink.astro";
+import IconButton from "../components/ui/actions/IconButton.astro";
+
+import Badge from "../components/ui/data/Badge.astro";
+import Chip from "../components/ui/data/Chip.astro";
+import Stat from "../components/ui/data/Stat.astro";
+import Avatar from "../components/ui/data/Avatar.astro";
+import Tooltip from "../components/ui/data/Tooltip.astro";
+
+import Card from "../components/ui/cards/Card.astro";
+import ProjectCard from "../components/ui/cards/ProjectCard.astro";
+import ArticleCard from "../components/ui/cards/ArticleCard.astro";
+import TestimonialCard from "../components/ui/cards/TestimonialCard.astro";
+import LogoTile from "../components/ui/cards/LogoTile.astro";
+import CaseStudyStat from "../components/ui/cards/CaseStudyStat.astro";
+
+import NavLink from "../components/ui/nav/NavLink.astro";
+import MenuPanel from "../components/ui/nav/MenuPanel.astro";
+import MenuItem from "../components/ui/nav/MenuItem.astro";
+import Accordion from "../components/ui/nav/Accordion.astro";
+import AccordionItem from "../components/ui/nav/AccordionItem.astro";
+import SeeMore from "../components/ui/nav/SeeMore.astro";
+import Tabs from "../components/ui/nav/Tabs.astro";
+import Breadcrumb from "../components/ui/nav/Breadcrumb.astro";
+import Pagination from "../components/ui/nav/Pagination.astro";
+
+import FormField from "../components/ui/forms/FormField.astro";
+import Input from "../components/ui/forms/Input.astro";
+import Textarea from "../components/ui/forms/Textarea.astro";
+import Select from "../components/ui/forms/Select.astro";
+import Checkbox from "../components/ui/forms/Checkbox.astro";
+import Radio from "../components/ui/forms/Radio.astro";
+import Switch from "../components/ui/forms/Switch.astro";
+import SubscribeForm from "../components/ui/forms/SubscribeForm";
+
+import Callout from "../components/ui/feedback/Callout.astro";
+import Skeleton from "../components/ui/feedback/Skeleton.astro";
+import EmptyState from "../components/ui/feedback/EmptyState.astro";
+import Toast from "../components/ui/feedback/Toast.astro";
+
+import Figure from "../components/ui/media/Figure.astro";
+import Marquee from "../components/ui/media/Marquee.astro";
+import SocialLink from "../components/ui/media/SocialLink.astro";
+import SocialIconRow from "../components/ui/media/SocialIconRow.astro";
+import Reveal from "../components/ui/media/Reveal.astro";
+
+import Icon from "../components/ui/icons/Icon.astro";
+import { uiIcons, brandIcons } from "../components/ui/icons/registry";
+
+/* ------------------------------------------------------------------ data -- */
+
+const nav = [
+  { id: "tokens", label: "Tokens" },
+  { id: "icons", label: "Icons" },
+  { id: "typography", label: "Typography" },
+  { id: "layout", label: "Layout" },
+  { id: "actions", label: "Actions" },
+  { id: "data", label: "Data display" },
+  { id: "cards", label: "Cards" },
+  { id: "navigation", label: "Navigation" },
+  { id: "forms", label: "Forms" },
+  { id: "feedback", label: "Feedback" },
+  { id: "media", label: "Media & motion" },
+  { id: "prose", label: "Prose" },
+];
+
+const inkSwatches = [
+  { name: "ink", hex: "#0A0E17", use: "Base background" },
+  { name: "silk", hex: "#1B2438", use: "Surfaces, cards" },
+  { name: "silk-raised", hex: "#232D45", use: "Raised surface" },
+  { name: "steel", hex: "#7C8AA8", use: "Secondary text, borders" },
+  { name: "frost", hex: "#EEF1F7", use: "Main text" },
+  { name: "signal", hex: "#EE5712", use: "Accent, CTA, focus" },
+];
+
+const emberSwatches = [
+  { name: "ember-primary", hex: "#EE5712", use: "Hero core" },
+  { name: "ember-glow", hex: "#FF8A3D", use: "Hero highlight" },
+  { name: "ember-burnt", hex: "#C43A08", use: "Hero midtone" },
+  { name: "ember-deep", hex: "#5A1603", use: "Hero shadow" },
+  { name: "ember-night", hex: "#120805", use: "Hero edge" },
+  { name: "ember-paper", hex: "#FFF3EA", use: "Text on Ember" },
+];
+
+const statusSwatches = [
+  { name: "danger", hex: "#FF6B70", use: "Destructive, errors" },
+  { name: "warning", hex: "#F2A93B", use: "Warnings" },
+  { name: "success", hex: "#3DD68C", use: "Confirmations" },
+  { name: "info", hex: "#5BA8F5", use: "Neutral notes" },
+];
+
+const typeScale = [
+  { token: "text-display", note: "clamp 44 -> 88px", font: "font-display" },
+  { token: "text-h1", note: "clamp 36 -> 56px", font: "font-display" },
+  { token: "text-h2", note: "clamp 28 -> 40px", font: "font-display" },
+  { token: "text-h3", note: "24px", font: "font-display" },
+  { token: "text-h4", note: "20px", font: "font-display" },
+  { token: "text-lead", note: "19px", font: "font-read" },
+  { token: "text-body", note: "16px", font: "font-sans" },
+  { token: "text-small", note: "14px", font: "font-sans" },
+  { token: "text-label", note: "12px / 0.18em", font: "font-mono" },
+];
+
+const radii = ["sm", "md", "lg", "xl", "2xl", "full"];
+const shadows = ["soft", "raised", "overlay", "glow-signal"];
+const sectionSpace = [
+  { token: "--section-sm", note: "clamp(2.5rem, 5vw, 4rem)" },
+  { token: "--section-md", note: "clamp(4rem, 8vw, 7rem)" },
+  { token: "--section-lg", note: "clamp(6rem, 12vw, 10rem)" },
+  { token: "--gutter", note: "clamp(1rem, 4vw, 2.5rem)" },
+];
+const motion = [
+  { token: "--duration-fast", note: "150ms" },
+  { token: "--duration-base", note: "250ms" },
+  { token: "--duration-slow", note: "500ms" },
+  { token: "--motion-standard", note: "cubic-bezier(0.4, 0, 0.2, 1)" },
+  { token: "--motion-emphasized", note: "cubic-bezier(0.16, 1, 0.3, 1)" },
+];
+const zScale = [
+  { token: "--z-base", note: "0" },
+  { token: "--z-dropdown", note: "30" },
+  { token: "--z-sticky", note: "40" },
+  { token: "--z-overlay", note: "50" },
+  { token: "--z-modal", note: "60" },
+  { token: "--z-toast", note: "70" },
+];
+const containers = [
+  { token: "max-w-prose", note: "68ch — reading measure" },
+  { token: "max-w-content", note: "1200px — default page width" },
+  { token: "max-w-wide", note: "1440px — full-bleed rows" },
+];
+
+const socials = [
+  { icon: "github" as const, href: "https://github.com/sanfor2004", label: "GitHub" },
+  { icon: "linkedin" as const, href: "https://www.linkedin.com/in/sanfor2004/", label: "LinkedIn" },
+  { icon: "devdotto" as const, href: "https://dev.to/sanfor2004", label: "DEV" },
+  { icon: "medium" as const, href: "https://medium.com/@2004.sanfor", label: "Medium" },
+];
+
+const uiIconNames = Object.keys(uiIcons) as (keyof typeof uiIcons)[];
+const brandIconNames = Object.keys(brandIcons) as (keyof typeof brandIcons)[];
+
+const galleryImages = [
+  "/images/art/gallery/tiger.png",
+  "/images/art/gallery/horse-drawing.jpg",
+  "/images/art/gallery/flower.png",
+  "/images/art/gallery/hand.png",
+  "/images/art/gallery/bulbasaur.png",
+];
+---
+
+<BaseLayout
+  title="UI kit"
+  description="Every component in the Sanfor design system, with variants, sizes and states."
+  noindex
+>
+  <a href="#kit-main" class="kit-skip">Skip to content</a>
+
+  <div class="kit-shell">
+    <aside class="kit-sidebar">
+      <div class="kit-sidebar-inner">
+        <p class="kit-sidebar-title">
+          <span class="kit-sidebar-mark">SANFOR</span>
+          <span class="kit-sidebar-sub">UI kit</span>
+        </p>
+        <nav aria-label="Component groups">
+          <ul class="kit-nav">
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={`#${item.id}`}>{item.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <p class="kit-sidebar-foot">
+          <a href="/styleguide/">Brand foundation &rarr;</a>
+        </p>
+      </div>
+    </aside>
+
+    <main class="kit-main" id="kit-main">
+      <header class="kit-header">
+        <Eyebrow dot>Design system</Eyebrow>
+        <Heading as="h1" size="h1">UI kit</Heading>
+        <Text variant="lead" tone="muted" measure="prose">
+          Every reusable component in the redesign, with its variants, sizes and states.
+          Dark only. Ink site-wide, Ember for special moments, signal orange used sparingly.
+        </Text>
+        <Text variant="small" tone="muted" measure={80}>
+          Hover and focus states are described in each specimen's note rather than
+          simulated. Disabled, loading, error and success states are rendered for real.
+        </Text>
+      </header>
+
+      {/* ============================================================ TOKENS */}
+      <KitGroup
+        id="tokens"
+        title="Tokens"
+        description="Raw values live in src/styles/tokens.css and reach components through the Tailwind @theme mapping in global.css. Components never hard-code a colour, radius or duration."
+      >
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Ink palette — site-wide</h3>
+          <ul class="kit-swatches">
+            {
+              inkSwatches.map((swatch) => (
+                <li class="kit-swatch">
+                  <span class="kit-swatch-chip" style={`background-color: var(--${swatch.name})`} />
+                  <span class="kit-swatch-meta">
+                    <code>{swatch.name}</code>
+                    <span>{swatch.hex}</span>
+                    <small>{swatch.use}</small>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Ember palette — hero and special moments only</h3>
+          <ul class="kit-swatches">
+            {
+              emberSwatches.map((swatch) => (
+                <li class="kit-swatch">
+                  <span class="kit-swatch-chip" style={`background-color: var(--${swatch.name})`} />
+                  <span class="kit-swatch-meta">
+                    <code>{swatch.name}</code>
+                    <span>{swatch.hex}</span>
+                    <small>{swatch.use}</small>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Status — meaning, never decoration</h3>
+          <ul class="kit-swatches">
+            {
+              statusSwatches.map((swatch) => (
+                <li class="kit-swatch">
+                  <span class="kit-swatch-chip" style={`background-color: var(--${swatch.name})`} />
+                  <span class="kit-swatch-meta">
+                    <code>{swatch.name}</code>
+                    <span>{swatch.hex}</span>
+                    <small>{swatch.use}</small>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Borders and surfaces</h3>
+          <Specimen name="borders" props="--border-hairline / --border-default / --border-strong" row>
+            <span class="kit-border-demo" style="border-color: var(--border-hairline)">hairline 10%</span>
+            <span class="kit-border-demo" style="border-color: var(--border-default)">default 20%</span>
+            <span class="kit-border-demo" style="border-color: var(--border-strong)">strong 35%</span>
+          </Specimen>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Type scale</h3>
+          <ul class="kit-typescale">
+            {
+              typeScale.map((row) => (
+                <li>
+                  <code class="kit-typescale-token">{row.token}</code>
+                  <code class="kit-typescale-note">{row.note} · {row.font}</code>
+                  <span class={`${row.token} ${row.font} kit-typescale-sample`}>
+                    Systems that ship
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Radii</h3>
+          <ul class="kit-tokenrow">
+            {
+              radii.map((radius) => (
+                <li>
+                  <span
+                    class="kit-radius-demo"
+                    style={`border-radius: ${radius === "full" ? "9999px" : `var(--radius-${radius})`}`}
+                  />
+                  <code>rounded-{radius}</code>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Shadows</h3>
+          <ul class="kit-tokenrow">
+            {
+              shadows.map((shadow) => (
+                <li>
+                  <span class="kit-shadow-demo" style={`box-shadow: var(--elev-${shadow})`} />
+                  <code>shadow-{shadow}</code>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="kit-subgroup">
+          <h3 class="kit-subgroup-title">Spacing, motion, z-index, containers</h3>
+          <div class="kit-tokentables">
+            <table class="kit-table">
+              <caption>Section rhythm</caption>
+              <tbody>
+                {sectionSpace.map((row) => (
+                  <tr>
+                    <th scope="row"><code>{row.token}</code></th>
+                    <td>{row.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <table class="kit-table">
+              <caption>Motion</caption>
+              <tbody>
+                {motion.map((row) => (
+                  <tr>
+                    <th scope="row"><code>{row.token}</code></th>
+                    <td>{row.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <table class="kit-table">
+              <caption>Z-index</caption>
+              <tbody>
+                {zScale.map((row) => (
+                  <tr>
+                    <th scope="row"><code>{row.token}</code></th>
+                    <td>{row.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <table class="kit-table">
+              <caption>Containers</caption>
+              <tbody>
+                {containers.map((row) => (
+                  <tr>
+                    <th scope="row"><code>{row.token}</code></th>
+                    <td>{row.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </KitGroup>
+
+      {/* ============================================================= ICONS */}
+      <KitGroup
+        id="icons"
+        title="Icons"
+        description="One approach: inline SVG from a typed registry. UI icons are Lucide (stroked), brand marks are Simple Icons (filled). No icon package, no runtime JS."
+      >
+        <Specimen name="<Icon />" props={`name · ${uiIconNames.length} UI icons (Lucide)`} row>
+          {uiIconNames.map((name) => (
+            <span class="kit-icon-cell">
+              <Icon name={name} size={20} />
+              <code>{name}</code>
+            </span>
+          ))}
+        </Specimen>
+
+        <Specimen name="<Icon />" props={`name · ${brandIconNames.length} brand marks (Simple Icons)`} row>
+          {brandIconNames.map((name) => (
+            <span class="kit-icon-cell">
+              <Icon name={name} size={20} />
+              <code>{name}</code>
+            </span>
+          ))}
+        </Specimen>
+
+        <Specimen name="<Icon />" props="size / strokeWidth / label" row
+          note="Decorative by default (aria-hidden). Pass `label` only when the icon is the sole carrier of meaning.">
+          <Icon name="arrow-right" size={16} />
+          <Icon name="arrow-right" size={24} />
+          <Icon name="arrow-right" size={32} />
+          <Icon name="arrow-right" size={32} strokeWidth={1} />
+          <Icon name="arrow-right" size={32} strokeWidth={3} />
+        </Specimen>
+      </KitGroup>
+
+      {/* ======================================================== TYPOGRAPHY */}
+      <KitGroup
+        id="typography"
+        title="Typography"
+        description="Five font roles. Pick by role, never by family: font-display (Syne), font-sans (Space Grotesk), font-expanded (Archivo at wdth 125), font-read (Sora), font-mono (JetBrains Mono)."
+      >
+        <Specimen name="<Heading />" props='as / size / font / weight / balance'>
+          <Stack gap={4}>
+            <Heading as="h3" size="display">Display</Heading>
+            <Heading as="h3" size="h1">Heading one</Heading>
+            <Heading as="h3" size="h2">Heading two</Heading>
+            <Heading as="h3" size="h3">Heading three</Heading>
+            <Heading as="h4" size="h4">Heading four</Heading>
+            <Heading as="h4" size="h4" font="expanded">Heading four, expanded</Heading>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Eyebrow />" props='tone="signal | steel" · dot' row
+          note="The dot pulses via a ring pseudo-element, so the text beside it never moves. Animation is dropped under reduced motion.">
+          <Eyebrow>Section label</Eyebrow>
+          <Eyebrow dot>Building now</Eyebrow>
+          <Eyebrow tone="steel">Quieter label</Eyebrow>
+        </Specimen>
+
+        <Specimen name="<Text />" props='variant / font / tone / measure'>
+          <Stack gap={3}>
+            <Text variant="lead">Lead — the sentence under a section title.</Text>
+            <Text variant="body">Body — default UI copy in Space Grotesk.</Text>
+            <Text variant="body" font="read" measure="prose">
+              Read — Sora, for genuinely long blocks. Backend, APIs and automation, from
+              concept to launch, with the reliability work that keeps them running.
+            </Text>
+            <Text variant="small" tone="muted">Small muted — captions and asides.</Text>
+            <Text variant="small" tone="subtle">Small subtle — dimmed body copy.</Text>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Kbd /> · <InlineCode />" props="tone" row>
+          <span><Kbd>Ctrl</Kbd> + <Kbd>K</Kbd></span>
+          <InlineCode>npm run build</InlineCode>
+          <InlineCode tone="signal">--signal</InlineCode>
+        </Specimen>
+      </KitGroup>
+
+      {/* ============================================================ LAYOUT */}
+      <KitGroup
+        id="layout"
+        title="Layout"
+        description="Containers, rhythm, and the decorative background layers. GuideLines, GrainOverlay and EmberGlow are all absolutely positioned and need a positioned parent."
+      >
+        <Specimen name="<Container />" props='size="prose | content | wide | full"'>
+          <Stack gap={2}>
+            {["prose", "content", "wide"].map((size) => (
+              <div class="kit-container-demo">
+                <span class="kit-container-bar" data-size={size}></span>
+                <code>max-w-{size}</code>
+              </div>
+            ))}
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Stack />" props="direction / gap / align / justify / wrap / collapseAt">
+          <Stack direction="row" gap={3} wrap>
+            {["one", "two", "three", "four"].map((item) => (
+              <span class="kit-box">{item}</span>
+            ))}
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Grid />" props="cols / gap / min"
+          note="cols steps down automatically at 1024px and 640px. Pass `min` instead for a purely width-driven card grid.">
+          <Grid cols={4} gap={3}>
+            {["1", "2", "3", "4"].map((item) => <span class="kit-box">{item}</span>)}
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<Divider />" props="orientation / weight / label / labelAlign">
+          <Stack gap={4}>
+            <Divider weight="hairline" />
+            <Divider weight="default" />
+            <Divider weight="strong" />
+            <Divider label="Or" />
+            <Divider label="Section" labelAlign="start" />
+            <Stack direction="row" gap={3} align="center">
+              <span class="kit-box">left</span>
+              <Divider orientation="vertical" />
+              <span class="kit-box">right</span>
+            </Stack>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<GuideLines />" props="columns / opacity / fade / inset"
+          note="Thin vertical rules drawn with one repeating gradient, so the column count costs nothing.">
+          <div class="kit-canvas">
+            <GuideLines columns={6} opacity={0.35} inset="full" />
+            <span class="kit-canvas-label">columns=6</span>
+          </div>
+        </Specimen>
+
+        <Specimen name="<GrainOverlay />" props="opacity / scale / blend"
+          note="Prefer the `grain` / `grain-strong` utilities when the surface's ::after is free. This component is for when it is not.">
+          <div class="kit-canvas">
+            <GrainOverlay opacity={0.18} scale={140} />
+            <span class="kit-canvas-label">opacity=0.18</span>
+          </div>
+        </Specimen>
+
+        <Specimen name="<EmberGlow />" props="intensity / position / size / blur"
+          note="The only sanctioned Ember use outside the hero.">
+          <div class="kit-canvas kit-canvas--tall">
+            <EmberGlow intensity="strong" position="bottom-right" />
+            <GrainOverlay opacity={0.08} />
+            <span class="kit-canvas-label">intensity=strong · bottom-right</span>
+          </div>
+        </Specimen>
+      </KitGroup>
+
+      {/* =========================================================== ACTIONS */}
+      <KitGroup
+        id="actions"
+        title="Actions"
+        description="Button renders an <a> when given href, so a link that looks like a button stays a link. Primary should appear once per view."
+      >
+        <Specimen name="<Button />" props='variant="primary | secondary | tertiary | danger"' row>
+          <Button variant="primary">Book a call</Button>
+          <Button variant="secondary">See my work</Button>
+          <Button variant="tertiary">Read more</Button>
+          <Button variant="danger">Delete</Button>
+        </Specimen>
+
+        <Specimen name="<Button />" props='size="sm | md | lg"' row>
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+        </Specimen>
+
+        <Specimen name="<Button />" props="iconLeft / iconRight / external" row
+          note="The trailing icon slides 3px right on hover; an external link gets the arrow and rel=noopener automatically.">
+          <Button iconRight="arrow-right">Continue</Button>
+          <Button variant="secondary" iconLeft="download">Download CV</Button>
+          <Button variant="secondary" href="https://example.com" external>External</Button>
+        </Specimen>
+
+        <Specimen name="<Button />" props="disabled / loading / iconOnly / block" row>
+          <Button disabled>Disabled</Button>
+          <Button loading>Saving</Button>
+          <Button variant="secondary" loading>Loading</Button>
+          <Button iconOnly label="Next" iconRight="arrow-right" />
+          <Button variant="secondary" iconOnly label="Close" iconRight="x" />
+        </Specimen>
+
+        <Specimen name="<Button />" props="block">
+          <Button block iconRight="arrow-right">Full width</Button>
+        </Specimen>
+
+        <Specimen name="<TextLink />" props="tone / external / size" row
+          note="The underline scales in from the left on hover and focus; a real text-decoration is restored under forced-colors.">
+          <TextLink href="#actions">Signal link</TextLink>
+          <TextLink href="#actions" tone="frost">Frost link</TextLink>
+          <TextLink href="#actions" tone="steel">Steel link</TextLink>
+          <TextLink href="https://example.com" external>External link</TextLink>
+        </Specimen>
+
+        <Specimen name="<IconButton />" props='variant="ghost | outline | solid" · size · pressed' row>
+          <IconButton icon="search" label="Search" variant="ghost" />
+          <IconButton icon="copy" label="Copy" variant="outline" />
+          <IconButton icon="mail" label="Email" variant="solid" />
+          <IconButton icon="star" label="Favourite" variant="outline" pressed />
+          <IconButton icon="trash" label="Delete" variant="ghost" disabled />
+          <IconButton icon="plus" label="Add" size="sm" variant="outline" />
+          <IconButton icon="plus" label="Add" size="lg" variant="outline" />
+        </Specimen>
+      </KitGroup>
+
+      {/* ====================================================== DATA DISPLAY */}
+      <KitGroup
+        id="data"
+        title="Data display"
+        description="Badges are read-only status; chips are interactive. Stat is a compact figure; CaseStudyStat (under Cards) is a figure that needs explaining."
+      >
+        <Specimen name="<Badge />" props='variant · size · dot · icon' row>
+          <Badge variant="signal">Building</Badge>
+          <Badge variant="neutral">Draft</Badge>
+          <Badge variant="outline">Archived</Badge>
+          <Badge variant="success">Shipped</Badge>
+          <Badge variant="warning">Paused</Badge>
+          <Badge variant="danger">Blocked</Badge>
+          <Badge variant="signal" dot>Live</Badge>
+          <Badge variant="success" icon="check" size="md">Verified</Badge>
+        </Specimen>
+
+        <Specimen name="<Chip />" props="active / href / removable / icon / size" row
+          note="A removable chip dispatches a bubbling `chip:remove` CustomEvent with its value; it does not remove itself.">
+          <Chip>C++20</Chip>
+          <Chip active>Linux</Chip>
+          <Chip href="#data">Networking</Chip>
+          <Chip icon="search" size="sm">Redis</Chip>
+          <Chip removable value="postgres" removeLabel="Remove Postgres filter">Postgres</Chip>
+        </Specimen>
+
+        <Specimen name="<Stat />" props="value / label / hint / size / tone / align">
+          <Grid cols={3} gap={6}>
+            <Stat value="5.4M+" label="Leads handled" size="lg" />
+            <Stat value="339K+" label="Calls & SMS / mo" tone="signal" />
+            <Stat value="~5 yrs" label="Backend" size="sm" hint="since 2021" />
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<Avatar />" props="name / src / initials / size / shape / ring" row
+          note="Falls back to initials derived from `name` when there is no image.">
+          <Avatar name="Ahmed Abdelaziz" src="/images/ahmed-abdelaziz.png" size="lg" />
+          <Avatar name="Ahmed Abdelaziz" size="lg" />
+          <Avatar name="Ahmed Abdelaziz" size="md" ring />
+          <Avatar name="Sanfor Studio" size="sm" shape="square" />
+          <Avatar name="Ahmed Abdelaziz" size="xs" />
+        </Specimen>
+
+        <Specimen name="<Tooltip />" props="text / side / maxWidth" row
+          note="CSS-only: revealed by :hover and :focus-within, so it works from the keyboard. Tab to a trigger to see it. The trigger keeps its own accessible name; the tooltip is wired as aria-describedby.">
+          <Tooltip text="Opens your calendar in a new tab" side="top">
+            <Button size="sm" variant="secondary">Top</Button>
+          </Tooltip>
+          <Tooltip text="Shown below the trigger" side="bottom">
+            <Button size="sm" variant="secondary">Bottom</Button>
+          </Tooltip>
+          <Tooltip text="Shown to the right" side="right">
+            <IconButton icon="info" label="More information" variant="outline" />
+          </Tooltip>
+        </Specimen>
+      </KitGroup>
+
+      {/* ============================================================= CARDS */}
+      <KitGroup
+        id="cards"
+        title="Cards"
+        description="Card is the base surface. The richer cards stretch a link from their title across the whole card, so they never nest a link inside a link."
+      >
+        <Specimen name="<Card />" props="surface / padding / radius / interactive / grain / href">
+          <Grid cols={3} gap={4}>
+            <Card surface="silk"><Text variant="small">surface=silk</Text></Card>
+            <Card surface="raised"><Text variant="small">surface=raised</Text></Card>
+            <Card surface="bare"><Text variant="small">surface=bare</Text></Card>
+            <Card interactive><Text variant="small">interactive — lifts 3px on hover</Text></Card>
+            <Card grain><Text variant="small">grain</Text></Card>
+            <Card href="#cards"><Text variant="small">href — whole card is a link</Text></Card>
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<ProjectCard />" props="title / description / href / image / status / stack">
+          <Grid cols={2} gap={4}>
+            <ProjectCard
+              title="Zomzam"
+              description="My product: a professional operating system"
+              href="#cards"
+              status="Building"
+              statusTone="signal"
+              stack={["TypeScript", "Postgres", "Redis"]}
+              image="/images/writing/redis-internals.webp"
+              imageAlt=""
+              imageWidth={960}
+              imageHeight={600}
+            />
+            <ProjectCard
+              title="BigDPP"
+              description="C++20 operations bot for a 450-member Discord"
+              href="#cards"
+              status="Shipped"
+              statusTone="success"
+              stack={["C++20", "CMake", "D++"]}
+            />
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<ArticleCard />" props='variant="compact | featured" · date / readTime / tag'>
+          <Stack gap={4}>
+            <ArticleCard
+              variant="featured"
+              title="Redis internals, from the inside out"
+              href="#cards"
+              excerpt="How Redis actually stores what you give it, and why the data structure you pick changes the memory profile more than the size of your data does."
+              date="2026-04-12"
+              readTime={14}
+              tag="Systems"
+              image="/images/writing/redis-internals.webp"
+              imageAlt=""
+            />
+            <Grid cols={3} gap={4}>
+              <ArticleCard
+                title="CMake explained for beginners"
+                href="#cards"
+                excerpt="A build system you can reason about."
+                date="2026-02-02"
+                readTime={9}
+                tag="C++"
+              />
+              <ArticleCard
+                title="Designing a reliable background job pipeline"
+                href="#cards"
+                excerpt="Retries, idempotency and the failure you forgot."
+                date="2026-01-18"
+                readTime={11}
+                tag="Backend"
+              />
+              <ArticleCard
+                title="Building a technical learning loop"
+                href="#cards"
+                date="2025-11-30"
+                readTime={6}
+                tag="Craft"
+              />
+            </Grid>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<TestimonialCard />" props="quote / name / role / company / avatar / mark">
+          <Grid cols={2} gap={4}>
+            <TestimonialCard
+              quote="He rebuilt the lead pipeline in six weeks and it has not paged us since. The throughput numbers speak for themselves."
+              name="Placeholder Name"
+              role="Engineering Manager"
+              company="Skylimit LLC"
+            />
+            <TestimonialCard
+              quote="Clear thinking, unusually clear writing, and the discipline to leave the system simpler than he found it."
+              name="Placeholder Name"
+              role="CTO"
+              company="Example Co"
+              mark={false}
+            />
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<LogoTile />" props="src / name / href / framed"
+          note="Greyscale and dimmed until hovered or focused.">
+          <Grid cols={4} gap={3}>
+            <LogoTile src="/assets/brand/logo.svg" name="Sanfor" width={120} height={40} />
+            <LogoTile src="/assets/brand/logo.svg" name="Sanfor" href="#cards" width={120} height={40} />
+            <LogoTile src="/assets/brand/logo.svg" name="Sanfor" framed={false} width={120} height={40} />
+            <LogoTile src="/favicon.svg" name="Sanfor mark" width={40} height={40} />
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<CaseStudyStat />" props="value / label / context / tone / size / rule">
+          <Grid cols={3} gap={6}>
+            <CaseStudyStat
+              value="5.4M+"
+              label="Leads"
+              context="Processed end-to-end through the platform built from scratch at Skylimit."
+            />
+            <CaseStudyStat
+              value="$1.35M+"
+              label="Revenue"
+              context="Attributed to campaigns running on that pipeline."
+              tone="signal"
+            />
+            <CaseStudyStat
+              value="339K+"
+              label="Calls & SMS"
+              context="Per month at peak, across multiple regions."
+              rule={false}
+            />
+          </Grid>
+        </Specimen>
+      </KitGroup>
+
+      {/* ======================================================== NAVIGATION */}
+      <KitGroup
+        id="navigation"
+        title="Navigation"
+        description="Accordion, Tabs and SeeMore are vanilla JS driven by class and attribute toggles. All three are keyboard operable; Tabs follows the WAI-ARIA roving-tabindex pattern."
+      >
+        <Specimen name="<NavLink />" props='variant="bar | stacked" · active' row
+          note="Active state is aria-current=page, and the styling hangs off that attribute so the two can never disagree.">
+          <NavLink href="#navigation">Work</NavLink>
+          <NavLink href="#navigation" active>Writing</NavLink>
+          <NavLink href="#navigation">About</NavLink>
+        </Specimen>
+
+        <Specimen name="<NavLink variant='stacked' />" props="active">
+          <Stack gap={1} class="kit-narrow">
+            <NavLink href="#navigation" variant="stacked">Overview</NavLink>
+            <NavLink href="#navigation" variant="stacked" active>Components</NavLink>
+            <NavLink href="#navigation" variant="stacked">Tokens</NavLink>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<MenuPanel /> + <MenuItem />" props="width / sideHeading / footerLabel · title / description / tag / icon"
+          note="Building blocks for the mega dropdown. The panel is presentational — positioning, open/close and focus management belong to the navbar that mounts it.">
+          <MenuPanel width={520} sideHeading="Also on" footerLabel="All projects" footerHref="#navigation">
+            <MenuItem
+              title="Zomzam"
+              description="My product: a professional operating system"
+              href="#navigation"
+              tag="Building"
+              icon="star"
+            />
+            <MenuItem
+              title="Lead-gen platform case study"
+              description="Built from scratch at Skylimit LLC"
+              href="#navigation"
+              icon="arrow-up-right"
+            />
+            <MenuItem
+              title="Design-Patterns-23"
+              description="All 23 GoF patterns in C++20"
+              href="#navigation"
+              icon="copy"
+            />
+            <Fragment slot="side">
+              <Stack gap={1}>
+                <SocialLink icon="github" href="https://github.com/sanfor2004" label="GitHub" showLabel />
+                <SocialLink icon="devdotto" href="https://dev.to/sanfor2004" label="DEV" showLabel />
+              </Stack>
+            </Fragment>
+          </MenuPanel>
+        </Specimen>
+
+        <Specimen name="<Accordion /> + <AccordionItem />" props='mode="single | multiple" · dividers · open'
+          note="Height animates with grid-template-rows 0fr -> 1fr, so it reaches the panel's real height without measuring. Keyboard: Tab to a trigger, Enter or Space to toggle.">
+          <Accordion mode="single">
+            <AccordionItem title="What do you work on?" open>
+              Backend and systems: APIs, data pipelines, and the reliability work that keeps
+              them running once real traffic arrives.
+            </AccordionItem>
+            <AccordionItem title="How do you work?">
+              Small, reviewable changes against a written spec, with the failure modes listed
+              before the happy path is built.
+            </AccordionItem>
+            <AccordionItem title="Are you available?">
+              For scoped backend and automation work. A call is the fastest way to find out.
+            </AccordionItem>
+          </Accordion>
+        </Specimen>
+
+        <Specimen name="<SeeMore />" props="collapsedHeight / moreLabel / lessLabel / fade"
+          note="The overflow stays in the DOM so in-page search finds it, and is marked inert while folded so its links stay out of the tab order. The toggle hides itself when the content does not actually overflow.">
+          <SeeMore collapsedHeight={90}>
+            <Stack gap={2}>
+              {[
+                "Astro 7 static output, no server runtime",
+                "Tailwind 4 via the Vite plugin",
+                "Self-hosted fonts through Fontsource",
+                "React only where client state is real",
+                "Vanilla JS for every other interaction",
+                "Content in Markdown with Zod schemas",
+                "Deployed to GitHub Pages from CI",
+              ].map((line) => <Text variant="small" tone="muted">{line}</Text>)}
+            </Stack>
+          </SeeMore>
+        </Specimen>
+
+        <Specimen name="<Tabs />" props='tabs / active / variant="line | pill" / orientation'
+          note="Keyboard: Left/Right move between tabs, Home and End jump to the ends, Tab leaves the tablist and enters the panel.">
+          <Stack gap={6}>
+            <Tabs
+              name="kit-tabs-line"
+              tabs={[
+                { id: "overview", label: "Overview" },
+                { id: "stack", label: "Stack" },
+                { id: "results", label: "Results" },
+              ]}
+            >
+              <Fragment slot="overview">
+                <Text variant="small" tone="muted">A lead-gen platform built from scratch.</Text>
+              </Fragment>
+              <Fragment slot="stack">
+                <Text variant="small" tone="muted">PHP, MySQL, Redis, queue workers, multi-region routing.</Text>
+              </Fragment>
+              <Fragment slot="results">
+                <Text variant="small" tone="muted">5.4M+ leads and $1.35M+ in attributed revenue.</Text>
+              </Fragment>
+            </Tabs>
+
+            <Tabs
+              name="kit-tabs-pill"
+              variant="pill"
+              tabs={[
+                { id: "all", label: "All" },
+                { id: "systems", label: "Systems" },
+                { id: "craft", label: "Craft" },
+              ]}
+            >
+              <Fragment slot="all"><Text variant="small" tone="muted">Everything.</Text></Fragment>
+              <Fragment slot="systems"><Text variant="small" tone="muted">Systems posts only.</Text></Fragment>
+              <Fragment slot="craft"><Text variant="small" tone="muted">Craft posts only.</Text></Fragment>
+            </Tabs>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Breadcrumb />" props="items / label"
+          note="The last item is rendered as text with aria-current=page, never as a link to the page you are on.">
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Writing", href: "#navigation" },
+              { label: "Redis internals" },
+            ]}
+          />
+        </Specimen>
+
+        <Specimen name="<Pagination />" props="current / total / href / window"
+          note="All real links — Astro builds a URL per page. Prev/Next render as disabled spans at the ends rather than links to nowhere.">
+          <Stack gap={5}>
+            <Pagination current={1} total={8} href={(page) => `#page-${page}`} />
+            <Pagination current={4} total={8} href={(page) => `#page-${page}`} />
+            <Pagination current={8} total={8} href={(page) => `#page-${page}`} />
+          </Stack>
+        </Specimen>
+      </KitGroup>
+
+      {/* ============================================================= FORMS */}
+      <KitGroup
+        id="forms"
+        title="Forms"
+        description="Silk field, hairline border, signal focus ring. Every control is a real native element — the checkbox, radio and switch keep the native input laid over the drawn control, so focus, clicks and form submission are all native."
+      >
+        <Specimen name="<FormField /> + <Input />" props="label / id / hint / error / required · type / invalid / describedBy">
+          <Stack gap={5} class="kit-form">
+            <FormField label="Email" id="kit-email" hint="I reply within a day or two." required>
+              <Input id="kit-email" type="email" placeholder="you@example.com" describedBy="kit-email-hint" required />
+            </FormField>
+
+            <FormField label="Company" id="kit-company">
+              <Input id="kit-company" placeholder="Where you work" />
+            </FormField>
+
+            <FormField label="Budget" id="kit-budget" error="Enter a number greater than zero.">
+              <Input id="kit-budget" type="number" value="0" invalid describedBy="kit-budget-error" />
+            </FormField>
+
+            <FormField label="Read-only" id="kit-readonly">
+              <Input id="kit-readonly" value="Cannot be edited" readonly />
+            </FormField>
+
+            <FormField label="Disabled" id="kit-disabled">
+              <Input id="kit-disabled" placeholder="Unavailable" disabled />
+            </FormField>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Textarea />" props="rows / invalid / disabled">
+          <Stack gap={5} class="kit-form">
+            <FormField label="Project brief" id="kit-brief" hint="What are you trying to build?">
+              <Textarea id="kit-brief" rows={4} placeholder="A few sentences is plenty." describedBy="kit-brief-hint" />
+            </FormField>
+            <FormField label="With an error" id="kit-brief2" error="Tell me a little more than that.">
+              <Textarea id="kit-brief2" rows={3} value="Hi" invalid describedBy="kit-brief2-error" />
+            </FormField>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Select />" props="options / placeholder / value / invalid / disabled"
+          note="Deliberately the native select: a custom listbox would have to reimplement typeahead and the mobile OS picker, and would be worse at both.">
+          <Stack gap={5} class="kit-form">
+            <FormField label="Engagement" id="kit-engagement">
+              <Select
+                id="kit-engagement"
+                placeholder="Pick one"
+                options={[
+                  { value: "project", label: "Fixed-scope project" },
+                  { value: "retainer", label: "Monthly retainer" },
+                  { value: "advisory", label: "Advisory / review" },
+                  { value: "other", label: "Something else", disabled: true },
+                ]}
+              />
+            </FormField>
+            <FormField label="Disabled select" id="kit-select-disabled">
+              <Select id="kit-select-disabled" disabled options={[{ value: "a", label: "Unavailable" }]} />
+            </FormField>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Checkbox />" props="label / checked / hint / disabled / invalid">
+          <Stack gap={3} class="kit-form">
+            <Checkbox label="Send me the occasional update" hint="No more than once a month." />
+            <Checkbox label="Already checked" checked />
+            <Checkbox label="Disabled" disabled />
+            <Checkbox label="Disabled and checked" checked disabled />
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Radio />" props="label / name / value / checked / hint / disabled"
+          note="Group radios in a fieldset with a legend so the group itself has a label.">
+          <fieldset class="kit-fieldset">
+            <legend class="ui-formfield-label">Preferred contact</legend>
+            <Stack gap={3}>
+              <Radio name="kit-contact" value="email" label="Email" checked />
+              <Radio name="kit-contact" value="call" label="A call" hint="15 minutes, calendar link." />
+              <Radio name="kit-contact" value="post" label="Carrier pigeon" disabled />
+            </Stack>
+          </fieldset>
+        </Specimen>
+
+        <Specimen name="<Switch />" props="label / checked / hint / disabled / labelFirst">
+          <Stack gap={3} class="kit-form">
+            <Switch label="Reduce motion" hint="Respects your system setting by default." />
+            <Switch label="Already on" checked />
+            <Switch label="Label first" checked labelFirst />
+            <Switch label="Disabled" disabled />
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<SubscribeForm />" props="action / name / label / placeholder / buttonLabel / hint"
+          note="THE ONLY REACT COMPONENT in the kit — it holds real async state (idle / loading / success / error). With no `action` it falls back to a native form submission, so it still works without JavaScript. Mounted client:visible.">
+          <SubscribeForm
+            client:visible
+            label="Get new posts by email"
+            hint="Provider-agnostic: pass any endpoint as `action`."
+            buttonLabel="Subscribe"
+          />
+        </Specimen>
+      </KitGroup>
+
+      {/* ========================================================== FEEDBACK */}
+      <KitGroup
+        id="feedback"
+        title="Feedback"
+        description="Each Callout tone carries its own icon as well as its own colour, so meaning never depends on colour alone."
+      >
+        <Specimen name="<Callout />" props='tone="info | tip | warning | danger" · title / icon'>
+          <Stack gap={3}>
+            <Callout tone="info" title="Note">
+              This kit is dark only. There is no light theme and no theme toggle.
+            </Callout>
+            <Callout tone="tip" title="Tip">
+              Pick type by role, not by family — <InlineCode>font-read</InlineCode> because the text
+              is long, not because you want Sora.
+            </Callout>
+            <Callout tone="warning" title="Careful">
+              Ember is reserved for the hero and special moments. The rest of the site is Ink.
+            </Callout>
+            <Callout tone="danger" title="Don't">
+              Never hard-code a hex value in a component. Add a token instead.
+            </Callout>
+            <Callout tone="info">A callout with no title.</Callout>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Skeleton />" props='variant="text | block | circle" · width / height / lines / radius'
+          note="aria-hidden and text-free: a skeleton is not information. Announce loading from a live region. The shimmer is dropped entirely under reduced motion.">
+          <Grid cols={3} gap={5}>
+            <Stack gap={3}>
+              <Skeleton variant="block" height="7rem" radius="lg" />
+              <Skeleton variant="text" lines={3} />
+            </Stack>
+            <Stack direction="row" gap={3} align="center">
+              <Skeleton variant="circle" height="3rem" />
+              <Skeleton variant="text" lines={2} width="10rem" />
+            </Stack>
+            <Skeleton variant="block" height="11rem" radius="xl" />
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<EmptyState />" props='title / description / icon / variant="panel | bare" / size'>
+          <Stack gap={4}>
+            <EmptyState
+              title="No articles match that filter"
+              description="Try a broader tag, or clear the search and start again."
+              icon="search"
+            >
+              <Button size="sm" variant="secondary">Clear filters</Button>
+            </EmptyState>
+            <EmptyState title="Nothing here yet" description="Come back once the first post lands." variant="bare" size="sm" icon="rss" />
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Toast />" props="position · window.sanforToast({ message, tone, duration })"
+          note="Mount the host once per page, then call the global. aria-live=polite, so a toast is announced without stealing focus. Hovering pauses the countdown.">
+          <Stack direction="row" gap={3} wrap>
+            <Button size="sm" variant="secondary" class="kit-toast-demo" data-toast-tone="info">Show info toast</Button>
+            <Button size="sm" variant="secondary" class="kit-toast-demo" data-toast-tone="success">Show success toast</Button>
+            <Button size="sm" variant="secondary" class="kit-toast-demo" data-toast-tone="error">Show error toast</Button>
+          </Stack>
+        </Specimen>
+      </KitGroup>
+
+      {/* ============================================================= MEDIA */}
+      <KitGroup
+        id="media"
+        title="Media & motion"
+        description="Figure requires intrinsic width and height so the browser reserves the box — that single rule is most of what keeps layout shift at zero. Marquee and Reveal both degrade to static content under reduced motion."
+      >
+        <Specimen name="<Figure />" props="src / alt / width / height / caption / ratio / grain / radius">
+          <Grid cols={2} gap={5}>
+            <Figure
+              src="/images/writing/redis-internals.webp"
+              alt="Illustration for the Redis internals article"
+              width={960}
+              height={600}
+              caption="Default framing, image's own ratio."
+            />
+            <Figure
+              src="/images/writing/cmake-explained-for-beginners.webp"
+              alt="Illustration for the CMake article"
+              width={960}
+              height={600}
+              ratio="21 / 9"
+              grain
+              radius="xl"
+              caption="ratio='21 / 9' with grain."
+            />
+          </Grid>
+        </Specimen>
+
+        <Specimen name="<Marquee />" props="duration / direction / pauseOnHover / gap / fade"
+          note="The track is duplicated and translated exactly -50%, so the loop is seamless with no JavaScript. Under reduced motion the duplicate is removed and it becomes a normal scrollable row.">
+          <Stack gap={4}>
+            <Marquee duration={30}>
+              {galleryImages.map((src) => (
+                <img class="kit-marquee-img" src={src} alt="" width={120} height={120} loading="lazy" />
+              ))}
+            </Marquee>
+            <Marquee duration={45} direction="right">
+              {["C++20", "Linux", "Redis", "Postgres", "Networking", "CMake", "Astro"].map((item) => (
+                <span class="kit-box">{item}</span>
+              ))}
+            </Marquee>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<SocialLink /> · <SocialIconRow />" props="icon / href / label / showLabel / size · links / align"
+          note="Steel to signal on hover rather than real brand colours — eight brand hues would pull the page apart.">
+          <Stack gap={4}>
+            <SocialIconRow links={socials} />
+            <SocialIconRow links={socials} size="lg" />
+            <Stack direction="row" gap={2} wrap>
+              <SocialLink icon="github" href="https://github.com/sanfor2004" label="GitHub" showLabel />
+              <SocialLink icon="medium" href="https://medium.com/@2004.sanfor" label="Medium" showLabel />
+            </Stack>
+          </Stack>
+        </Specimen>
+
+        <Specimen name="<Reveal />" props="delay / stagger / distance / direction / threshold / once"
+          note="Content is visible by default; the hidden start state is only applied by script once motion is confirmed allowed. With JS off or reduced motion on, nothing animates and nothing disappears. Scroll this specimen out of view and back to replay.">
+          <Reveal stagger={80} once={false}>
+            <Grid cols={3} gap={4}>
+              <Card surface="raised"><Text variant="small">First</Text></Card>
+              <Card surface="raised"><Text variant="small">Second</Text></Card>
+              <Card surface="raised"><Text variant="small">Third</Text></Card>
+            </Grid>
+          </Reveal>
+        </Specimen>
+      </KitGroup>
+
+      {/* ============================================================= PROSE */}
+      <KitGroup
+        id="prose"
+        title="Prose"
+        description="Applied as .prose-sanfor to the wrapper around rendered Markdown, so article bodies stay free of classes. Body copy is Sora; headings are Syne; anything monospaced is JetBrains Mono."
+      >
+        <Specimen name=".prose-sanfor" props="wrapper class for Markdown / MDX bodies">
+          <div class="prose-sanfor">
+            <h2>A second-level heading</h2>
+            <p>
+              Body copy is set in Sora at a 68ch measure. Links inside prose take
+              <a href="#prose"> the accent colour</a> and thicken their underline on hover.
+              Inline code looks like <code>--signal</code> and stays on one line.
+            </p>
+            <h3>A third-level heading</h3>
+            <ul>
+              <li>Unordered items get a small signal bullet</li>
+              <li>Drawn as a pseudo-element, not a list marker</li>
+              <li>So the spacing is ours to control</li>
+            </ul>
+            <ol>
+              <li>Ordered items keep a mono marker</li>
+              <li>Which lines numerals up with the rest of the UI</li>
+            </ol>
+            <blockquote>
+              <p>Art is soft, atmospheric and heavily textured. UI is sharp, thin and quiet.</p>
+              <cite>AGENTS.md, section 4.1</cite>
+            </blockquote>
+            <h4>A fourth-level heading</h4>
+            <pre><code>{`int main() {
+  // Code blocks sit on --ink with a hairline border
+  // and scroll horizontally rather than widen the page.
+  return 0;
+}`}</code></pre>
+            <table>
+              <thead>
+                <tr><th>Token</th><th>Role</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>--ink</td><td>Base background</td></tr>
+                <tr><td>--frost</td><td>Main text</td></tr>
+                <tr><td>--signal</td><td>Accent</td></tr>
+              </tbody>
+            </table>
+            <hr />
+            <p>
+              Text can be <strong>emphasised</strong>, <mark>marked</mark>, or annotated with an
+              <abbr title="Abbreviation">abbr</abbr>.
+            </p>
+          </div>
+        </Specimen>
+      </KitGroup>
+
+      <footer class="kit-footer">
+        <Text variant="small" tone="muted">
+          Tokens in <InlineCode>src/styles/tokens.css</InlineCode> ·
+          components in <InlineCode>src/components/ui/</InlineCode> ·
+          docs in <InlineCode>docs/ui-kit.md</InlineCode>
+        </Text>
+      </footer>
+    </main>
+  </div>
+
+  <Toast position="bottom-right" />
+</BaseLayout>
+
+<style is:global>
+  .kit-skip {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    z-index: var(--z-toast);
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-md);
+    background-color: var(--signal);
+    color: var(--ink);
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .kit-skip:focus-visible {
+    transform: none;
+  }
+
+  .kit-shell {
+    display: grid;
+    /* minmax(0, …) on every track: a grid item's default `min-width: auto`
+       lets wide content (images, marquees) push the column past the page. */
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    max-inline-size: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-block: 3rem 6rem;
+  }
+
+  .kit-sidebar,
+  .kit-main {
+    min-inline-size: 0;
+  }
+
+  .kit-sidebar-inner {
+    position: sticky;
+    inset-block-start: 2rem;
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    max-block-size: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+
+  .kit-sidebar-title {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .kit-sidebar-mark {
+    font-family: var(--type-display);
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+    color: var(--frost);
+  }
+
+  .kit-sidebar-sub {
+    font-family: var(--type-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--signal-text);
+  }
+
+  .kit-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+  }
+
+  .kit-nav a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-md);
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--steel-text);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast) var(--motion-standard),
+      background-color var(--duration-fast) var(--motion-standard);
+  }
+
+  .kit-nav a:hover {
+    color: var(--frost);
+    background-color: color-mix(in srgb, var(--steel) 12%, transparent);
+  }
+
+  .kit-sidebar-foot {
+    margin: 0;
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid var(--border-hairline);
+  }
+
+  .kit-sidebar-foot a {
+    font-family: var(--type-mono);
+    font-size: 0.68rem;
+    color: var(--signal-text);
+    text-decoration: none;
+  }
+
+  .kit-header {
+    display: grid;
+    gap: 0.85rem;
+    padding-block-end: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .kit-footer {
+    margin-block-start: 4rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--border-hairline);
+  }
+
+  /* --- token sheet --- */
+
+  .kit-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kit-swatch {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-lg);
+    background-color: color-mix(in srgb, var(--silk) 45%, transparent);
+  }
+
+  .kit-swatch-chip {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    flex: none;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-default);
+  }
+
+  .kit-swatch-meta {
+    display: grid;
+    gap: 1px;
+    min-inline-size: 0;
+  }
+
+  .kit-swatch-meta code {
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    color: var(--frost);
+  }
+
+  .kit-swatch-meta span {
+    font-family: var(--type-mono);
+    font-size: 0.68rem;
+    color: var(--signal-text);
+  }
+
+  .kit-swatch-meta small {
+    font-family: var(--type-sans);
+    font-size: 0.7rem;
+    color: var(--steel-text);
+  }
+
+  .kit-typescale {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .kit-typescale li {
+    display: grid;
+    gap: 0.25rem;
+    padding-block-end: 1rem;
+    border-block-end: 1px solid var(--border-hairline);
+  }
+
+  .kit-typescale-token {
+    font-family: var(--type-mono);
+    font-size: 0.7rem;
+    color: var(--signal-text);
+  }
+
+  .kit-typescale-note {
+    font-family: var(--type-mono);
+    font-size: 0.65rem;
+    color: var(--steel-text);
+  }
+
+  .kit-typescale-sample {
+    color: var(--frost);
+    /* Long display samples must not push the page wide. */
+    overflow-wrap: anywhere;
+  }
+
+  .kit-tokenrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .kit-tokenrow li {
+    display: grid;
+    gap: 0.4rem;
+    justify-items: center;
+  }
+
+  .kit-tokenrow code {
+    font-family: var(--type-mono);
+    font-size: 0.68rem;
+    color: var(--steel-text);
+  }
+
+  .kit-radius-demo,
+  .kit-shadow-demo {
+    display: block;
+    inline-size: 4rem;
+    block-size: 4rem;
+    background-color: var(--silk-raised);
+    border: 1px solid var(--border-default);
+  }
+
+  .kit-shadow-demo {
+    border-radius: var(--radius-lg);
+  }
+
+  .kit-tokentables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+    gap: 1.25rem;
+  }
+
+  .kit-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    text-align: start;
+  }
+
+  .kit-table caption {
+    font-family: var(--type-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--signal-text);
+    text-align: start;
+    padding-block-end: 0.5rem;
+  }
+
+  .kit-table th,
+  .kit-table td {
+    text-align: start;
+    padding: 0.35rem 0.5rem 0.35rem 0;
+    border-block-end: 1px solid var(--border-hairline);
+    font-family: var(--type-mono);
+    font-size: 0.68rem;
+    font-weight: 400;
+    color: var(--steel-text);
+    vertical-align: top;
+  }
+
+  .kit-table th code {
+    color: var(--frost);
+  }
+
+  .kit-border-demo {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid;
+    border-radius: var(--radius-md);
+    font-family: var(--type-mono);
+    font-size: 0.7rem;
+    color: var(--steel-text);
+  }
+
+  /* --- demo furniture --- */
+
+  .kit-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    background-color: var(--silk-raised);
+    font-family: var(--type-mono);
+    font-size: 0.72rem;
+    color: var(--steel-text);
+    white-space: nowrap;
+  }
+
+  .kit-canvas {
+    position: relative;
+    block-size: 8rem;
+    border-radius: var(--radius-lg);
+    background-color: var(--ink);
+    border: 1px solid var(--border-hairline);
+    overflow: hidden;
+  }
+
+  .kit-canvas--tall {
+    block-size: 14rem;
+  }
+
+  .kit-canvas-label {
+    position: absolute;
+    inset-block-end: 0.6rem;
+    inset-inline-start: 0.8rem;
+    z-index: 3;
+    font-family: var(--type-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--steel-text);
+  }
+
+  .kit-container-demo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .kit-container-demo code {
+    font-family: var(--type-mono);
+    font-size: 0.68rem;
+    color: var(--steel-text);
+    flex: none;
+  }
+
+  .kit-container-bar {
+    display: block;
+    block-size: 0.6rem;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--signal) 45%, transparent);
+  }
+
+  .kit-container-bar[data-size="prose"] {
+    inline-size: 45%;
+  }
+  .kit-container-bar[data-size="content"] {
+    inline-size: 78%;
+  }
+  .kit-container-bar[data-size="wide"] {
+    inline-size: 100%;
+  }
+
+  .kit-icon-cell {
+    display: grid;
+    justify-items: center;
+    gap: 0.35rem;
+    inline-size: 5.5rem;
+    color: var(--frost);
+  }
+
+  .kit-icon-cell code {
+    font-family: var(--type-mono);
+    font-size: 0.6rem;
+    color: var(--steel-text);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .kit-narrow {
+    max-inline-size: 16rem;
+  }
+
+  .kit-form {
+    max-inline-size: 26rem;
+  }
+
+  .kit-fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .kit-marquee-img {
+    inline-size: 120px;
+    block-size: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-hairline);
+    display: block;
+  }
+
+  /* --- responsive --- */
+
+  @media (max-width: 900px) {
+    .kit-shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .kit-sidebar-inner {
+      position: static;
+      max-block-size: none;
+      padding-block-end: 1.25rem;
+      border-block-end: 1px solid var(--border-hairline);
+    }
+
+    .kit-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+  }
+</style>
+
+<script>
+  /* Showcase-only: wire the toast demo buttons. */
+  document.querySelectorAll<HTMLElement>(".kit-toast-demo").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tone = (button.dataset.toastTone ?? "info") as "info" | "success" | "error";
+      const messages = {
+        info: "Heads up — this is an informational toast.",
+        success: "Saved. Everything went through.",
+        error: "That didn't work. Try again in a moment.",
+      };
+      window.sanforToast?.({ message: messages[tone], tone });
+    });
+  });
+</script>

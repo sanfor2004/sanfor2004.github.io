@@ -1,0 +1,119 @@
+---
+/**
+ * Loading placeholder.
+ *
+ * `aria-hidden` with no text: a skeleton is not information. Announce loading
+ * state with a live region elsewhere, not from here.
+ *
+ * The shimmer is a moving gradient, disabled under reduced motion in favour of
+ * a flat block (no pulsing either - a pulse is still motion).
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  variant?: "text" | "block" | "circle";
+  /** CSS width, e.g. "100%" or "12rem". */
+  width?: string;
+  /** CSS height. Ignored by `text`, which uses its line count. */
+  height?: string;
+  /** Number of lines for the `text` variant. */
+  lines?: number;
+  radius?: "sm" | "md" | "lg" | "xl" | "full";
+  class?: string;
+}
+
+const {
+  variant = "text",
+  width = "100%",
+  height,
+  lines = 3,
+  radius = "md",
+  class: className = "",
+} = Astro.props as Props;
+
+const radii = {
+  sm: "var(--radius-sm)",
+  md: "var(--radius-md)",
+  lg: "var(--radius-lg)",
+  xl: "var(--radius-xl)",
+  full: "9999px",
+} as const;
+
+const style = [
+  "--ui-skel-w:" + width,
+  height ? "--ui-skel-h:" + height : "",
+  "--ui-skel-r:" + (variant === "circle" ? "9999px" : radii[radius]),
+]
+  .filter(Boolean)
+  .join(";");
+---
+
+{
+  variant === "text" ? (
+    <div class={cx("ui-skeleton-lines", className)} style={style} aria-hidden="true">
+      {Array.from({ length: lines }).map((_, index) => (
+        <span
+          class="ui-skeleton"
+          style={index === lines - 1 && lines > 1 ? "inline-size:65%" : undefined}
+        />
+      ))}
+    </div>
+  ) : (
+    <span
+      class={cx("ui-skeleton", "ui-skeleton--" + variant, className)}
+      style={style}
+      aria-hidden="true"
+    />
+  )
+}
+
+<style is:global>
+  .ui-skeleton {
+    display: block;
+    inline-size: var(--ui-skel-w, 100%);
+    block-size: var(--ui-skel-h, 0.85rem);
+    border-radius: var(--ui-skel-r, var(--radius-md));
+    background-color: var(--silk-raised);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--steel) 18%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: ui-skeleton-sheen 1.4s linear infinite;
+  }
+
+  .ui-skeleton--circle {
+    aspect-ratio: 1;
+    block-size: var(--ui-skel-h, 3rem);
+    inline-size: var(--ui-skel-h, 3rem);
+  }
+
+  .ui-skeleton--block {
+    block-size: var(--ui-skel-h, 8rem);
+  }
+
+  .ui-skeleton-lines {
+    display: grid;
+    gap: 0.5rem;
+    inline-size: var(--ui-skel-w, 100%);
+  }
+
+  @keyframes ui-skeleton-sheen {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-skeleton {
+      animation: none;
+      background-image: none;
+    }
+  }
+</style>

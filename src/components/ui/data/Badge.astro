@@ -1,0 +1,112 @@
+---
+/**
+ * A small status label: BUILDING, SHIPPED, DRAFT.
+ *
+ * Always monospace and uppercase - badges are read as tags, not as prose. Use
+ * `Chip` instead for anything the user can click or dismiss.
+ *
+ * Typed with Astro's `Polymorphic` helper - see the note in `Eyebrow.astro`
+ * for why an `as` prop needs it.
+ */
+import type { HTMLTag, Polymorphic } from "astro/types";
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+import type { IconName } from "../icons/registry";
+
+type Props<Tag extends HTMLTag = "span"> = Polymorphic<{
+  as: Tag;
+  variant?: "signal" | "neutral" | "outline" | "success" | "warning" | "danger";
+  size?: "sm" | "md";
+  icon?: IconName;
+  /** Leading dot. Good for live/status badges. */
+  dot?: boolean;
+}>;
+
+const {
+  variant = "signal",
+  size = "sm",
+  icon,
+  dot = false,
+  as: Tag = "span",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<Tag
+  class={cx("ui-badge", "ui-badge--" + variant, "ui-badge--" + size, className)}
+  {...rest}
+>
+  {dot && <span class="ui-badge-dot" aria-hidden="true"></span>}
+  {icon && <Icon name={icon} size={size === "sm" ? 11 : 13} />}
+  <slot />
+</Tag>
+
+<style is:global>
+  .ui-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-family: var(--type-mono);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+
+  .ui-badge--sm {
+    font-size: 0.625rem;
+    padding: 0.15em 0.55em;
+  }
+  .ui-badge--md {
+    font-size: 0.6875rem;
+    padding: 0.25em 0.7em;
+  }
+
+  .ui-badge-dot {
+    inline-size: 5px;
+    block-size: 5px;
+    border-radius: 9999px;
+    background-color: currentColor;
+    flex: none;
+  }
+
+  .ui-badge--signal {
+    color: var(--signal-text);
+    background-color: color-mix(in srgb, var(--signal) 12%, transparent);
+    border-color: color-mix(in srgb, var(--signal) 35%, transparent);
+  }
+
+  .ui-badge--neutral {
+    color: var(--steel-text);
+    background-color: color-mix(in srgb, var(--steel) 12%, transparent);
+    border-color: transparent;
+  }
+
+  .ui-badge--outline {
+    color: var(--steel-text);
+    background-color: transparent;
+    border-color: var(--border-default);
+  }
+
+  .ui-badge--success {
+    color: var(--success);
+    background-color: color-mix(in srgb, var(--success) 12%, transparent);
+    border-color: color-mix(in srgb, var(--success) 32%, transparent);
+  }
+
+  .ui-badge--warning {
+    color: var(--warning);
+    background-color: color-mix(in srgb, var(--warning) 12%, transparent);
+    border-color: color-mix(in srgb, var(--warning) 32%, transparent);
+  }
+
+  .ui-badge--danger {
+    color: var(--danger);
+    background-color: color-mix(in srgb, var(--danger) 12%, transparent);
+    border-color: color-mix(in srgb, var(--danger) 32%, transparent);
+  }
+</style>

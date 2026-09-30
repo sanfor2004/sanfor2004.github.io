@@ -1,0 +1,123 @@
+---
+/**
+ * A hover/focus tooltip, CSS-only.
+ *
+ * No JavaScript: the bubble is a sibling revealed by `:hover` and
+ * `:focus-visible` on the wrapper, so it works with the keyboard for free. The
+ * trigger must be focusable - pass a button or link in the default slot.
+ *
+ * `aria-describedby` wires the bubble to the trigger, which is why it carries a
+ * generated id and `role="tooltip"`. A tooltip must only ever ADD detail: never
+ * put the control's only accessible name in here.
+ */
+import { cx } from "../cx";
+
+export interface Props {
+  /** The tooltip text. */
+  text: string;
+  side?: "top" | "bottom" | "left" | "right";
+  /** Stop long text wrapping too narrow. */
+  maxWidth?: number;
+  class?: string;
+}
+
+const { text, side = "top", maxWidth = 220, class: className = "" } = Astro.props as Props;
+
+const id = "ui-tip-" + Math.random().toString(36).slice(2, 9);
+---
+
+<span
+  class={cx("ui-tooltip", "ui-tooltip--" + side, className)}
+  style={"--ui-tooltip-max:" + maxWidth + "px"}
+  data-tooltip
+  data-describedby={id}
+>
+  <slot />
+  <span class="ui-tooltip-bubble" role="tooltip" id={id}>{text}</span>
+</span>
+
+<style is:global>
+  .ui-tooltip {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .ui-tooltip-bubble {
+    position: absolute;
+    z-index: var(--z-dropdown);
+    max-inline-size: var(--ui-tooltip-max, 220px);
+    inline-size: max-content;
+    padding: 0.35rem 0.55rem;
+    font-family: var(--type-sans);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--frost);
+    background-color: var(--silk-raised);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    box-shadow: var(--elev-raised);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-fast) var(--motion-standard),
+      visibility 0s linear var(--duration-fast);
+  }
+
+  .ui-tooltip:hover .ui-tooltip-bubble,
+  .ui-tooltip:focus-within .ui-tooltip-bubble {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .ui-tooltip--top .ui-tooltip-bubble {
+    inset-block-end: calc(100% + 8px);
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+  .ui-tooltip--bottom .ui-tooltip-bubble {
+    inset-block-start: calc(100% + 8px);
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+  }
+  .ui-tooltip--left .ui-tooltip-bubble {
+    inset-inline-end: calc(100% + 8px);
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+  .ui-tooltip--right .ui-tooltip-bubble {
+    inset-inline-start: calc(100% + 8px);
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-tooltip-bubble {
+      transition-duration: 1ms;
+    }
+  }
+</style>
+
+<script>
+  /* The bubble's id has to reach the trigger as aria-describedby, and the
+     trigger is slotted content this component cannot annotate at build time. */
+  const root = document.documentElement;
+  if (!root.dataset.uiTooltipReady) {
+    root.dataset.uiTooltipReady = "1";
+    const wire = () => {
+      document.querySelectorAll<HTMLElement>("[data-tooltip]").forEach((tip) => {
+        const id = tip.dataset.describedby;
+        if (!id || tip.dataset.wired === "1") return;
+        const trigger = tip.querySelector<HTMLElement>(
+          'button, a[href], input, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!trigger) return;
+        trigger.setAttribute("aria-describedby", id);
+        tip.dataset.wired = "1";
+      });
+    };
+    wire();
+    document.addEventListener("astro:page-load", wire);
+  }
+</script>

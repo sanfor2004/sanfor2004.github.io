@@ -90,7 +90,8 @@ Portfolio writeups describe separate projects; do not assume their source exists
 A full redesign is in progress on `redesign/foundation`. Its colour and type
 foundation is **`docs/brand-foundation.md`**: the Ink and Ember palettes, the five
 font roles (Syne / Space Grotesk / Archivo Expanded / Sora / JetBrains Mono), the
-Tailwind class names, and the `grain` and `ember-field` utilities.
+Tailwind class names, and the `grain` and `ember-field` utilities. The component
+library built on it is **`docs/ui-kit.md`**, with a live showcase at `/ui-kit/`.
 
 For new work, that file supersedes §4.2 and §4.3 below. The identity those two
 sections describe — warm paper, daisyUI `sanfor` / `sanfor-dark`, Inter and

@@ -33,6 +33,9 @@
 @import "@fontsource/jetbrains-mono/500.css";
 
 @import "./tokens.css";
+@import "./prose.css";
+@import "../components/ui/forms/field.css";
+@import "../components/ui/forms/subscribe.css";
 
 /* Keep the archived UI out of Tailwind's class scanning. */
 @source not "../../legacy";
@@ -43,9 +46,11 @@
   /* Ink — site-wide. bg-ink, text-frost, border-steel, text-signal, … */
   --color-ink: var(--ink);
   --color-silk: var(--silk);
-  --color-steel: var(--steel);
+  /* Text utilities take the AA-safe variants; raw --steel / --signal stay
+     exact for fills, borders and focus rings in component CSS. */
+  --color-steel: var(--steel-text);
   --color-frost: var(--frost);
-  --color-signal: var(--signal);
+  --color-signal: var(--signal-text);
 
   /* Ember — hero only. bg-ember-glow, text-ember-paper, … */
   --color-ember-primary: var(--ember-primary);
@@ -65,6 +70,76 @@
   /* `font-expanded` carries the width axis with it, so a component never has to
    * remember to set it separately. */
   --font-expanded--font-variation-settings: "wdth" 125;
+
+  /* --- UI kit: surfaces and borders -------------------------------------- */
+  --color-silk-raised: var(--silk-raised);
+  --color-overlay: var(--overlay);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --color-hairline: var(--border-hairline);
+  --color-line: var(--border-default);
+  --color-line-strong: var(--border-strong);
+
+  /* --- UI kit: radii ------------------------------------------------------ *
+   * `rounded-full` is built in. */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* --- UI kit: shadows ---------------------------------------------------- */
+  --shadow-soft: var(--elev-soft);
+  --shadow-raised: var(--elev-raised);
+  --shadow-overlay: var(--elev-overlay);
+  --shadow-glow-signal: var(--elev-glow-signal);
+
+  /* --- UI kit: container widths ------------------------------------------ *
+   * max-w-prose / max-w-content / max-w-wide. */
+  --container-prose: 68ch;
+  --container-content: 75rem;
+  --container-wide: 90rem;
+
+  /* --- UI kit: type scale ------------------------------------------------- *
+   * text-display … text-label. Display and h1 are fluid; the rest step. */
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 5.5rem);
+  --text-display--line-height: 0.96;
+  --text-display--letter-spacing: -0.03em;
+
+  --text-h1: clamp(2.25rem, 1.5rem + 3.4vw, 3.5rem);
+  --text-h1--line-height: 1.04;
+  --text-h1--letter-spacing: -0.025em;
+
+  --text-h2: clamp(1.75rem, 1.35rem + 1.8vw, 2.5rem);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.02em;
+
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.015em;
+
+  --text-h4: 1.25rem;
+  --text-h4--line-height: 1.35;
+  --text-h4--letter-spacing: -0.01em;
+
+  --text-lead: 1.1875rem;
+  --text-lead--line-height: 1.6;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.55;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.18em;
+
+  /* --- UI kit: easing ----------------------------------------------------- */
+  --ease-standard: var(--motion-standard);
+  --ease-emphasized: var(--motion-emphasized);
 }
 
 /* --- Base ---------------------------------------------------------------- */
@@ -84,7 +159,7 @@
 
   /* Links take the accent; underline offset keeps descenders clear. */
   a {
-    color: var(--signal);
+    color: var(--signal-text);
     text-underline-offset: 0.2em;
   }
 
@@ -100,6 +175,48 @@
 
   hr {
     border-color: color-mix(in oklab, var(--steel) 40%, transparent);
+  }
+}
+
+/* --- UI kit shared utilities --------------------------------------------- */
+
+/* Explicit focus ring for elements that suppress the global one (custom
+   checkboxes, switches) or need it on a wrapper rather than the control. */
+@utility focus-ring {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+/* Vertical rhythm for a page section. */
+@utility section-sm {
+  padding-block: var(--section-sm);
+}
+@utility section-md {
+  padding-block: var(--section-md);
+}
+@utility section-lg {
+  padding-block: var(--section-lg);
+}
+
+/* Screen-reader-only text that becomes visible on focus. */
+@utility sr-only-focusable {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+
+  &:focus-visible {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
   }
 }
 

@@ -1,0 +1,92 @@
+---
+/**
+ * The small mono label that sits above a heading.
+ *
+ * `dot` adds a pulsing signal dot for live / in-progress states. The pulse is
+ * decoration: never let it be the only thing carrying the meaning.
+ *
+ * Typed with Astro's `Polymorphic` helper rather than a plain `Props`
+ * interface. A hand-written `interface Props` containing `as` silently lost its
+ * type here - `astro check` resolved the component to `IntrinsicAttributes`
+ * (no props at all) and rejected every attribute at the call site. Polymorphic
+ * is the supported way to type an `as` prop, and it also forwards the real
+ * attributes of whichever tag is chosen.
+ */
+import type { HTMLTag, Polymorphic } from "astro/types";
+import { cx } from "../cx";
+
+type Props<Tag extends HTMLTag = "p"> = Polymorphic<{
+  as: Tag;
+  /** Signal is the accent; steel for a quieter secondary label. */
+  tone?: "signal" | "steel";
+  dot?: boolean;
+}>;
+
+const {
+  tone = "signal",
+  dot = false,
+  as: Tag = "p",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<Tag
+  class={cx("ui-eyebrow", tone === "signal" ? "text-signal" : "text-steel", className)}
+  {...rest}
+>
+  {dot && <span class="ui-eyebrow-dot" aria-hidden="true"></span>}
+  <slot />
+</Tag>
+
+<style is:global>
+  .ui-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--type-mono);
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    letter-spacing: var(--text-label--letter-spacing);
+    text-transform: uppercase;
+  }
+
+  .ui-eyebrow-dot {
+    position: relative;
+    inline-size: 6px;
+    block-size: 6px;
+    flex: none;
+    border-radius: 9999px;
+    background-color: currentColor;
+  }
+
+  /* The ring animates, not the dot: scaling the dot itself would nudge the
+     text beside it on every pulse. */
+  .ui-eyebrow-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: currentColor;
+    animation: ui-eyebrow-pulse 2s var(--motion-standard) infinite;
+  }
+
+  @keyframes ui-eyebrow-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    70%,
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-eyebrow-dot::after {
+      animation: none;
+    }
+  }
+</style>

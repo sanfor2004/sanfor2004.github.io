@@ -1,0 +1,144 @@
+---
+/**
+ * One row inside a mega-menu panel: title, one-line description, optional mono
+ * tag and leading icon.
+ *
+ * Renders `<a>` normally. Set `static` when the row is a group heading with its
+ * own links inside - a link containing links is invalid.
+ */
+import { cx } from "../cx";
+import Icon from "../icons/Icon.astro";
+import type { IconName } from "../icons/registry";
+
+export interface Props {
+  title: string;
+  description?: string;
+  href?: string;
+  /** Small mono tag in signal, e.g. BUILDING. */
+  tag?: string;
+  icon?: IconName;
+  external?: boolean;
+  /** Render a non-interactive row (for a heading with nested links). */
+  isStatic?: boolean;
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  href,
+  tag,
+  icon,
+  external = false,
+  isStatic = false,
+  class: className = "",
+} = Astro.props as Props;
+
+const Tag = isStatic || !href ? "div" : "a";
+---
+
+<Tag
+  class={cx("ui-menuitem", isStatic && "ui-menuitem--static", className)}
+  href={Tag === "a" ? href : undefined}
+  target={Tag === "a" && external ? "_blank" : undefined}
+  rel={Tag === "a" && external ? "noopener noreferrer" : undefined}
+>
+  {
+    icon && (
+      <span class="ui-menuitem-icon" aria-hidden="true">
+        <Icon name={icon} size={17} />
+      </span>
+    )
+  }
+  <span class="ui-menuitem-body">
+    <span class="ui-menuitem-head">
+      <span class="ui-menuitem-title">{title}</span>
+      {tag && <span class="ui-menuitem-tag">{tag}</span>}
+    </span>
+    {description && <span class="ui-menuitem-desc">{description}</span>}
+    <slot />
+  </span>
+</Tag>
+
+<style is:global>
+  .ui-menuitem {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: var(--radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color var(--duration-fast) var(--motion-standard);
+  }
+
+  a.ui-menuitem:hover {
+    background-color: color-mix(in srgb, var(--steel) 12%, transparent);
+  }
+
+  .ui-menuitem--static {
+    cursor: default;
+  }
+
+  .ui-menuitem-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.9rem;
+    block-size: 1.9rem;
+    flex: none;
+    border-radius: var(--radius-md);
+    background-color: color-mix(in srgb, var(--steel) 12%, transparent);
+    color: var(--steel-text);
+  }
+
+  a.ui-menuitem:hover .ui-menuitem-icon {
+    color: var(--signal-text);
+  }
+
+  .ui-menuitem-body {
+    display: grid;
+    gap: 3px;
+    min-inline-size: 0;
+  }
+
+  .ui-menuitem-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ui-menuitem-title {
+    font-family: var(--type-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--frost);
+  }
+
+  .ui-menuitem-tag {
+    font-family: var(--type-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--signal-text);
+    border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent);
+    border-radius: 9999px;
+    padding: 1px 6px;
+    line-height: 1.4;
+  }
+
+  .ui-menuitem-desc {
+    font-family: var(--type-sans);
+    font-size: 0.79rem;
+    line-height: 1.4;
+    color: var(--steel-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-menuitem {
+      transition-duration: 1ms;
+    }
+  }
+</style>
