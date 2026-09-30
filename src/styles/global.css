@@ -15,21 +15,14 @@
 /* Syne — variable wght 400-800. Wordmark and big headings. */
 @import "@fontsource-variable/syne/wght.css";
 
-/* Space Grotesk — UI and body. */
+/* Space Grotesk — UI, body, labels. */
 @import "@fontsource/space-grotesk/400.css";
 @import "@fontsource/space-grotesk/500.css";
 @import "@fontsource/space-grotesk/700.css";
 
-/* Archivo — variable wdth 62-125 + wght 100-900. Used at wdth 125. */
-@import "@fontsource-variable/archivo/wdth.css";
-
 /* Sora — long readable prose. */
 @import "@fontsource/sora/400.css";
 @import "@fontsource/sora/600.css";
-
-/* JetBrains Mono — labels, numbers, tags. */
-@import "@fontsource/jetbrains-mono/400.css";
-@import "@fontsource/jetbrains-mono/500.css";
 
 @import "./tokens.css";
 @import "./prose.css";
@@ -45,6 +38,7 @@
   --color-steel: var(--steel-text);
   --color-frost: var(--frost);
   --color-signal: var(--signal-text);
+  --color-muted: var(--text-muted);
 
   /* Ember — hero only. bg-ember-glow, text-ember-paper, … */
   --color-ember-primary: var(--ember-primary);
@@ -54,16 +48,11 @@
   --color-ember-night: var(--ember-night);
   --color-ember-paper: var(--ember-paper);
 
-  /* Type roles. font-display, font-sans, font-expanded, font-read, font-mono. */
+  /* Type roles. font-display, font-sans, font-read, font-mono (code only). */
   --font-display: var(--type-display);
   --font-sans: var(--type-sans);
-  --font-expanded: var(--type-expanded);
   --font-read: var(--type-read);
-  --font-mono: var(--type-mono);
-
-  /* `font-expanded` carries the width axis with it, so a component never has to
-   * remember to set it separately. */
-  --font-expanded--font-variation-settings: "wdth" 125;
+  --font-mono: var(--type-code);
 
   /* --- UI kit: surfaces and borders -------------------------------------- */
   --color-silk-raised: var(--silk-raised);

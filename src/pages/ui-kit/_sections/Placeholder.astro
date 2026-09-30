@@ -1,0 +1,14 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  phase: string;
+}
+
+const { id, title, phase } = Astro.props;
+---
+
+<section id={id} class="scroll-mt-24">
+  <h2 class="font-display text-h2 text-frost">{title}</h2>
+  <p class="text-muted font-sans text-body mt-2">Coming in {phase}.</p>
+</section>

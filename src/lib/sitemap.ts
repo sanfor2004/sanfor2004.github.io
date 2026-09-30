@@ -1,4 +1,4 @@
-const noIndexPaths = new Set(["/testblog/", "/ui-kit/", "/styleguide/", "/404/", "/404.html"]);
+const noIndexPaths = new Set(["/404/", "/404.html", "/ui-kit/"]);
 
 const redirectPathPrefixes = ["/learning/"];
 

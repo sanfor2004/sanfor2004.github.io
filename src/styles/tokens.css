@@ -45,22 +45,17 @@
 
   /* SANFOR wordmark and large headings. */
   --type-display: "Syne Variable", "Syne", ui-sans-serif, system-ui, sans-serif;
-  /* General UI and body text. */
+  /* General UI and body text — also carries labels/kickers (uppercase +
+   * letter-spacing) and short strong text, roles a 4th/5th font used to cover. */
   --type-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
-  /* Short, strong, important text. Always paired with --type-expanded-wdth. */
-  --type-expanded: "Archivo Variable", "Archivo", ui-sans-serif, system-ui,
-    sans-serif;
   /* Long readable prose blocks only. */
   --type-read: "Sora", ui-sans-serif, system-ui, sans-serif;
-  /* Labels, numerals, small-caps tags. */
-  --type-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas,
+  /* Code and tabular numerals. System stack, no hosted font: this is a
+   * functional requirement (monospace alignment), not a 4th brand voice, so
+   * it isn't counted among the site's 3 fonts. */
+  --type-code: ui-monospace, "SFMono-Regular", Menlo, Consolas,
     "Liberation Mono", monospace;
-
-  /* Archivo's wdth axis runs 62–125; 125 is its widest setting, which is
-   * what "Archivo Expanded" means here. Applied as font-variation-settings
-   * rather than font-stretch so the axis is hit exactly. */
-  --type-expanded-wdth: 125;
 }
 
 /* ===========================================================================
@@ -111,6 +106,25 @@
   --border-default: color-mix(in srgb, var(--steel) 20%, transparent);
   --border-strong: color-mix(in srgb, var(--steel) 35%, transparent);
 
+  /* --- Text: third tier ---------------------------------------------------- *
+   * --frost (primary) and --steel-text (secondary) both clear 4.5:1 on every
+   * surface. This one doesn't, by construction: steel lifted only 80% of the
+   * way out of --ink. Verified 3.94:1 on --ink, 3.16:1 on --silk (AA-large/UI
+   * only, not AA-normal) and 2.80:1 on --silk-raised (fails outright).
+   * Restricted use: large text (>= --text-h3) or non-essential captions on
+   * --ink/--silk only. Never body copy, never small text, never on
+   * --silk-raised — use --steel-text there instead. */
+  --steel-muted: color-mix(in srgb, var(--steel) 80%, var(--ink));
+
+  /* --- Accent interactive states -------------------------------------------- *
+   * Fills for hover/active on a --signal-colored control (button, badge).
+   * Text/icons set directly on any of these three (base, hover, active) are
+   * AA-large/UI-tier only (2.7-4.3:1), same ceiling as --signal itself —
+   * always pair with >=600 weight at >=16px, or use them as a border/text
+   * color on Ink instead of as a fill for anything smaller. */
+  --signal-hover: color-mix(in srgb, var(--signal) 88%, white);
+  --signal-active: color-mix(in srgb, var(--signal) 85%, black);
+
   /* --- Shadows ------------------------------------------------------------ *
    * Named --elev-* rather than --shadow-* so Tailwind's `--shadow-*` theme
    * namespace can point at these without a circular var().
@@ -152,4 +166,27 @@
   --section-lg: clamp(6rem, 12vw, 10rem);
   /* The page's own side gutter. Shared by every container width. */
   --gutter: clamp(1rem, 4vw, 2.5rem);
+
+  /* --- Text levels ---------------------------------------------------------
+   * --frost and --steel-text (above) ARE the primary/secondary text tokens —
+   * do not duplicate them under new names. --text-muted is the one addition:
+   * a third, dimmer tier for de-emphasized or inactive text. It falls below
+   * 4.5:1 by design (~4:1 on --ink, less on lighter surfaces) — WCAG's own
+   * carve-out for inactive/decorative text. Never use it for essential body
+   * copy or as the sole carrier of meaning; pair it with an icon or label
+   * when it needs to communicate anything. See docs/design-system.md §2. */
+  --text-muted: color-mix(in srgb, var(--steel-text) 70%, transparent);
+
+  /* --- Interaction states --------------------------------------------------
+   * Hover and active are transforms applied to whatever surface or text
+   * color is already in play, not fixed colors of their own — so they stay
+   * correct no matter which token they're layered on.
+   *   hover:    color-mix(in srgb, var(--X) calc(100% - var(--state-hover-mix)), white var(--state-hover-mix))
+   *   active:   color-mix(in srgb, var(--X) calc(100% - var(--state-active-mix)), black var(--state-active-mix))
+   * Focus is not a new token: it is --signal via the existing `focus-ring`
+   * utility (2px solid, 2px offset). Disabled is opacity, not a new color —
+   * pair --state-disabled-opacity with `pointer-events: none`. */
+  --state-hover-mix: 10%;
+  --state-active-mix: 16%;
+  --state-disabled-opacity: 0.45;
 }
