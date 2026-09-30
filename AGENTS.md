@@ -1,7 +1,8 @@
 # AGENTS.md — Sanfor
 
 Single source of truth for this repository: architecture, design system, content
-rules, SEO, and change discipline. There is no `docs/` tree — this file replaces it.
+rules, SEO, and change discipline. It is the only general doc tree; `docs/` holds
+single-topic references that this file points at, not a parallel handbook.
 
 Sanfor is Ahmed Abdelaziz Hanafy's portfolio, technical blog, and art archive. Its
 professional focus is systems and backend engineering, Linux, networking, and
@@ -83,6 +84,19 @@ Portfolio writeups describe separate projects; do not assume their source exists
 ---
 
 ## 4. Design system
+
+### 4.0 2026 redesign — read this first
+
+A full redesign is in progress on `redesign/foundation`. Its colour and type
+foundation is **`docs/brand-foundation.md`**: the Ink and Ember palettes, the five
+font roles (Syne / Space Grotesk / Archivo Expanded / Sora / JetBrains Mono), the
+Tailwind class names, and the `grain` and `ember-field` utilities.
+
+For new work, that file supersedes §4.2 and §4.3 below. The identity those two
+sections describe — warm paper, daisyUI `sanfor` / `sanfor-dark`, Inter and
+Instrument Serif — is archived in `legacy/` (see `legacy/README.md`) and is no longer
+built. §4.1 and §4.4–§4.8 still hold. The rest of §4 will be revised as the redesign
+lands its sections; it is left intact here rather than rewritten ahead of the work.
 
 ### 4.1 The governing idea
 

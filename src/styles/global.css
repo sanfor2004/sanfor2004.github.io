@@ -1,0 +1,165 @@
+/*
+ * Sanfor — 2026 redesign global stylesheet.
+ *
+ * Import order matters: Tailwind first, then self-hosted fonts, then the raw
+ * tokens, then the `@theme` mapping that exposes tokens as utilities.
+ *
+ * daisyUI is still a dependency but is deliberately NOT loaded here — the new UI
+ * uses the Ink/Ember tokens directly. The old daisyUI themes live in
+ * `legacy/src/styles.css`.
+ */
+
+@import "tailwindcss";
+
+/* --- Self-hosted fonts (Fontsource, no Google CDN) ----------------------- */
+
+/* Syne — variable wght 400-800. Wordmark and big headings. */
+@import "@fontsource-variable/syne/wght.css";
+
+/* Space Grotesk — UI and body. */
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/700.css";
+
+/* Archivo — variable wdth 62-125 + wght 100-900. Used at wdth 125. */
+@import "@fontsource-variable/archivo/wdth.css";
+
+/* Sora — long readable prose. */
+@import "@fontsource/sora/400.css";
+@import "@fontsource/sora/600.css";
+
+/* JetBrains Mono — labels, numbers, tags. */
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+@import "./tokens.css";
+
+/* Keep the archived UI out of Tailwind's class scanning. */
+@source not "../../legacy";
+
+/* --- Tailwind theme ------------------------------------------------------- */
+
+@theme {
+  /* Ink — site-wide. bg-ink, text-frost, border-steel, text-signal, … */
+  --color-ink: var(--ink);
+  --color-silk: var(--silk);
+  --color-steel: var(--steel);
+  --color-frost: var(--frost);
+  --color-signal: var(--signal);
+
+  /* Ember — hero only. bg-ember-glow, text-ember-paper, … */
+  --color-ember-primary: var(--ember-primary);
+  --color-ember-glow: var(--ember-glow);
+  --color-ember-burnt: var(--ember-burnt);
+  --color-ember-deep: var(--ember-deep);
+  --color-ember-night: var(--ember-night);
+  --color-ember-paper: var(--ember-paper);
+
+  /* Type roles. font-display, font-sans, font-expanded, font-read, font-mono. */
+  --font-display: var(--type-display);
+  --font-sans: var(--type-sans);
+  --font-expanded: var(--type-expanded);
+  --font-read: var(--type-read);
+  --font-mono: var(--type-mono);
+
+  /* `font-expanded` carries the width axis with it, so a component never has to
+   * remember to set it separately. */
+  --font-expanded--font-variation-settings: "wdth" 125;
+}
+
+/* --- Base ---------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--ink);
+    color: var(--frost);
+    font-family: var(--type-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Links take the accent; underline offset keeps descenders clear. */
+  a {
+    color: var(--signal);
+    text-underline-offset: 0.2em;
+  }
+
+  ::selection {
+    background-color: var(--signal);
+    color: var(--ember-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  hr {
+    border-color: color-mix(in oklab, var(--steel) 40%, transparent);
+  }
+}
+
+/* --- Grain overlay ------------------------------------------------------- *
+ * Adds a subtle fractal-noise film over an element. Apply to a positioned
+ * container: `<div class="relative grain">…</div>`. The noise is painted by a
+ * ::after pseudo-element, so it sits above the element's own background but
+ * below its children only if they are positioned — add `relative` to content
+ * that must stay crisp on top.
+ *
+ * `grain` is the default weight; `grain-strong` for hero surfaces where the
+ * gradient is broad enough to band without it. Both are purely static texture —
+ * no animation, so nothing for reduced-motion to switch off. */
+
+@utility grain {
+  position: relative;
+  isolation: isolate;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.055;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    background-repeat: repeat;
+  }
+}
+
+@utility grain-strong {
+  position: relative;
+  isolation: isolate;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.11;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    background-repeat: repeat;
+  }
+}
+
+/* The hero's Ember field. Kept here rather than in a component so the hero and
+ * the styleguide cannot drift apart. */
+@utility ember-field {
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 50% 105%,
+      var(--ember-glow) 0%,
+      var(--ember-primary) 28%,
+      var(--ember-burnt) 52%,
+      var(--ember-deep) 74%,
+      var(--ember-night) 100%
+    );
+}

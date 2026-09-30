@@ -1,0 +1,64 @@
+/*
+ * Sanfor — 2026 redesign design tokens.
+ *
+ * Raw palette values live here and nowhere else. Consumers read them through the
+ * Tailwind `@theme` mapping in `global.css` (`bg-ink`, `text-frost`, …) rather than
+ * hard-coding hex. See `docs/brand-foundation.md`.
+ *
+ * The site is dark only. There is no light theme and no `prefers-color-scheme`
+ * branch — these values are the single state.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* --- Ink palette — site-wide -------------------------------------------- */
+
+  /* Base background. The page sits on this. */
+  --ink: #0a0e17;
+  /* Surfaces and cards, one step up from the base. */
+  --silk: #1b2438;
+  /* Secondary text, borders, rules, layout guides. */
+  --steel: #7c8aa8;
+  /* Main text. */
+  --frost: #eef1f7;
+  /* Primary accent: links, CTAs, focus. */
+  --signal: #ee5712;
+
+  /* --- Ember palette — hero only ------------------------------------------ *
+   * Reserved for the hero. Do not reach for these in body sections; the rest
+   * of the site is Ink. */
+
+  --ember-primary: #ee5712;
+  --ember-glow: #ff8a3d;
+  --ember-burnt: #c43a08;
+  --ember-deep: #5a1603;
+  --ember-night: #120805;
+  /* Text on Ember surfaces — Ember is warm enough that --frost reads cold. */
+  --ember-paper: #fff3ea;
+
+  /* --- Typography --------------------------------------------------------- *
+   * Roles, not families. Change the stack here; never in a component. */
+
+  /* Named --type-* rather than --font-* so Tailwind's `--font-*` theme
+   * namespace in global.css can point at these without a circular var(). */
+
+  /* SANFOR wordmark and large headings. */
+  --type-display: "Syne Variable", "Syne", ui-sans-serif, system-ui, sans-serif;
+  /* General UI and body text. */
+  --type-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  /* Short, strong, important text. Always paired with --type-expanded-wdth. */
+  --type-expanded: "Archivo Variable", "Archivo", ui-sans-serif, system-ui,
+    sans-serif;
+  /* Long readable prose blocks only. */
+  --type-read: "Sora", ui-sans-serif, system-ui, sans-serif;
+  /* Labels, numerals, small-caps tags. */
+  --type-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas,
+    "Liberation Mono", monospace;
+
+  /* Archivo's wdth axis runs 62–125; 125 is its widest setting, which is
+   * what "Archivo Expanded" means here. Applied as font-variation-settings
+   * rather than font-stretch so the axis is hit exactly. */
+  --type-expanded-wdth: 125;
+}

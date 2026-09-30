@@ -1,0 +1,37 @@
+---
+/**
+ * Minimal shell for the 2026 redesign.
+ *
+ * Intentionally bare: head, meta, global.css, slot. The old shell (loader,
+ * header, footer, cursor, theme toggle, ClientRouter) is archived in
+ * `legacy/src/layouts/BaseLayout.astro` and will be rebuilt section by section.
+ */
+import "../styles/global.css";
+import { site } from "../site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.title}` : site.seoTitle;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0A0E17" />
+    <meta name="color-scheme" content="dark" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

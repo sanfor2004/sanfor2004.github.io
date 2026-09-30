@@ -1,0 +1,228 @@
+---
+/**
+ * Brand foundation preview. Not part of the public site — excluded from the
+ * sitemap in `src/lib/sitemap.ts`. Every swatch is painted from its CSS variable
+ * rather than a literal hex, so broken token wiring in `global.css` shows up
+ * here first.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+type Swatch = {
+  name: string;
+  token: string;
+  hex: string;
+  utility: string;
+  role: string;
+};
+
+const ink: Swatch[] = [
+  { name: "Ink", token: "--ink", hex: "#0A0E17", utility: "bg-ink", role: "Base background" },
+  { name: "Silk", token: "--silk", hex: "#1B2438", utility: "bg-silk", role: "Surfaces, cards" },
+  { name: "Steel", token: "--steel", hex: "#7C8AA8", utility: "text-steel", role: "Secondary text, borders, guides" },
+  { name: "Frost", token: "--frost", hex: "#EEF1F7", utility: "text-frost", role: "Main text" },
+  { name: "Signal", token: "--signal", hex: "#EE5712", utility: "text-signal", role: "Primary accent, links, CTA" },
+];
+
+const ember: Swatch[] = [
+  { name: "Ember Primary", token: "--ember-primary", hex: "#EE5712", utility: "bg-ember-primary", role: "Hero core" },
+  { name: "Ember Glow", token: "--ember-glow", hex: "#FF8A3D", utility: "bg-ember-glow", role: "Hero highlight" },
+  { name: "Ember Burnt", token: "--ember-burnt", hex: "#C43A08", utility: "bg-ember-burnt", role: "Hero midtone" },
+  { name: "Ember Deep", token: "--ember-deep", hex: "#5A1603", utility: "bg-ember-deep", role: "Hero shadow" },
+  { name: "Ember Night", token: "--ember-night", hex: "#120805", utility: "bg-ember-night", role: "Hero edge" },
+  { name: "Ember Paper", token: "--ember-paper", hex: "#FFF3EA", utility: "text-ember-paper", role: "Text on Ember" },
+];
+
+type Face = {
+  name: string;
+  utility: string;
+  role: string;
+  family: string;
+};
+
+const faces: Face[] = [
+  {
+    name: "Syne",
+    utility: "font-display",
+    role: "SANFOR wordmark and big headings",
+    family: "Syne Variable · wght 400–800",
+  },
+  {
+    name: "Space Grotesk",
+    utility: "font-sans",
+    role: "General UI and body text — the default on <body>",
+    family: "Space Grotesk · 400/500/700",
+  },
+  {
+    name: "Archivo Expanded",
+    utility: "font-expanded",
+    role: "Strong, important short text",
+    family: "Archivo Variable · wdth 125",
+  },
+  {
+    name: "Sora",
+    utility: "font-read",
+    role: "Long, clean readable text blocks only",
+    family: "Sora · 400/600",
+  },
+  {
+    name: "JetBrains Mono",
+    utility: "font-mono",
+    role: "Labels, numbers, small-caps tags",
+    family: "JetBrains Mono · 400/500",
+  },
+];
+
+const sizes = ["text-5xl", "text-3xl", "text-xl", "text-base", "text-xs"];
+
+const sample = "Sanfor builds systems";
+---
+
+<BaseLayout
+  title="Styleguide"
+  description="Ink and Ember palettes, font roles, and Tailwind class names for the 2026 Sanfor redesign."
+>
+  <main class="mx-auto max-w-5xl px-6 py-16 sm:px-10 sm:py-24">
+    <header class="mb-16 border-b border-steel/25 pb-10">
+      <p class="mb-4 font-mono text-xs tracking-[0.3em] text-steel uppercase">
+        Brand foundation · 2026
+      </p>
+      <h1 class="font-display text-4xl font-extrabold tracking-tight text-frost sm:text-6xl">
+        Styleguide
+      </h1>
+      <p class="mt-5 max-w-xl font-read text-sm leading-relaxed text-steel">
+        Every colour below is painted from its CSS variable, not a literal hex, so a
+        broken token shows up here first. Reference:
+        <code class="font-mono text-frost">docs/brand-foundation.md</code>.
+      </p>
+    </header>
+
+    <section class="mb-20">
+      <h2 class="mb-2 font-expanded text-lg tracking-[0.12em] text-frost uppercase">
+        Ink palette
+      </h2>
+      <p class="mb-8 font-read text-sm text-steel">
+        Site-wide. Used everywhere except the hero.
+      </p>
+
+      <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          ink.map((s) => (
+            <li class="overflow-hidden rounded-sm border border-steel/25">
+              <div class="h-24 w-full" style={"background-color: var(" + s.token + ")"}></div>
+              <div class="bg-silk px-4 py-3">
+                <p class="font-expanded text-sm tracking-[0.08em] text-frost uppercase">{s.name}</p>
+                <p class="mt-1.5 font-mono text-xs text-steel">{s.hex}</p>
+                <p class="mt-0.5 font-mono text-xs text-signal">{s.token}</p>
+                <p class="mt-0.5 font-mono text-xs text-steel">{s.utility}</p>
+                <p class="mt-2 font-read text-xs leading-snug text-steel">{s.role}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mb-20">
+      <h2 class="mb-2 font-expanded text-lg tracking-[0.12em] text-frost uppercase">
+        Ember palette
+      </h2>
+      <p class="mb-8 font-read text-sm text-steel">
+        Hero only. Do not reach for these in body sections.
+      </p>
+
+      <ul class="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          ember.map((s) => (
+            <li class="overflow-hidden rounded-sm border border-steel/25">
+              <div class="h-24 w-full" style={"background-color: var(" + s.token + ")"}></div>
+              <div class="bg-silk px-4 py-3">
+                <p class="font-expanded text-sm tracking-[0.08em] text-frost uppercase">{s.name}</p>
+                <p class="mt-1.5 font-mono text-xs text-steel">{s.hex}</p>
+                <p class="mt-0.5 font-mono text-xs text-signal">{s.token}</p>
+                <p class="mt-0.5 font-mono text-xs text-steel">{s.utility}</p>
+                <p class="mt-2 font-read text-xs leading-snug text-steel">{s.role}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="overflow-hidden rounded-sm border border-steel/25">
+        <div
+          class="ember-field grain-strong relative flex min-h-[22rem] flex-col justify-end p-8 sm:p-12"
+        >
+          <div class="relative z-10">
+            <p class="mb-3 font-mono text-xs tracking-[0.3em] text-ember-paper/70 uppercase">
+              Hero sample
+            </p>
+            <p
+              class="font-display text-4xl leading-[0.95] font-extrabold tracking-tight text-ember-paper sm:text-6xl"
+            >
+              Sanfor
+            </p>
+            <p class="mt-3 font-expanded text-sm tracking-[0.16em] text-ember-paper/85 uppercase">
+              Systems &amp; backend engineering
+            </p>
+          </div>
+        </div>
+        <div class="bg-silk px-4 py-3">
+          <p class="font-mono text-xs text-steel">
+            .ember-field · .grain-strong · text-ember-paper
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 overflow-hidden rounded-sm border border-steel/25">
+        <div class="grain relative flex h-28 items-center bg-silk px-8">
+          <p class="relative z-10 font-mono text-xs tracking-[0.2em] text-steel uppercase">
+            .grain on bg-silk — default weight
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-2 font-expanded text-lg tracking-[0.12em] text-frost uppercase">Type</h2>
+      <p class="mb-8 font-read text-sm text-steel">
+        Five roles. Pick by role, never by family name.
+      </p>
+
+      <div class="space-y-12">
+        {
+          faces.map((f) => (
+            <article class="border-t border-steel/25 pt-6">
+              <header class="mb-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <h3 class="font-expanded text-base tracking-[0.1em] text-frost uppercase">
+                  {f.name}
+                </h3>
+                <code class="font-mono text-xs text-signal">.{f.utility}</code>
+                <span class="font-mono text-xs text-steel">{f.family}</span>
+              </header>
+              <p class="mb-6 max-w-lg font-read text-xs leading-relaxed text-steel">{f.role}</p>
+
+              <ul class="space-y-4">
+                {sizes.map((size) => (
+                  <li class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-6">
+                    <code class="w-24 shrink-0 font-mono text-xs text-steel">{size}</code>
+                    <span class={[f.utility, size, "min-w-0 break-words text-frost"].join(" ")}>
+                      {sample}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <footer class="mt-20 border-t border-steel/25 pt-8">
+      <a
+        href="/"
+        class="font-mono text-xs tracking-[0.2em] text-steel uppercase transition-colors hover:text-signal"
+      >
+        ← Home
+      </a>
+    </footer>
+  </main>
+</BaseLayout>
