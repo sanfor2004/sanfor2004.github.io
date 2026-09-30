@@ -5,8 +5,7 @@
  * tokens, then the `@theme` mapping that exposes tokens as utilities.
  *
  * daisyUI is still a dependency but is deliberately NOT loaded here — the new UI
- * uses the Ink/Ember tokens directly. The old daisyUI themes live in
- * `legacy/src/styles.css`.
+ * uses the Ink/Ember tokens directly.
  */
 
 @import "tailwindcss";
@@ -34,11 +33,6 @@
 
 @import "./tokens.css";
 @import "./prose.css";
-@import "../components/ui/forms/field.css";
-@import "../components/ui/forms/subscribe.css";
-
-/* Keep the archived UI out of Tailwind's class scanning. */
-@source not "../../legacy";
 
 /* --- Tailwind theme ------------------------------------------------------- */
 
