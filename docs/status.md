@@ -1,5 +1,12 @@
 # Status
 
+## 2026-10-06 — Last About dates filled
+
+**Done:** from the owner: Zomzam `2026 – now`, eRateApp.com `2024`. No `[YEAR]`
+placeholders remain in `src/`. The list stays ordered by when each role ended.
+Removed from AGENTS.md open placeholders. Verified: build completed;
+renders at 1440 and 375.
+
 ## 2026-10-06 — Deploy fix: build on Node 24
 
 **Problem:** the first two pushes to main (46952ab, fbf0ae6) did NOT go live.

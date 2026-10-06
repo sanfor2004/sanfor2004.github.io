@@ -43,7 +43,6 @@ public/images/                 fig-01 … fig-05 paintings (WebP)
 
 ## Open placeholders
 Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
-- Years for Zomzam (founder, start) and eRateApp.com (lead developer) on About. Skylimit 2022–2026 and Fiverr 2021–2022 are filled from the live site.
 - Skylimit problem story, team size, hours saved, 2 screenshots
 - Articles (replace `example-article.md`, keep `_template.md`)
 - Medium and year for each artwork on /art/ (only titles are known)
