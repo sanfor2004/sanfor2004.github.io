@@ -1,5 +1,17 @@
 # Status
 
+## 2026-10-06 — CV button → LinkedIn
+
+**Done:** the owner chose LinkedIn over a CV file. The About button "Download
+CV (PDF)" (`/cv.pdf`, which never existed) is now "View my LinkedIn" with
+the arrow, opening in a new tab. The LinkedIn URL lives once in
+`site.linkedin` (`site.ts`), used by the About button, footer, /links/ and
+Contact (whose text is unchanged). `cv.pdf` removed from AGENTS.md
+placeholders.
+**Verified:** build completed; whole site **0 broken internal links (1755)
+and 0 missing assets (516)**; button renders at 1440 and 375
+(`.playwright-mcp/linkedin-button/`).
+
 ## 2026-10-06 — Last About dates filled
 
 **Done:** from the owner: Zomzam `2026 – now`, eRateApp.com `2024`. No `[YEAR]`

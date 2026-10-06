@@ -46,7 +46,6 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - Skylimit problem story, team size, hours saved, 2 screenshots
 - Articles (replace `example-article.md`, keep `_template.md`)
 - Medium and year for each artwork on /art/ (only titles are known)
-- `public/cv.pdf`
 - Contact form + newsletter `action` endpoints (GitHub Pages can't process forms: use Formspree/Web3Forms and Buttondown or similar)
 - Budget ranges and reply time on /contact/
 

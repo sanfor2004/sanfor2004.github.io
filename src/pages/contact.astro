@@ -5,7 +5,7 @@ import ArrowUpRight from '../components/ui/ArrowUpRight.astro';
 import { site } from '../data/site';
 const direct = [
   { k: 'Email', v: site.email, href: `mailto:${site.email}` },
-  { k: 'LinkedIn', v: 'linkedin.com/in/sanfor2004', href: 'https://www.linkedin.com/in/sanfor2004' },
+  { k: 'LinkedIn', v: site.linkedin.replace('https://www.', ''), href: site.linkedin },
   { k: 'Upwork', v: 'Hire me on Upwork', href: 'https://www.upwork.com/freelancers/~0108502d49f0acdd84' },
   { k: 'Contra', v: 'contra.com/sanfor2004', href: 'https://contra.com/sanfor2004' },
 ];

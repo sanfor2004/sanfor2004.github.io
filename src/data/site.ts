@@ -5,6 +5,7 @@ export const site = {
     'Backend, automation, AI integration and payments that save businesses hours of manual work. By Ahmed (Sanfor), Alexandria.',
   email: '2004.sanfor@gmail.com',
   bookCall: 'https://calendly.com/sanfor2004',
+  linkedin: 'https://www.linkedin.com/in/sanfor2004',
   location: 'Alexandria, EG',
 };
 
@@ -17,7 +18,7 @@ export const nav = [
 ];
 
 export const footerLinks = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sanfor2004' },
+  { label: 'LinkedIn', href: site.linkedin },
   { label: 'GitHub', href: 'https://github.com/sanfor2004' },
   { label: 'Upwork', href: 'https://www.upwork.com/freelancers/~0108502d49f0acdd84' },
   { label: 'X', href: 'https://x.com/Sanfor2004_' },
@@ -47,7 +48,7 @@ export const linkGroups = [
     { label: 'YouTube', href: 'https://youtube.com/@sanfor2004' },
   ]},
   { name: 'Social', links: [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/sanfor2004' },
+    { label: 'LinkedIn', href: site.linkedin },
     { label: 'X', href: 'https://x.com/Sanfor2004_' },
     { label: 'Instagram', href: 'https://instagram.com/sanfor2004.official' },
     { label: 'Threads', href: 'https://threads.com/@sanfor2004.official' },
