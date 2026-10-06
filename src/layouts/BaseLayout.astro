@@ -18,7 +18,7 @@ interface Props {
   cta?: boolean;   // final "Have manual work eating your week?" band
   chrome?: boolean; // navbar + sticky CTA (off for /links/)
 }
-const { title, description = site.description, ogImage = '/images/fig-01-quiet-machine.webp', cta = true, chrome = true } = Astro.props;
+const { title, description = site.description, ogImage = '/og/default.png', cta = true, chrome = true } = Astro.props;
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — Backend & automation engineer`;
 const canonical = new URL(Astro.url.pathname, site.url);
 ---
