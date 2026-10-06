@@ -44,7 +44,6 @@ public/images/                 fig-01 … fig-05 paintings (WebP)
 ## Open placeholders
 Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - Years for Zomzam (founder, start) and eRateApp.com (lead developer) on About. Skylimit 2022–2026 and Fiverr 2021–2022 are filled from the live site.
-- 360Vision article links to `/projects/360-vision/` (no such page yet) and `/rss.xml` (no feed yet)
 - Skylimit problem story, team size, hours saved, 2 screenshots
 - Articles (replace `example-article.md`, keep `_template.md`)
 - Medium and year for each artwork on /art/ (only titles are known)
@@ -57,4 +56,5 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - 2026-10: Home = hero, stats, scroll story with 4 paintings (sticky right column on desktop, pinned strip on phone), story ends on its own CTA.
 - 2026-10: Contrast fixes: muted #5e5a52, primary-text #a33a08.
 - 2026-10-06: **Gradient Waves removed** from the hero (with `ogl`, the `ember` token, and the dark-panel experiment). On a light page the effect only reads as a soft haze; it needs a dark ground to show its layered hills, and in Firefox it showed as a flat gradient. Hero is plain paper again.
+- 2026-10-06: **Launched from `main`** (the only branch; GitHub Pages deploys on push to main). Old live-site URLs (/blog, /learning/patterns, /tags, old /projects/<slug>) redirect via `src/data/redirects.mjs`, a snapshot that never needs new entries. RSS at /rss.xml; sitemap via @astrojs/sitemap.
 - 2026-10-06: React Bits **Side Rays** tried and removed (with `ogl`): like Gradient Waves, a light-on-dark WebGL effect that reads as a grey veil on paper. Replaced by our own **GradientBand** (`ui/GradientBand.astro`): light peach/orange linear gradient rising from the bottom of the hero's left column, slowly drifting sideways. Pure CSS, tokens only, still under reduced motion. Hero text stays muted/graphite (≥5.4:1 measured over it).

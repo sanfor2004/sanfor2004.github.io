@@ -1,5 +1,36 @@
 # Status
 
+## 2026-10-06 — RSS, sitemap check, redirects, launch to main
+
+**Done:**
+- RSS: `@astrojs/rss` + `src/pages/rss.xml.ts`: 32 published articles, newest
+  first, topic + tags as categories; `<link rel="alternate">` in BaseLayout.
+  Valid XML; every item link resolves.
+- Sitemap (`@astrojs/sitemap`, already configured): 40 URLs = every built
+  page, all https, no 404, no redirect pages. `robots.txt` now points at the
+  https sitemap.
+- 154 legacy redirects (`src/data/redirects.mjs`, generated from
+  origin/main's routes): /blog + 32 posts, /learning/patterns (48), 7 old
+  project pages → /projects/, 64 /tags → /articles/, /testblog + /ui-kit → /.
+  Static meta-refresh pages, noindex + canonical to the new URL. All 154
+  tested; whole-site link check: 1755 internal links, 0 broken.
+- `.playwright-mcp/` added to .gitignore. Secret scan of all 172 committed
+  files: clean.
+- Git: committed `6f56ba7` (redesign) + `46952ab` (redirects) and
+  fast-forwarded `main` to them (`2c3e9e7..46952ab`, no history rewritten),
+  pushed, which triggered the GitHub Pages deploy. Deleted `redesign` (local +
+  GitHub) and the two `claude/*` branches (all fully contained in main) plus
+  their app worktree. **Only `main` remains.** An empty, git-ignored folder
+  `.claude/worktrees/fetch-loop-spacing-144e4c` couldn't be removed (locked
+  by a running process); it's harmless.
+
+## Next
+- Owner to supply: Zomzam start year and eRateApp.com year (About), `cv.pdf`.
+- Per-project case study pages (old /projects/<slug> currently redirect to
+  /projects/).
+- After the deploy: spot-check https://sanfor2004.com/ (new home page),
+  /articles/, an old /blog/<slug>/ link, /rss.xml and /sitemap-index.xml.
+
 ## 2026-10-06 — Old /blog/ links fixed; known dates filled
 
 **Links:** 212 links in 26 articles pointed to the old `/blog/...` URLs (404
