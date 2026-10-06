@@ -1,12 +1,12 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Container from "../components/Container.astro";
-import SiteHeader from "../components/SiteHeader.astro";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Stats from '../components/sections/Stats.astro';
+import Story from '../components/sections/Story.astro';
 ---
-
-<BaseLayout>
-  <SiteHeader />
-  <main class="bg-ink min-h-screen">
-    <Container></Container>
-  </main>
+<!-- The story ends on its own CTA, so the shared band is off here. -->
+<BaseLayout cta={false}>
+  <Hero />
+  <Stats />
+  <Story />
 </BaseLayout>

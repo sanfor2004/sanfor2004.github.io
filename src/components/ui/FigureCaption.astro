@@ -1,0 +1,7 @@
+---
+interface Props { left: string; right?: string; class?: string }
+const { left, right, class: extra = '' } = Astro.props;
+---
+<figcaption class:list={['flex justify-between gap-4 border-t border-line px-6 py-4 text-xs text-muted md:px-8', extra]}>
+  <span>{left}</span>{right && <span>{right}</span>}
+</figcaption>

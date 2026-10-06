@@ -1,0 +1,28 @@
+---
+import ArrowUpRight from './ArrowUpRight.astro';
+interface Props {
+  href: string;
+  variant?: 'primary' | 'ink' | 'outline';
+  arrow?: boolean;
+  full?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', arrow = false, full = false, class: extra = '' } = Astro.props;
+const variants = {
+  primary: 'bg-primary text-ink hover:bg-ink hover:text-paper',
+  ink: 'bg-ink text-paper hover:bg-primary hover:text-ink',
+  outline: 'border border-ink text-ink hover:bg-ink hover:text-paper',
+};
+const external = href.startsWith('http');
+---
+<a
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+  class:list={[
+    'inline-flex min-h-12 items-center justify-center gap-2 px-6 text-base font-medium no-underline transition-colors',
+    variants[variant],
+    full && 'w-full',
+    extra,
+  ]}
+><slot />{arrow && <ArrowUpRight size={16} />}</a>

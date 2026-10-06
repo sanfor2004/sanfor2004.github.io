@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import Tag from '../../components/ui/Tag.astro';
+import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
+import { projects, categoryLabel } from '../../data/projects';
+const filters = [['all', 'All'], ['client', 'Client work'], ['product', 'Products'], ['oss', 'Open source']] as const;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<BaseLayout title="Work" description="Production platforms, products and open-source tools by Sanfor2004.">
+  <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
+    <Eyebrow>Work</Eyebrow>
+    <h1 class="max-w-head text-h1 tracking-tighter">Things I've built, for clients and for myself.</h1>
+    <p class="max-w-copy text-lg font-light text-graphite">Production platforms, products in progress, and open-source tools. Each one starts with a real problem.</p>
+  </section>
+
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line px-5 py-5 md:px-8">
+    <div role="group" aria-label="Filter projects" class="flex flex-wrap gap-2">
+      {filters.map(([id, label], i) => (
+        <button type="button" data-filter={id} aria-pressed={i === 0 ? 'true' : 'false'}
+          class="filter min-h-10 cursor-pointer border border-line px-4 text-ui font-medium">{label}</button>
+      ))}
+    </div>
+    <span class="text-xs uppercase tracking-label text-muted"><span data-count>{pad(projects.length)}</span> projects</span>
+  </div>
+
+  <section class="border-b border-line">
+    {projects.map((p, i) => (
+      <a href={p.href ?? '#'} data-category={p.category}
+        class="project grid items-start gap-3 border-t border-line px-5 py-7 no-underline first:border-t-0 md:grid-project md:gap-6 md:px-8">
+        <span class="hidden pt-1.5 text-sm text-muted md:block">{pad(i + 1)}</span>
+        <span class="flex flex-col gap-1"><span class="font-display text-3xl font-semibold">{p.title}</span><span class="text-ui text-muted">{p.subtitle} · {categoryLabel[p.category]}</span></span>
+        <span class="text-base font-light text-graphite">{p.result}</span>
+        <span class="flex flex-wrap gap-1.5">{p.tags.map((t) => <Tag quiet>{t}</Tag>)}</span>
+        <span class="hidden pt-1.5 md:block"><ArrowUpRight /></span>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .filter[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+</style>
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const rows = document.querySelectorAll<HTMLElement>('[data-category]');
+  const count = document.querySelector('[data-count]');
+  buttons.forEach((btn) => btn.addEventListener('click', () => {
+    const f = btn.dataset.filter;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    let n = 0;
+    rows.forEach((r) => { const show = f === 'all' || r.dataset.category === f; r.hidden = !show; if (show) n++; });
+    if (count) count.textContent = String(n).padStart(2, '0');
+  }));
+</script>

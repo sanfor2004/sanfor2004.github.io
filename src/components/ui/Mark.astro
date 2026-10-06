@@ -1,0 +1,31 @@
+---
+// One hand-drawn orange underline per section (rough-notation), drawn once on scroll.
+interface Props { type?: 'underline' | 'highlight' }
+const { type = 'underline' } = Astro.props;
+---
+<span class="mark" data-mark={type}><slot /></span>
+<script>
+  import { annotate } from 'rough-notation';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const styles = getComputedStyle(document.documentElement);
+  const orange = styles.getPropertyValue('--color-primary').trim();
+  const peach = styles.getPropertyValue('--color-peach').trim();
+  const io = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const el = entry.target as HTMLElement;
+      const isHighlight = el.dataset.mark === 'highlight';
+      annotate(el, {
+        type: isHighlight ? 'highlight' : 'underline',
+        color: isHighlight ? peach : orange,
+        strokeWidth: 3,
+        padding: isHighlight ? 2 : 4,
+        animate: !reduce,
+        animationDuration: 900,
+        multiline: true,
+      }).show();
+      io.unobserve(el);
+    }
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-mark]').forEach((el) => io.observe(el));
+</script>

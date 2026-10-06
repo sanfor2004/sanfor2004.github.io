@@ -1,0 +1,33 @@
+---
+// Soft, light gradient that rises from the bottom of its parent, with warm patches slowly
+// drifting sideways. Pure CSS (works in every browser), tokens only, decorative.
+// The parent must be `relative isolate` so the band sits behind its content.
+interface Props { class?: string }
+const { class: extra = '' } = Astro.props;
+---
+<div class:list={['gradient-band pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2', extra]} aria-hidden="true"></div>
+
+<style>
+  .gradient-band {
+    /* Peach ↔ light orange, repeated so the 200%-wide ramp can slide without a seam. */
+    background-image: linear-gradient(90deg,
+      color-mix(in srgb, var(--color-peach) 85%, transparent),
+      color-mix(in srgb, var(--color-primary) 32%, transparent),
+      color-mix(in srgb, var(--color-peach) 85%, transparent),
+      color-mix(in srgb, var(--color-primary) 32%, transparent),
+      color-mix(in srgb, var(--color-peach) 85%, transparent));
+    background-size: 200% 100%;
+    /* Fade upward so it rises from the bottom edge instead of ending in a line. */
+    -webkit-mask-image: linear-gradient(to top, var(--color-ink), transparent);
+    mask-image: linear-gradient(to top, var(--color-ink), transparent);
+    animation: gradient-band-drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes gradient-band-drift {
+    from { background-position: 0% 0; }
+    to { background-position: 100% 0; }
+  }
+  /* Reduced motion: the same gradient, holding still. */
+  @media (prefers-reduced-motion: reduce) {
+    .gradient-band { animation: none; }
+  }
+</style>

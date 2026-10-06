@@ -15,3 +15,6 @@ Thumbs.db
 .codex/
 /Design Patterns Elements of Reusable Object-Oriented Software.pdf
 /tmp/
+
+# Local screenshot/verification artifacts (Playwright)
+.playwright-mcp/

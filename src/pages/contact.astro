@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import ArrowUpRight from '../components/ui/ArrowUpRight.astro';
+import { site } from '../data/site';
+const direct = [
+  { k: 'Email', v: site.email, href: `mailto:${site.email}` },
+  { k: 'LinkedIn', v: 'linkedin.com/in/sanfor2004', href: 'https://www.linkedin.com/in/sanfor2004' },
+  { k: 'Upwork', v: 'Hire me on Upwork', href: 'https://www.upwork.com/freelancers/~0108502d49f0acdd84' },
+  { k: 'Contra', v: 'contra.com/sanfor2004', href: 'https://contra.com/sanfor2004' },
+];
+const field = 'flex flex-col gap-2 text-xs uppercase tracking-label text-muted';
+const input = 'min-h-12 border border-ink bg-paper px-4 text-base normal-case tracking-normal text-ink';
+---
+<!-- No final CTA band on Contact: this page IS the call to action. -->
+<BaseLayout title="Contact" description="Book a free call with Sanfor about the manual work you want automated." cta={false}>
+  <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
+    <Eyebrow>Contact</Eyebrow>
+    <h1 class="max-w-head-sm text-h1 tracking-tighter">Let's talk about your project.</h1>
+    <p class="max-w-copy text-lg font-light text-graphite">Book a free call and show me the manual work. I'll tell you honestly if I can fix it.</p>
+  </section>
+
+  <section class="flex flex-wrap border-b border-line">
+    <div class="flex min-w-0 grow basis-140 flex-col gap-4 p-5 md:border-r md:border-line md:p-8">
+      <Eyebrow>Pick a time</Eyebrow>
+      <!-- Calendly inline embed. Loads only on this page. -->
+      <div class="calendly-inline-widget min-h-170 w-full" data-url={`${site.bookCall}?hide_gdpr_banner=1&background_color=eae4d8&text_color=111111&primary_color=ee5712`}></div>
+      <script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    </div>
+    <form action="#" method="post" class="flex min-w-0 grow basis-96 flex-col gap-5 p-5 md:p-8">
+      <!-- TODO: set action to Formspree / Web3Forms / your own endpoint (GitHub Pages can't process forms). -->
+      <Eyebrow>Or write to me</Eyebrow>
+      <label class={field}>Name<input name="name" type="text" required autocomplete="name" class={input} /></label>
+      <label class={field}>Email<input name="email" type="email" required autocomplete="email" class={input} /></label>
+      <label class={field}>What needs automating?<textarea name="message" rows="4" required class={`${input} resize-y py-3`}></textarea></label>
+      <label class={field}>Budget range
+        <select name="budget" class={input}>
+          <option>[Under $X]</option><option>[$X – $Y]</option><option>[$Y+]</option><option>Not sure yet</option>
+        </select>
+      </label>
+      <button type="submit" class="min-h-12 cursor-pointer bg-primary font-medium text-ink hover:bg-ink hover:text-paper">Send message</button>
+      <p class="text-sm text-muted">I reply within [24 hours], Egypt time (EET).</p>
+    </form>
+  </section>
+
+  <section class="grid gap-8 border-b border-line px-5 py-16 md:grid-split md:gap-12 md:px-8">
+    <h2 class="text-h2 tracking-tight">Direct links</h2>
+    <div class="border-b border-line">
+      {direct.map((d) => (
+        <a href={d.href} class="flex items-center justify-between border-t border-line py-4 no-underline">
+          <span class="flex flex-col gap-0.5"><span class="text-xs uppercase tracking-label text-muted">{d.k}</span><span class="text-md">{d.v}</span></span>
+          <ArrowUpRight />
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

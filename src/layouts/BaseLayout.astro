@@ -1,40 +1,59 @@
 ---
-/**
- * Minimal shell for the 2026 redesign.
- *
- * Intentionally bare: head, meta, global.css, slot. The old shell (loader,
- * header, footer, cursor, theme toggle, ClientRouter) is archived in
- * `legacy/src/layouts/BaseLayout.astro` and will be rebuilt section by section.
- */
-import "../styles/global.css";
-import { site } from "../site";
+import '@fontsource/syne/600.css';
+import '@fontsource/syne/700.css';
+import '@fontsource/sora/300.css';
+import '@fontsource/sora/400.css';
+import '@fontsource/sora/500.css';
+import '../styles/global.css';
+import { site } from '../data/site';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import CtaBand from '../components/layout/CtaBand.astro';
+import StickyCta from '../components/layout/StickyCta.astro';
 
 interface Props {
   title?: string;
   description?: string;
-  /** Keep the page out of search results. For internal previews. */
-  noindex?: boolean;
+  ogImage?: string;
+  cta?: boolean;   // final "Have manual work eating your week?" band
+  chrome?: boolean; // navbar + sticky CTA (off for /links/)
 }
-
-const { title, description = site.description, noindex = false } = Astro.props;
-const pageTitle = title ? `${title} — ${site.title}` : site.seoTitle;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const { title, description = site.description, ogImage = '/images/fig-01-quiet-machine.webp', cta = true, chrome = true } = Astro.props;
+const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — Backend & automation engineer`;
+const canonical = new URL(Astro.url.pathname, site.url);
 ---
-
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
+    <!-- Favicon from the logo mark: .ico (16/32/48) for older browsers and search results, SVG for the rest. -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0A0E17" />
-    <meta name="color-scheme" content="dark" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#eae4d8" /><!-- check-tokens-ignore: browsers need a literal -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, site.url)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Articles`} href="/rss.xml" />
   </head>
   <body>
-    <slot />
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-ink focus:p-3 focus:text-paper">Skip to content</a>
+    <div class="mx-auto max-w-frame border-x border-line">
+      {chrome && <Navbar />}
+      <main id="main">
+        <slot />
+      </main>
+      {cta && <CtaBand />}
+      <Footer />
+    </div>
+    {chrome && <StickyCta />}
   </body>
 </html>

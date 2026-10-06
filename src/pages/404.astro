@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import FigureCaption from '../components/ui/FigureCaption.astro';
+import { figures } from '../data/site';
+const fig = figures.nightShift;
+---
+<BaseLayout title="Page not found" cta={false}>
+  <section class="flex flex-wrap border-b border-line">
+    <div class="flex min-w-0 grow basis-130 flex-col justify-center gap-6 px-5 py-24 md:border-r md:border-line md:px-8">
+      <span class="font-display text-huge font-bold tracking-tighter text-primary-text">404</span>
+      <h1 class="max-w-head-sm text-h1 tracking-tighter">This page got lost in the paper pile.</h1>
+      <p class="max-w-copy text-lg font-light text-graphite">The link may be old, or I moved things around. Here's the way back.</p>
+      <div class="flex flex-wrap gap-4">
+        <Button href="/" variant="ink">Back to home</Button>
+        <Button href="/articles/" variant="outline">Read the articles</Button>
+      </div>
+    </div>
+    <figure class="m-0 flex min-w-0 grow basis-96 flex-col">
+      <img src={fig.src} alt={fig.alt} width="820" height="1024" class="min-h-120 w-full grow object-cover" />
+      <FigureCaption left={fig.fig} right="Still looking" />
+    </figure>
+  </section>
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import ArrowUpRight from '../components/ui/ArrowUpRight.astro';
+import { linkGroups, site } from '../data/site';
+---
+<BaseLayout title="Links" description="Every Sanfor2004 profile in one place." cta={false} chrome={false}>
+  <section class="mx-auto flex max-w-links flex-col gap-4 px-6 pt-18 pb-16">
+    <!-- alt="": the name right below already says "Sanfor2004"; the mark is decorative. -->
+    <img src="/assets/brand/logo.svg" alt="" width="56" height="38" class="h-14 w-auto self-start" />
+    <span class="font-display text-5xl font-bold tracking-tight">Sanfor2004</span>
+    <p class="text-md font-light text-graphite">Backend & automation engineer. Painter. Alexandria.</p>
+    <Button href={site.bookCall} full class="mt-2">Book a free call</Button>
+    <Button href="/" variant="outline" full>sanfor2004.com</Button>
+    {linkGroups.map((g) => (
+      <div class="flex flex-col">
+        <span class="pt-6 pb-2 text-xs uppercase tracking-label text-muted">{g.name}</span>
+        {g.links.map((l) => (
+          <a href={l.href} target="_blank" rel="noopener" class="flex min-h-13 items-center justify-between border-t border-line px-1 text-md no-underline">{l.label}<ArrowUpRight /></a>
+        ))}
+      </div>
+    ))}
+  </section>
+</BaseLayout>

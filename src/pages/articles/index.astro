@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import Placeholder from '../../components/ui/Placeholder.astro';
+import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
+import Subscribe from '../../components/sections/Subscribe.astro';
+import { readingTime, formatDate, topics as allTopics } from '../../data/articles';
+
+// Drafts show while developing (npm run dev) and are hidden in the built site.
+const all = (await getCollection('articles', ({ data }) => import.meta.env.DEV || !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = all.find((a) => a.data.featured) ?? all[0];
+const rest = all.filter((a) => a !== featured);
+// Only topics that have at least one article in the filtered list (the featured card sits above
+// the filter), so no button leads to an empty list. New topics appear on their own.
+const topics = ['All', ...allTopics.filter((t) => rest.some((a) => a.data.topic === t))];
+---
+<BaseLayout title="Articles" description="Notes on backend, automation, design patterns and systems, by Sanfor2004.">
+  <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
+    <Eyebrow>Articles</Eyebrow>
+    <h1 class="max-w-head text-h1 tracking-tighter">Notes from building backends that run on their own.</h1>
+    <p class="max-w-copy text-lg font-light text-graphite">Backend, automation, design patterns and systems. Written plainly, with real code.</p>
+  </section>
+
+  {featured ? (
+    <a href={`/articles/${featured.id}/`} class="flex flex-wrap border-b border-line no-underline">
+      <div class="min-w-0 grow basis-105 md:border-r md:border-line">
+        <!-- Cover alt="": inside the link the title already names it; a long description would bloat the link name. -->
+        {featured.data.image ? (
+          <img src={featured.data.image} alt="" width={featured.data.imageWidth} height={featured.data.imageHeight}
+            decoding="async" class="aspect-16/10 h-full w-full object-cover" />
+        ) : (
+          <Placeholder label="[FEATURED ARTICLE IMAGE]" ratio="aspect-16/10" />
+        )}
+      </div>
+      <div class="flex min-w-0 grow basis-105 flex-col justify-center gap-4 px-5 py-12 md:px-8">
+        <Eyebrow tone="primary">Featured · {featured.data.topic}</Eyebrow>
+        <span class="font-display text-5xl font-bold tracking-tight">{featured.data.title}</span>
+        <span class="text-md font-light text-graphite">{featured.data.description}</span>
+        <span class="text-sm text-muted">{formatDate(featured.data.date)} · {readingTime(featured.body)} min read</span>
+      </div>
+    </a>
+  ) : (
+    <p class="border-b border-line px-5 py-12 text-lg font-light text-graphite md:px-8">The first article is on its way. Subscribe below to get it.</p>
+  )}
+
+  <div role="group" aria-label="Filter by topic" class="flex flex-wrap gap-2 px-5 py-5 md:px-8">
+    {topics.map((t, i) => <button type="button" data-topic={t} aria-pressed={i === 0 ? 'true' : 'false'} class="filter min-h-10 cursor-pointer border border-line px-4 text-ui font-medium">{t}</button>)}
+  </div>
+  <section class="border-b border-line">
+    {rest.map((a) => (
+      <a href={`/articles/${a.id}/`} data-article-topic={a.data.topic} class="grid items-baseline gap-2 border-t border-line px-5 py-6 no-underline md:grid-article-row md:gap-6 md:px-8">
+        <span class="text-xs uppercase tracking-label text-primary-text">{a.data.topic}</span>
+        <span class="font-display text-2xl font-semibold">{a.data.title}</span>
+        <span class="text-sm text-muted">{formatDate(a.data.date)} · {readingTime(a.body)} min</span>
+        <span class="hidden md:block"><ArrowUpRight /></span>
+      </a>
+    ))}
+  </section>
+  <Subscribe />
+</BaseLayout>
+
+<style>
+  .filter[aria-pressed='true'] { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+</style>
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-topic]');
+  const rows = document.querySelectorAll<HTMLElement>('[data-article-topic]');
+  buttons.forEach((btn) => btn.addEventListener('click', () => {
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    rows.forEach((r) => { r.hidden = !(btn.dataset.topic === 'All' || r.dataset.articleTopic === btn.dataset.topic); });
+  }));
+</script>

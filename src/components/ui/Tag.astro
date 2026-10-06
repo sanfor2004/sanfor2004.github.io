@@ -1,0 +1,5 @@
+---
+interface Props { quiet?: boolean }
+const { quiet = false } = Astro.props;
+---
+<span class:list={['inline-flex min-h-6 items-center rounded-sm border px-2 text-xs', quiet ? 'border-line text-graphite' : 'border-ink text-ink']}><slot /></span>

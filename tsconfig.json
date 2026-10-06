@@ -1,10 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "exclude": ["node_modules", "dist", "tmp", "legacy"],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  }
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "legacy-ink-ember"],
+  "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "react" }
 }

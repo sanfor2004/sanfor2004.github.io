@@ -1,0 +1,99 @@
+---
+// Home scroll story. Desktop: sticky painting column on the right that crossfades per section.
+// Phone: the same paintings as a strip pinned under the navbar.
+import { figures, services, site, steps } from '../../data/site';
+import DecryptedWord from '../islands/DecryptedWord.tsx';
+import Button from '../ui/Button.astro';
+import Eyebrow from '../ui/Eyebrow.astro';
+import ServiceRow from './ServiceRow.astro';
+import Step from './Step.astro';
+
+const story = [figures.nightShift, figures.runsOnItsOwn, figures.firstConversation, figures.yoursToKeep];
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<div class="story md:flex md:items-stretch">
+  <div class="story-art story-art-col md:order-last">
+    <div class="story-frame flex flex-col border-b border-line bg-paper md:border-b-0">
+      <div class="relative min-h-0 grow overflow-hidden">
+        {story.map((f, i) => (
+          <img src={f.src} alt={f.alt} loading="lazy" width="820" height="1024" data-story-img={i} data-fig={f.fig}
+            class:list={['story-img absolute inset-0 size-full object-cover', i === 0 && 'is-active']} />
+        ))}
+      </div>
+      <div class="flex justify-between gap-4 border-t border-line px-5 py-3 text-xs text-muted md:px-8 md:py-4">
+        <span data-story-caption>{story[0].fig}</span>
+        <span><span data-story-count>01</span> / {pad(story.length)}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="min-w-0 flex-1 md:border-r md:border-line">
+    <section data-story-step="0" class="story-step">
+      <Eyebrow>Sound familiar?</Eyebrow>
+      <p class="max-w-head-lg font-display text-h2-lg font-bold tracking-tight">
+        Your team still does <DecryptedWord client:visible words={['lead entry', 'invoice chasing', 'weekly reports', 'order updates', 'data cleanup']} /> by hand.
+      </p>
+      <p class="max-w-copy text-lg font-light text-graphite">
+        Late nights, copied numbers, the same spreadsheet every week. That's the work I automate. You keep the decisions, the system does the typing.
+      </p>
+    </section>
+
+    <section data-story-step="1" class="story-step">
+      <Eyebrow>What I do · 04</Eyebrow>
+      <h2 class="max-w-head-lg text-h2-lg tracking-tight">I build the machine. Then it runs without you.</h2>
+      <div class="flex flex-col">
+        {services.map((s, i) => <ServiceRow num={pad(i + 1)} title={s.title} desc={s.desc} />)}
+      </div>
+    </section>
+
+    <section data-story-step="2" class="story-step">
+      <Eyebrow>How we'd work together</Eyebrow>
+      <h2 class="max-w-head-lg text-h2-lg tracking-tight">It starts with a conversation, not a contract.</h2>
+      <div class="flex flex-col">
+        {steps.map((s, i) => <Step num={pad(i + 1)} title={s.title} desc={s.desc} />)}
+      </div>
+    </section>
+
+    <section data-story-step="3" class="story-step border-b-0">
+      <Eyebrow>Your machine, your keys</Eyebrow>
+      <h2 class="max-w-head-sm text-cta tracking-tighter">Have manual work eating your week?</h2>
+      <div><Button href={site.bookCall}>Book a free call</Button></div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .story-step {
+    display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;
+    padding: 4rem 1.25rem; border-bottom: 1px solid var(--color-line);
+  }
+  .story-img { opacity: 0; transform: scale(1); transition: opacity 0.9s ease, transform 6s ease; object-position: center 55%; }
+  .story-img.is-active { opacity: 1; transform: scale(1.03); }
+
+  /* Phone: a strip pinned under the 56px navbar. */
+  .story-art { position: sticky; top: 3.5rem; z-index: 20; }
+  .story-frame { height: 34vh; }
+
+  @media (min-width: 768px) {
+    .story-step { min-height: 100vh; padding: 6rem 3rem 6rem 2rem; }
+    .story-step:last-child { border-bottom: 0; }
+    /* z-index reset: as a flex item it would still stack above the footer and hide its top line. */
+    .story-art { position: static; z-index: auto; }
+    .story-frame { position: sticky; top: 3.5rem; height: calc(100vh - 3.5rem); }
+  }
+</style>
+
+<script>
+  const imgs = [...document.querySelectorAll<HTMLImageElement>('[data-story-img]')];
+  const caption = document.querySelector('[data-story-caption]');
+  const count = document.querySelector('[data-story-count]');
+  const show = (i: number) => {
+    imgs.forEach((img, j) => img.classList.toggle('is-active', i === j));
+    if (caption) caption.textContent = imgs[i]?.dataset.fig ?? '';
+    if (count) count.textContent = String(i + 1).padStart(2, '0');
+  };
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) show(Number((e.target as HTMLElement).dataset.storyStep));
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  document.querySelectorAll('[data-story-step]').forEach((el) => io.observe(el));
+</script>

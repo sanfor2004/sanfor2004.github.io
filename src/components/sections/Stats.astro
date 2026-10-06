@@ -1,0 +1,13 @@
+---
+import { stats } from '../../data/site';
+interface Props { items?: { value: string; label: string }[]; large?: boolean }
+const { items = stats, large = false } = Astro.props;
+---
+<section aria-label="Results" class="grid border-b border-line sm:grid-cols-3">
+  {items.map((s) => (
+    <div class="flex flex-col gap-2 border-b border-line p-8 last:border-b-0 sm:border-r sm:border-b-0 sm:last:border-r-0">
+      <span class:list={['font-display font-bold tracking-tight', large ? 'text-number-lg' : 'text-number']}>{s.value}</span>
+      <span class="text-sm text-muted">{s.label}</span>
+    </div>
+  ))}
+</section>

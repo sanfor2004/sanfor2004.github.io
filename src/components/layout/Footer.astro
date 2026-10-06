@@ -1,0 +1,12 @@
+---
+import { footerLinks, site } from '../../data/site';
+---
+<!-- -mt-px: the top border overlaps whatever line the section above ends with, so it never doubles up.
+     relative: paint above sticky elements (the home Story painting) that would otherwise hide that line. -->
+<footer class="relative -mt-px flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-y border-line px-5 py-6 pb-28 text-sm text-muted md:px-8 md:pb-6">
+  <span>© Sanfor2004 · <a href={`mailto:${site.email}`} class="text-graphite">{site.email}</a></span>
+  <nav aria-label="Social" class="flex flex-wrap gap-6">
+    {footerLinks.map((l) => <a href={l.href} target="_blank" rel="noopener" class="text-graphite">{l.label}</a>)}
+    <a href="/links/" class="text-graphite">All links</a>
+  </nav>
+</footer>

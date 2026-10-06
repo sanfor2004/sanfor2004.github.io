@@ -1,0 +1,32 @@
+---
+import { figures, site } from '../../data/site';
+import Button from '../ui/Button.astro';
+import Eyebrow from '../ui/Eyebrow.astro';
+import Mark from '../ui/Mark.astro';
+import FigureCaption from '../ui/FigureCaption.astro';
+import GradientBand from '../ui/GradientBand.astro';
+const fig = figures.quietMachine;
+---
+<section class="hero relative flex flex-wrap overflow-hidden border-b border-line">
+  <!-- relative isolate: the gradient band sits behind this column's text only, never behind the painting. -->
+  <div class="relative isolate flex min-w-0 shrink grow basis-140 flex-col gap-8 border-line px-5 pt-16 pb-16 md:border-r md:px-8 md:pt-24">
+    <GradientBand />
+    <Eyebrow dot>Available for new projects</Eyebrow>
+    <h1 class="max-w-head-sm text-display tracking-tighter">
+      I build the systems your business <Mark>runs on.</Mark>
+    </h1>
+    <p class="max-w-copy text-lg font-light text-graphite">
+      Backend, automation, AI and payments. I turn the manual work eating your week into software that runs on its own.
+    </p>
+    <div data-hero-actions class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+      <Button href={site.bookCall}>Book a free call</Button>
+      <Button href="/projects/" variant="outline">See the work</Button>
+    </div>
+  </div>
+
+  <figure class="relative m-0 flex min-w-0 grow basis-96 flex-col bg-paper">
+    <img src={fig.src} alt={fig.alt} width="1039" height="1298" fetchpriority="high"
+      class="aspect-4/5 w-full grow object-cover md:aspect-auto md:min-h-130" />
+    <FigureCaption left={fig.fig} right={site.location} class="bg-paper" />
+  </figure>
+</section>

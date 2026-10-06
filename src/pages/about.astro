@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Tag from '../components/ui/Tag.astro';
+import FigureCaption from '../components/ui/FigureCaption.astro';
+import ArrowUpRight from '../components/ui/ArrowUpRight.astro';
+import { site, portrait } from '../data/site';
+
+const timeline = [
+  { when: '[YEAR] – now', role: 'Founder', where: 'Zomzam · product in progress', result: 'A professional operating system for your work life: Life, CRM and more, on one identity.' },
+  { when: '2022 – 2026', role: 'Full-stack engineer (remote)', where: 'Skylimit LLC · Sacramento, CA', result: 'Built the lead-gen and loan platform from scratch. 5.4M+ leads, 53,341+ orders, $1.35M in payments.' },
+  { when: '[YEAR]', role: 'Lead developer', where: 'eRateApp.com', result: 'School collaboration platform with document handling, admin dashboard and financial reporting. 200+ schools in its first two months.' },
+  { when: '2021 – 2022', role: 'Freelance engineer', where: 'Fiverr', result: 'Custom software, automation and consulting for 10+ international clients. 5-star rating.' },
+  { when: '2023 – 2027', role: 'B.Sc. Business Information Systems', where: 'Alexandria University', result: 'In progress.' },
+];
+const skills = [
+  { group: 'Backend', items: ['PHP · Laravel', 'Python · Django', 'Node.js', 'PostgreSQL', 'MySQL', 'MongoDB'] },
+  { group: 'Automation & AI', items: ['Twilio', 'Plivo', 'Telnyx', 'Stripe', 'Queues & workers', 'LLM integration'] },
+  { group: 'Infra', items: ['Docker', 'AWS', 'GCP', 'Linux', 'CI/CD'] },
+  { group: 'Frontend', items: ['TypeScript', 'React', 'Next.js', 'Astro', 'Three.js'] },
+];
+const beyond = [
+  { title: 'Art', desc: 'Paintings and drawings, on the Art page, Behance and Dribbble.', href: '/art/' },
+  { title: 'Writing', desc: 'Backend, automation and design patterns, here and on DEV.', href: '/articles/' },
+  { title: 'Community', desc: 'A Discord server of about 450 people, run with my own C++ bot.', href: '/links/' },
+];
+---
+<BaseLayout title="About" description="Ahmed (Sanfor): product-minded backend and automation engineer in Alexandria, Egypt. Painter on the side.">
+  <section class="flex flex-wrap border-b border-line">
+    <div class="flex min-w-0 grow basis-140 flex-col gap-7 px-5 pt-16 pb-16 md:border-r md:border-line md:px-8 md:pt-24">
+      <Eyebrow>About · Alexandria, Egypt</Eyebrow>
+      <h1 class="max-w-head-sm text-h1 tracking-tighter">Product-minded engineer. Painter on the side.</h1>
+      <p class="max-w-copy text-lg font-light text-graphite">I'm Ahmed, known online as Sanfor. For about five years I've built the backend side of businesses: APIs, automation, telephony and payments, the systems that quietly do the work so people don't have to.</p>
+      <div class="flex flex-wrap gap-4">
+        <Button href="/cv.pdf" variant="outline">Download CV (PDF)</Button>
+        <Button href={site.bookCall}>Book a free call</Button>
+      </div>
+    </div>
+    <figure class="m-0 flex min-w-0 grow basis-96 flex-col">
+      <img src={portrait.src} alt={portrait.alt} width={portrait.width} height={portrait.height} fetchpriority="high"
+        class="aspect-4/5 w-full grow object-cover md:aspect-auto md:min-h-130" />
+      <FigureCaption left={portrait.fig} right={site.location} />
+    </figure>
+  </section>
+
+  <section class="grid gap-12 border-b border-line px-5 py-24 md:grid-cols-2 md:px-8">
+    <div class="flex flex-col gap-4">
+      <Eyebrow>How I got here</Eyebrow>
+      <h2 class="max-w-head text-h2 tracking-tight">From Fiverr gigs to systems that run whole businesses.</h2>
+    </div>
+    <div class="flex flex-col gap-5 text-md font-light leading-read text-graphite">
+      <p class="max-w-read">I started freelancing on Fiverr, building custom software and automation for more than ten international clients, and kept a 5-star rating doing it.</p>
+      <p class="max-w-read">Then I joined Skylimit LLC, a Sacramento company, as a remote full-stack engineer. I built their lead-generation and loan platform from scratch: calls, SMS and IVR through Twilio and Plivo, payments through Stripe, data cleaning and reporting. It processed over 5.4 million leads and 53,000 orders.</p>
+      <p class="max-w-read">Today I take on client work in backend, automation and AI integration, and I'm building Zomzam, my own product. I'm also finishing a Business Information Systems degree at Alexandria University.</p>
+    </div>
+  </section>
+
+  <section class="border-b border-line">
+    <h2 class="px-5 pt-16 pb-8 text-h2 tracking-tight md:px-8">Experience</h2>
+    {timeline.map((t) => (
+      <div class="grid gap-2 border-t border-line px-5 py-7 md:grid-timeline md:gap-8 md:px-8">
+        <span class="pt-1 text-sm text-muted">{t.when}</span>
+        <span class="flex flex-col gap-1"><span class="font-display text-2xl font-semibold">{t.role}</span><span class="text-ui text-muted">{t.where}</span></span>
+        <span class="text-base font-light text-graphite">{t.result}</span>
+      </div>
+    ))}
+  </section>
+
+  <section class="border-b border-line">
+    <h2 class="px-5 pt-16 pb-8 text-h2 tracking-tight md:px-8">What I work with</h2>
+    <div class="grid border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+      {skills.map((s) => (
+        <div class="flex flex-col gap-4 border-b border-line p-8 sm:border-r lg:border-b-0">
+          <span class="font-display text-xl font-semibold">{s.group}</span>
+          <div class="flex flex-wrap gap-2">{s.items.map((i) => <Tag>{i}</Tag>)}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="grid gap-12 border-b border-line px-5 py-24 md:grid-cols-2 md:px-8">
+    <div class="flex flex-col gap-4">
+      <Eyebrow>Beyond code</Eyebrow>
+      <h2 class="max-w-head-sm text-h2 tracking-tight">I paint, I write, and I run a small community.</h2>
+    </div>
+    <div class="flex flex-col">
+      {beyond.map((b) => (
+        <a href={b.href} class="flex items-center justify-between gap-6 border-t border-line py-5 no-underline last:border-b">
+          <span><span class="block font-display text-xl font-semibold">{b.title}</span><span class="mt-1 block text-ui font-light text-graphite">{b.desc}</span></span>
+          <ArrowUpRight />
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

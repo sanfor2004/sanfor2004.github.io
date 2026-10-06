@@ -1,265 +1,108 @@
-/*
- * Sanfor — 2026 redesign global stylesheet.
- *
- * Import order matters: Tailwind first, then self-hosted fonts, then the raw
- * tokens, then the `@theme` mapping that exposes tokens as utilities.
- *
- * daisyUI is still a dependency but is deliberately NOT loaded here — the new UI
- * uses the Ink/Ember tokens directly.
- */
-
 @import "tailwindcss";
 
-/* --- Self-hosted fonts (Fontsource, no Google CDN) ----------------------- */
-
-/* Syne — variable wght 400-800. Wordmark and big headings. */
-@import "@fontsource-variable/syne/wght.css";
-
-/* Space Grotesk — UI, body, labels. */
-@import "@fontsource/space-grotesk/400.css";
-@import "@fontsource/space-grotesk/500.css";
-@import "@fontsource/space-grotesk/700.css";
-
-/* Sora — long readable prose. */
-@import "@fontsource/sora/400.css";
-@import "@fontsource/sora/600.css";
-
-@import "./tokens.css";
-@import "./prose.css";
-
-/* --- Tailwind theme ------------------------------------------------------- */
-
+/*
+  Sanfor2004 design tokens (Paper & Ink).
+  The ONLY values the site may use. Tailwind defaults for color, type,
+  radius and tracking are reset so nothing off-system exists.
+*/
 @theme {
-  /* Ink — site-wide. bg-ink, text-frost, border-steel, text-signal, … */
-  --color-ink: var(--ink);
-  --color-silk: var(--silk);
-  /* Text utilities take the AA-safe variants; raw --steel / --signal stay
-     exact for fills, borders and focus rings in component CSS. */
-  --color-steel: var(--steel-text);
-  --color-frost: var(--frost);
-  --color-signal: var(--signal-text);
-  --color-muted: var(--text-muted);
+  --color-*: initial;
+  --color-paper: #eae4d8;        /* page background */
+  --color-paper-deep: #ddd4c3;   /* recessed panels behind art */
+  --color-ink: #111111;          /* headlines, ink buttons, focus */
+  --color-graphite: #4a4740;     /* body text, 7.3:1 */
+  --color-muted: #5e5a52;        /* captions, labels, 5.4:1 */
+  --color-line: #ccc4b4;         /* 1px hairlines */
+  --color-primary: #ee5712;      /* orange FILL only, ink text on it */
+  --color-primary-text: #a33a08; /* orange as TEXT on paper, 5.2:1 */
+  --color-peach: #f2c4a4;        /* highlighter, text selection */
 
-  /* Ember — hero only. bg-ember-glow, text-ember-paper, … */
-  --color-ember-primary: var(--ember-primary);
-  --color-ember-glow: var(--ember-glow);
-  --color-ember-burnt: var(--ember-burnt);
-  --color-ember-deep: var(--ember-deep);
-  --color-ember-night: var(--ember-night);
-  --color-ember-paper: var(--ember-paper);
+  --font-*: initial;
+  --font-display: "Syne", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Sora", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Type roles. font-display, font-sans, font-read, font-mono (code only). */
-  --font-display: var(--type-display);
-  --font-sans: var(--type-sans);
-  --font-read: var(--type-read);
-  --font-mono: var(--type-code);
+  --text-*: initial;
+  --text-xs: 0.75rem;   --text-xs--line-height: 1.4;
+  --text-sm: 0.8125rem; --text-sm--line-height: 1.4;
+  --text-ui: 0.875rem;  --text-ui--line-height: 1.2;
+  --text-base: 0.9375rem; --text-base--line-height: 1.6;
+  --text-md: 1rem;      --text-md--line-height: 1.6;
+  --text-lg: 1.125rem;  --text-lg--line-height: 1.65;
+  --text-xl: 1.25rem;   --text-xl--line-height: 1.3;
+  --text-2xl: 1.375rem; --text-2xl--line-height: 1.3;
+  --text-3xl: 1.5rem;   --text-3xl--line-height: 1.3;
+  --text-4xl: 1.75rem;  --text-4xl--line-height: 1.15;
+  --text-5xl: 2.25rem;  --text-5xl--line-height: 1.1;
+  --text-number: 3rem;  --text-number--line-height: 1;
+  --text-number-lg: 3.5rem; --text-number-lg--line-height: 1;
+  --text-h2: clamp(1.75rem, 3vw, 2.5rem); --text-h2--line-height: 1.1;
+  --text-h2-lg: clamp(2rem, 3.6vw, 3.25rem); --text-h2-lg--line-height: 1.08;
+  --text-h1: clamp(2.5rem, 5vw, 4.25rem); --text-h1--line-height: 1.05;
+  --text-display: clamp(2.625rem, 5.6vw, 4.75rem); --text-display--line-height: 1.04;
+  --text-cta: clamp(2.25rem, 4.4vw, 3.75rem); --text-cta--line-height: 1.05;
+  --text-huge: 7.5rem; --text-huge--line-height: 1;
 
-  /* --- UI kit: surfaces and borders -------------------------------------- */
-  --color-silk-raised: var(--silk-raised);
-  --color-overlay: var(--overlay);
-  --color-danger: var(--danger);
-  --color-warning: var(--warning);
-  --color-success: var(--success);
-  --color-info: var(--info);
-  --color-hairline: var(--border-hairline);
-  --color-line: var(--border-default);
-  --color-line-strong: var(--border-strong);
+  --tracking-*: initial;
+  --tracking-tighter: -0.025em;
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.02em;
+  --tracking-label: 0.1em;
 
-  /* --- UI kit: radii ------------------------------------------------------ *
-   * `rounded-full` is built in. */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --radius-*: initial;
+  --radius-sm: 4px;
+  --radius-full: 9999px;
 
-  /* --- UI kit: shadows ---------------------------------------------------- */
-  --shadow-soft: var(--elev-soft);
-  --shadow-raised: var(--elev-raised);
-  --shadow-overlay: var(--elev-overlay);
-  --shadow-glow-signal: var(--elev-glow-signal);
+  --spacing: 4px; /* p-6 = 24px, p-24 = 96px: always the 4px grid */
 
-  /* --- UI kit: container widths ------------------------------------------ *
-   * max-w-prose / max-w-content / max-w-wide. */
-  --container-prose: 68ch;
-  --container-content: 75rem;
-  --container-wide: 90rem;
+  --container-frame: 1280px;
+  --container-article: 760px;
+  --container-links: 520px;
+  --container-copy: 46ch;
+  --container-read: 62ch;
+  --container-head-sm: 13ch;
+  --container-head: 16ch;
+  --container-head-lg: 20ch;
 
-  /* --- UI kit: type scale ------------------------------------------------- *
-   * text-display … text-label. Display and h1 are fluid; the rest step. */
-  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 5.5rem);
-  --text-display--line-height: 0.96;
-  --text-display--letter-spacing: -0.03em;
-
-  --text-h1: clamp(2.25rem, 1.5rem + 3.4vw, 3.5rem);
-  --text-h1--line-height: 1.04;
-  --text-h1--letter-spacing: -0.025em;
-
-  --text-h2: clamp(1.75rem, 1.35rem + 1.8vw, 2.5rem);
-  --text-h2--line-height: 1.12;
-  --text-h2--letter-spacing: -0.02em;
-
-  --text-h3: 1.5rem;
-  --text-h3--line-height: 1.25;
-  --text-h3--letter-spacing: -0.015em;
-
-  --text-h4: 1.25rem;
-  --text-h4--line-height: 1.35;
-  --text-h4--letter-spacing: -0.01em;
-
-  --text-lead: 1.1875rem;
-  --text-lead--line-height: 1.6;
-
-  --text-body: 1rem;
-  --text-body--line-height: 1.65;
-
-  --text-small: 0.875rem;
-  --text-small--line-height: 1.55;
-
-  --text-label: 0.75rem;
-  --text-label--line-height: 1.4;
-  --text-label--letter-spacing: 0.18em;
-
-  /* --- UI kit: easing ----------------------------------------------------- */
-  --ease-standard: var(--motion-standard);
-  --ease-emphasized: var(--motion-emphasized);
+  --leading-read: 1.8;
 }
-
-/* --- Base ---------------------------------------------------------------- */
 
 @layer base {
-  html {
-    -webkit-text-size-adjust: 100%;
-  }
-
+  html { background: var(--color-paper); scroll-behavior: smooth; }
   body {
-    background-color: var(--ink);
-    color: var(--frost);
-    font-family: var(--type-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Links take the accent; underline offset keeps descenders clear. */
-  a {
-    color: var(--signal-text);
-    text-underline-offset: 0.2em;
-  }
-
-  ::selection {
-    background-color: var(--signal);
-    color: var(--ember-paper);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
-  }
-
-  hr {
-    border-color: color-mix(in oklab, var(--steel) 40%, transparent);
-  }
-}
-
-/* --- UI kit shared utilities --------------------------------------------- */
-
-/* Explicit focus ring for elements that suppress the global one (custom
-   checkboxes, switches) or need it on a wrapper rather than the control. */
-@utility focus-ring {
-  outline: 2px solid var(--signal);
-  outline-offset: 2px;
-}
-
-/* Vertical rhythm for a page section. */
-@utility section-sm {
-  padding-block: var(--section-sm);
-}
-@utility section-md {
-  padding-block: var(--section-md);
-}
-@utility section-lg {
-  padding-block: var(--section-lg);
-}
-
-/* Screen-reader-only text that becomes visible on focus. */
-@utility sr-only-focusable {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-
-  &:focus-visible {
-    position: static;
-    inline-size: auto;
-    block-size: auto;
     margin: 0;
-    overflow: visible;
-    clip-path: none;
-    white-space: normal;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 700; margin: 0; }
+  p { margin: 0; }
+  a { color: inherit; }
+  a:hover { color: var(--color-primary-text); }
+  :focus-visible { outline: 2px solid var(--color-ink); outline-offset: 3px; }
+  img { max-width: 100%; display: block; }
+  ::selection { background: var(--color-peach); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Named grid templates. Use these instead of arbitrary grid-cols-[...] values. */
+@utility grid-service { grid-template-columns: 3rem minmax(0, 1fr) 1.5rem; }
+@utility grid-step { grid-template-columns: 6rem minmax(0, 1fr); }
+@utility grid-split { grid-template-columns: 17.5rem minmax(0, 1fr); }
+@utility grid-timeline { grid-template-columns: 12.5rem minmax(0, 1fr) minmax(0, 1.2fr); }
+@utility grid-project { grid-template-columns: 4rem minmax(0, 1.1fr) minmax(0, 1.3fr) 13.75rem 1.5rem; }
+@utility grid-article-row { grid-template-columns: 10rem minmax(0, 1fr) 11.25rem 1.5rem; }
+
+/* Story layout and small shared pieces */
+@utility story-art-col { flex: 0 0 44%; }
+@layer components {
+  .caret {
+    display: inline-block; width: 4px; height: 0.9em; margin-left: 4px; vertical-align: -0.1em;
+    background: var(--color-primary); animation: caret 1s steps(1) infinite;
   }
 }
-
-/* --- Grain overlay ------------------------------------------------------- *
- * Adds a subtle fractal-noise film over an element. Apply to a positioned
- * container: `<div class="relative grain">…</div>`. The noise is painted by a
- * ::after pseudo-element, so it sits above the element's own background but
- * below its children only if they are positioned — add `relative` to content
- * that must stay crisp on top.
- *
- * `grain` is the default weight; `grain-strong` for hero surfaces where the
- * gradient is broad enough to band without it. Both are purely static texture —
- * no animation, so nothing for reduced-motion to switch off. */
-
-@utility grain {
-  position: relative;
-  isolation: isolate;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.055;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    background-repeat: repeat;
-  }
-}
-
-@utility grain-strong {
-  position: relative;
-  isolation: isolate;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.11;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    background-repeat: repeat;
-  }
-}
-
-/* The hero's Ember field. Kept here rather than in a component so the hero and
- * the styleguide cannot drift apart. */
-@utility ember-field {
-  background-image:
-    radial-gradient(
-      ellipse 80% 60% at 50% 105%,
-      var(--ember-glow) 0%,
-      var(--ember-primary) 28%,
-      var(--ember-burnt) 52%,
-      var(--ember-deep) 74%,
-      var(--ember-night) 100%
-    );
-}
+@keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }

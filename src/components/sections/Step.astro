@@ -1,0 +1,11 @@
+---
+interface Props { num: string; title: string; desc: string }
+const { num, title, desc } = Astro.props;
+---
+<div class="grid grid-step gap-4 border-t border-line py-6">
+  <span class="pt-1.5 text-xs uppercase tracking-label text-primary-text">Step {num}</span>
+  <span>
+    <span class="block font-display text-2xl font-semibold">{title}</span>
+    <span class="mt-1.5 block text-base font-light text-graphite">{desc}</span>
+  </span>
+</div>

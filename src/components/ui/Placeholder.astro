@@ -1,0 +1,15 @@
+---
+// Dotted stand-in for content Ahmed still has to supply. Search the repo for <Placeholder to find them all.
+interface Props { label: string; ratio?: string; class?: string }
+const { label, ratio = 'aspect-4/5', class: extra = '' } = Astro.props;
+---
+<div class:list={['placeholder flex items-center justify-center p-4 text-center text-sm text-graphite', ratio, extra]}>
+  <span class="bg-paper px-2 py-1">{label}</span>
+</div>
+<style>
+  .placeholder {
+    background-color: var(--color-paper-deep);
+    background-image: radial-gradient(color-mix(in srgb, var(--color-ink) 14%, transparent) 0.9px, transparent 1.1px);
+    background-size: 5px 5px;
+  }
+</style>

@@ -1,0 +1,8 @@
+---
+interface Props { dot?: boolean; tone?: 'muted' | 'primary'; as?: 'span' | 'p' }
+const { dot = false, tone = 'muted', as: Tag = 'span' } = Astro.props;
+---
+<Tag class:list={['inline-flex items-center gap-3 text-xs uppercase tracking-label', tone === 'primary' ? 'text-primary-text' : 'text-muted']}>
+  {dot && <span class="size-2 rounded-full bg-primary" aria-hidden="true"></span>}
+  <slot />
+</Tag>
