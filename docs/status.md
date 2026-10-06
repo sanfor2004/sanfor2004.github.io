@@ -1,5 +1,19 @@
 # Status
 
+## 2026-10-06 — Deploy fix: build on Node 24
+
+**Problem:** the first two pushes to main (46952ab, fbf0ae6) did NOT go live.
+The GitHub Pages build failed because `withastro/action@v3` defaults to Node 20
+and Astro 7 needs Node ≥ 22.12, so the deploy job was skipped. The old site
+stayed up, unaffected.
+**Fix (f350a18):** `.github/workflows/deploy.yml` now uses
+`actions/checkout@v7`, `withastro/action@v6` with `node-version: '24'`, and
+`actions/deploy-pages@v5`. Verified beforehand: clean clone + `npm ci` +
+`npm run build` passes; no case-sensitive path mismatches (218 references
+checked).
+**How to check a deploy without the gh CLI:** the public API at
+`https://api.github.com/repos/sanfor2004/sanfor2004.github.io/actions/runs?branch=main`.
+
 ## 2026-10-06 — RSS, sitemap check, redirects, launch to main
 
 **Done:**
