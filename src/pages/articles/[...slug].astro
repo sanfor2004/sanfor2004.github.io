@@ -15,8 +15,8 @@ export async function getStaticPaths() {
 const { article, all } = Astro.props;
 const { Content, headings } = await render(article);
 const toc = headings.filter((h) => h.depth === 2);
-// Social platforms don't render SVG previews: fall back to the site default.
-const ogImage = article.data.image?.endsWith('.svg') ? undefined : article.data.image;
+// Social platforms don't render SVG previews: SVG covers use a PNG rendered next to them.
+const ogImage = article.data.image?.replace(/\.svg$/, '.png');
 const related = all.filter((a) => a.id !== article.id && a.data.topic === article.data.topic).slice(0, 3);
 ---
 <BaseLayout title={article.data.title} description={article.data.description} ogImage={ogImage}>

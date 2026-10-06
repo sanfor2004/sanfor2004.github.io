@@ -1,5 +1,22 @@
 # Status
 
+## 2026-10-07 — Default og:image is now `og/default.png`
+
+**Done:** `BaseLayout.astro` falls back to `/og/default.png` (1024×541 PNG,
+~820 KB) instead of `fig-01-quiet-machine.webp`. This closes the "default
+`og:image` is a WebP" note below. Articles with a raster cover still use
+their cover. The one SVG cover (background-job pipeline) got a 1200×750 PNG
+render beside it (`images/writing/background-job-pipeline.png`), and
+`articles/[...slug].astro` swaps `.svg` → `.png` for `og:image`, so every
+article shares its own cover.
+**Verified:** `npm run verify` passed; home and /articles/ emit
+`og/default.png`; all 32 article pages emit their own cover, and every
+`og:image` file exists in `dist`.
+**Note:** 31 article covers are WebP. Most platforms accept it; LinkedIn is
+the least reliable. Convert to JPG/PNG if previews come out blank there.
+**Next:** commit `public/og/default.png` along with the deletion of
+`og/default.jpg` (both already in the working tree from the owner).
+
 ## 2026-10-06 — CV button → LinkedIn
 
 **Done:** the owner chose LinkedIn over a CV file. The About button "Download
