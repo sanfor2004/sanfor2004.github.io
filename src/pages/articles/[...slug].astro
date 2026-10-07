@@ -4,7 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Eyebrow from '../../components/ui/Eyebrow.astro';
 import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
-import Subscribe from '../../components/sections/Subscribe.astro';
 import { readingTime, formatDate } from '../../data/articles';
 import { portrait } from '../../data/site';
 
@@ -67,7 +66,6 @@ const related = all.filter((a) => a.id !== article.id && a.data.topic === articl
       ))}
     </section>
   )}
-  <Subscribe title="Liked this? Get the next one." />
 </BaseLayout>
 
 <style is:global>

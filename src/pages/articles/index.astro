@@ -4,7 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Eyebrow from '../../components/ui/Eyebrow.astro';
 import Placeholder from '../../components/ui/Placeholder.astro';
 import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
-import Subscribe from '../../components/sections/Subscribe.astro';
 import { readingTime, formatDate, topics as allTopics } from '../../data/articles';
 
 // Drafts show while developing (npm run dev) and are hidden in the built site.
@@ -42,7 +41,7 @@ const topics = ['All', ...allTopics.filter((t) => rest.some((a) => a.data.topic 
       </div>
     </a>
   ) : (
-    <p class="border-b border-line px-5 py-12 text-lg font-light text-graphite md:px-8">The first article is on its way. Subscribe below to get it.</p>
+    <p class="border-b border-line px-5 py-12 text-lg font-light text-graphite md:px-8">The first article is on its way.</p>
   )}
 
   <div role="group" aria-label="Filter by topic" class="flex flex-wrap gap-2 px-5 py-5 md:px-8">
@@ -58,7 +57,6 @@ const topics = ['All', ...allTopics.filter((t) => rest.some((a) => a.data.topic 
       </a>
     ))}
   </section>
-  <Subscribe />
 </BaseLayout>
 
 <style>

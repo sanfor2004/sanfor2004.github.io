@@ -32,7 +32,7 @@ src/content/articles/*.md      articles (files starting with _ are ignored; _tem
 src/layouts/BaseLayout.astro   head/SEO, frame, navbar, CTA band, footer, mobile sticky CTA
 src/components/ui/             primitives
 src/components/layout/         Navbar, Footer, CtaBand, StickyCta
-src/components/sections/       Hero, Stats, Story, ServiceRow, Step, Subscribe
+src/components/sections/       Hero, Stats, Story, ServiceRow, Step
 src/components/islands/        React: DecryptedWord
 src/pages/                     index, about, projects/, projects/skylimit, articles/, articles/[...slug], art, contact, links, 404
 public/images/                 fig-01 … fig-05 paintings (WebP)
@@ -46,7 +46,7 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - Skylimit problem story, team size, hours saved, 2 screenshots
 - Articles (replace `example-article.md`, keep `_template.md`)
 - Medium and year for each artwork on /art/ (only titles are known)
-- Contact form + newsletter `action` endpoints (GitHub Pages can't process forms: use Formspree/Web3Forms and Buttondown or similar)
+- Contact form `action` endpoint (GitHub Pages can't process forms: use Formspree/Web3Forms or similar)
 - Budget ranges and reply time on /contact/
 
 ## Decisions log
@@ -55,4 +55,5 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - 2026-10: Contrast fixes: muted #5e5a52, primary-text #a33a08.
 - 2026-10-06: **Gradient Waves removed** from the hero (with `ogl`, the `ember` token, and the dark-panel experiment). On a light page the effect only reads as a soft haze; it needs a dark ground to show its layered hills, and in Firefox it showed as a flat gradient. Hero is plain paper again.
 - 2026-10-06: **Launched from `main`** (the only branch; GitHub Pages deploys on push to main). Old live-site URLs (/blog, /learning/patterns, /tags, old /projects/<slug>) redirect via `src/data/redirects.mjs`, a snapshot that never needs new entries. RSS at /rss.xml; sitemap via @astrojs/sitemap.
+- 2026-10-07: **Newsletter signup removed** (Subscribe section on /articles/ and every article): no email service behind it, so the form did nothing. Readers can follow via RSS (/rss.xml). Add a section back only together with a real provider.
 - 2026-10-06: React Bits **Side Rays** tried and removed (with `ogl`): like Gradient Waves, a light-on-dark WebGL effect that reads as a grey veil on paper. Replaced by our own **GradientBand** (`ui/GradientBand.astro`): light peach/orange linear gradient rising from the bottom of the hero's left column, slowly drifting sideways. Pure CSS, tokens only, still under reduced motion. Hero text stays muted/graphite (≥5.4:1 measured over it).

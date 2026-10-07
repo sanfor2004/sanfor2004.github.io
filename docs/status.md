@@ -1,5 +1,21 @@
 # Status
 
+## 2026-10-07 — Newsletter signup removed
+
+**Why:** the "Get new articles by email" form posted to `#`; there was no
+email service behind it, so signups went nowhere.
+**Done:** removed `<Subscribe />` from `/articles/` and the article template
+("Liked this? Get the next one."); deleted
+`components/sections/Subscribe.astro` (it's in git history). The empty-list
+text on `/articles/` no longer says "Subscribe below". AGENTS.md file map,
+placeholders and decisions log updated. RSS remains the way to follow.
+**Verified:** build completed; 0 pages with a newsletter form; list / Keep
+reading → CTA band join cleanly (no gap, no double line) at 1440 and 375;
+`.playwright-mcp/no-subscribe/`.
+**Still open:** `/contact/` form also posts to `#` (messages go nowhere).
+Needs Formspree/Web3Forms (owner signs up) or a replacement (mailto /
+Calendly).
+
 ## 2026-10-07 — New artwork on /art/: "Horse / gallop"
 
 **Done:** `public/images/art/Horse_Far_View.png` moved (git mv) to
