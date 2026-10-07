@@ -1,5 +1,15 @@
 # Status
 
+## 2026-10-07 — Home story headline on 3 lines
+
+**Done:** in `Story.astro`, "by hand." now starts its own line from `md` up
+(`<br class="hidden md:inline">`), so desktop reads "Your team still does /
+[word] / by hand." On phones the break is hidden: a forced break there made
+the longer words ("invoice chasing", "weekly reports", "order updates") wrap
+to 4 lines, while the natural wrap is always 3.
+**Verified:** `npm run verify` passed; 3 lines for every rotating word at
+1440, 768 and 375 (`.playwright-mcp/by-hand-break/`).
+
 ## 2026-10-07 — Default og:image is now `og/default.png`
 
 **Done:** `BaseLayout.astro` falls back to `/og/default.png` (1024×541 PNG,
