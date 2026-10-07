@@ -18,3 +18,6 @@ Thumbs.db
 
 # Local screenshot/verification artifacts (Playwright)
 .playwright-mcp/
+
+# Claude Code local preview config
+.claude/launch.json
