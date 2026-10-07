@@ -9,6 +9,7 @@
   --color-*: initial;
   --color-paper: #eae4d8;        /* page background */
   --color-paper-deep: #ddd4c3;   /* recessed panels behind art */
+  --color-white: #ffffff;        /* ground behind /art/ gallery images */
   --color-ink: #111111;          /* headlines, ink buttons, focus */
   --color-graphite: #4a4740;     /* body text, 7.3:1 */
   --color-muted: #5e5a52;        /* captions, labels, 5.4:1 */

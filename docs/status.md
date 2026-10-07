@@ -1,5 +1,21 @@
 # Status
 
+## 2026-10-07 — New artwork on /art/: "Horse / gallop"
+
+**Done:** `public/images/art/Horse_Far_View.png` moved (git mv) to
+`art/gallery/horse-far-view.png` (kebab-case like the rest). Web copy
+`horse-far-view.webp` made with sharp (1200×651, transparent, ~178 KB; the
+dense hatching keeps it heavier than the others). Added as the last entry
+of `artworks` in `site.ts` with title and alt text.
+**Verified:** `npm run verify` passed (0 errors); image loads on /art/ and
+sits cleanly on paper (transparent background).
+**Next:** give it a medium and year along with the other artworks.
+**Follow-up:** /art/ cards now give every image a white ground (`bg-white`
+on the `<img>`, new token `--color-white` in `global.css`), so transparent
+pieces (horse, tiger) match the white-background ones. The caption strip
+stays transparent on paper. Verified: verify passed; computed img bg
+`rgb(255,255,255)`, caption `transparent`.
+
 ## 2026-10-07 — Home story headline on 3 lines
 
 **Done:** in `Story.astro`, "by hand." now starts its own line from `md` up

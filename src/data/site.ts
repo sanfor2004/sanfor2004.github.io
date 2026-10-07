@@ -98,6 +98,7 @@ export const artworks = [
   { src: '/images/art/gallery/kakuna.webp', width: 1200, height: 1200, title: 'Kakuna study', alt: 'Original digital drawing of Kakuna, a yellow cocoon-like creature, on a white background.' },
   { src: '/images/art/gallery/tiger.webp', width: 1200, height: 626, title: 'Tiger / line study', alt: 'Original golden line-art drawing of a tiger head on a transparent background.' },
   { src: '/images/art/gallery/hand.webp', width: 1200, height: 479, title: 'Hands and orb', alt: 'Original digital drawing of yellow cartoon hands holding a pale orb.' },
+  { src: '/images/art/gallery/horse-far-view.webp', width: 1200, height: 651, title: 'Horse / gallop', alt: 'Original sepia line drawing of a galloping horse with a flowing mane and tail, hatched shading and a hand-drawn signature, on a transparent background.' },
 ];
 
 export const stats = [

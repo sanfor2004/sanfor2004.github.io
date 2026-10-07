@@ -19,7 +19,7 @@ import { artworks } from '../data/site';
   <section class="gallery border-b border-line p-5 md:p-8">
     {artworks.map((a, i) => (
       <figure class="m-0 mb-4 break-inside-avoid border border-line">
-        <img src={a.src} alt={a.alt} width={a.width} height={a.height} loading={i < 3 ? 'eager' : 'lazy'} decoding="async" class="block h-auto w-full" />
+        <img src={a.src} alt={a.alt} width={a.width} height={a.height} loading={i < 3 ? 'eager' : 'lazy'} decoding="async" class="block h-auto w-full bg-white" />
         <figcaption class="flex justify-between border-t border-line px-3.5 py-2.5 text-xs text-muted"><span>{a.title}</span></figcaption>
       </figure>
     ))}
