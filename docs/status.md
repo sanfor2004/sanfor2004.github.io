@@ -1,5 +1,25 @@
 # Status
 
+## 2026-10-09 — Cal.com popup was dark, not on-brand (fixed)
+
+**Bug (owner screenshot):** the booking popup showed Cal's black/white default
+theme: grey dates, white selected day, no orange.
+**Cause:** `theme: "light"` was only sent in the `ui` call. Cal takes the popup
+shell's and the booking iframe's theme from the `theme` key of the modal/inline
+`config` (it becomes `theme=light` in the iframe URL); without it Cal follows the
+visitor's system theme. On a dark OS it rendered its dark default, and the
+`cssVarsPerTheme.light` colours never applied. Earlier checks ran in a light
+browser, where Cal's default also looks light, so this was missed.
+**Fix:** `CalBooking.astro`: `window.calBookingConfig` now includes
+`theme: "light"`. That one object feeds the popup (every button) and the
+/contact/ inline calendar.
+**Verified:** with the browser emulating a dark system theme: iframe URL has
+`theme=light`, shell class `cal-element-embed-light`; popup at 1440 and 375 = paper
+ground, ink text, orange selected date, square corners, no horizontal scroll;
+/contact/ inline calendar the same; the booking-form step (after picking a time)
+has paper fields and an orange Confirm with ink text. Nothing was submitted.
+Not changed: Cal's own "Cal.com" mark and open/close animation.
+
 ## 2026-10-08 — apple-touch-icon dropped
 
 **Why:** owner: no need for it. It was also the one icon still out of step with
