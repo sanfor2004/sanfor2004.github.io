@@ -1,5 +1,92 @@
 # Status
 
+## 2026-10-08 — LinkedIn-safe share images, Backend topic, Automation draft
+
+**Done:**
+- 31 article covers were WebP (LinkedIn previews unreliable). Made a 1200px
+  JPG beside each (PIL, q85, 156–242 KB; the 3 with a PNG original were made
+  from the PNG). `articles/[...slug].astro` uses the JPG/PNG copy for
+  og:image when it exists, else the cover. Pages still show the WebP.
+  Built: 31 jpg + 1 png og:images, all files present.
+- "Designing a Reliable Background Job Pipeline" topic Systems → Backend
+  (already tagged Backend): the Backend filter is back on /articles/.
+- **Draft** `articles/distributing-leads-by-rules.md` (topic Automation,
+  `draft: true`, not built, not in RSS): written only from Skylimit facts;
+  HTML comments mark the generic rule examples to replace. Automation filter
+  appears when the owner publishes it (`draft: false`).
+- /articles/ featured card: no cover → text-only card (the dotted
+  "[FEATURED ARTICLE IMAGE]" fallback is gone; `<Placeholder` no longer used
+  anywhere).
+- Owner dropped: case-study screenshots/quotes, art medium/year, tiger alt
+  text. TODOs removed; AGENTS.md "Open placeholders" = none.
+- /links/ stays without the navbar (owner: its button returns to the site).
+**Verified:** `npm run verify` passed; prod build: Backend filter shows the
+pipeline article at 1440 + 375; dev: draft renders, featured card text-only.
+`.playwright-mcp/articles-fixes/`.
+**Owner to do:** review the draft, replace the rule examples, set
+`draft: false`.
+**Cover (added same day):** generated with Figma AI (owner-approved, "My Own
+Draft" plan, gemini-3.1-flash-image, 1 image) in the series' ink + watercolor
+workshop style. `writing/distributing-leads-by-rules.png` (original,
+1376×768) + `.webp` (page, 207 KB) + `.jpg` (share, 1200px, 229 KB). Checked
+in dev: article cover, featured card, og:image → .jpg (200).
+
+
+## 2026-10-08 — eRateApp content filled (owner)
+
+**Done:** problem (contracts saved by hand; hard to find the right equipment
+on the smallest budget; school info searched for instead of live), audience
+in the intro ("For school owners and top managers"; Client field stays
+eRateApp.com), team of 5, MySQL added (case study + Work tags), third stat
+"400+ contracts on the platform" (owner: 200+ schools × 2–3 contracts; 400
+is the low end) and a matching Results line. Screens and quote: owner has
+none, hidden. eRateApp now shows 01 Problem / 02 My role / 03 What I built /
+04 Results.
+**Verified:** `npm run verify` passed; 3 stat columns on desktop, 1 on phone;
+no horizontal scroll at 1440 / 375. `.playwright-mcp/erateapp-content/`.
+
+
+## 2026-10-08 — Skylimit content filled (owner)
+
+**Done:** problem (5M+ leads, 2,000+ accounts, orders, rule-based lead
+distribution), team size ("ranged from 2 to 10 people"), hours saved worded
+as the owner's estimate ("An estimated 48+ hours … every week"). Template's
+Problem title "What was slow and manual" → "What needed solving" (fits any
+study). Skylimit now shows 01 Problem / 02 My role / 03 What I built /
+04 Results.
+**Not done, on purpose:** the owner asked for a client quote written on the
+client's behalf (the real one was a deleted Fiverr review). Declined: a
+quote under the client's name that they didn't give is a fabricated
+testimonial. Quote stays hidden until the client re-sends one.
+**Still hidden:** Skylimit screenshots (owner has none).
+**Verified:** `npm run verify` passed; 1440 + 375, no horizontal scroll.
+`.playwright-mcp/skylimit-content/`.
+
+
+## 2026-10-08 — Task 5: eRateApp.com case study (known facts only)
+
+**Done:**
+- `erateapp` in `case-studies.ts` + `pages/projects/erateapp.astro` on the
+  CaseStudy template. Facts from the owner: lead developer, 2024, 200+ schools
+  in two months, vanilla PHP + JS (no framework), contract uploads, schools
+  connected with equipment, WebSocket live chat, government APIs. "Admin
+  dashboard and financial reporting" taken from the About page (owner's
+  live-site copy). Problem, team size, more numbers, screens, quote, client
+  name: TODO(owner), hidden.
+- Work page eRateApp row now links to the case study; tags corrected
+  Laravel/MySQL/Dashboards → PHP/JavaScript/WebSocket (owner: all vanilla
+  PHP + JS; MySQL dropped as unconfirmed).
+- Links: Skylimit "Next project" → eRateApp; eRateApp next → All projects.
+- `Stats`: column count follows the number of items (eRateApp has 2); the
+  note spans all columns. Home and Skylimit unchanged (3).
+- AGENTS.md placeholders: stale `example-article.md` line replaced by the
+  eRateApp TODO list.
+**Verified:** `npm run verify` passed; 1440 + 375: 2 stat columns on desktop,
+1 on phone, home still 3; no `[...]`/TODO text; link chain Work → eRateApp,
+Skylimit → eRateApp → /projects/ works; no horizontal scroll.
+`.playwright-mcp/erateapp/`.
+
+
 ## 2026-10-08 — Task 4: CaseStudy template, Skylimit moved onto it
 
 **Done:**

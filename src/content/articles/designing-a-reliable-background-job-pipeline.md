@@ -6,7 +6,7 @@ imageAlt: "Editorial diagram of an API sending jobs through a queue to two worke
 imageWidth: 240
 imageHeight: 150
 date: "2026-09-03"
-topic: Systems
+topic: Backend
 tags:
   - Backend
   - Queues

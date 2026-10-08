@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseStudy from '../../components/sections/CaseStudy.astro';
+import { erateapp as study } from '../../data/case-studies';
+---
+<BaseLayout title={study.seoTitle} description={study.seoDescription}>
+  <CaseStudy study={study} />
+</BaseLayout>

@@ -1,4 +1,5 @@
 ---
+import { existsSync } from 'node:fs';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Tag from '../../components/ui/Tag.astro';
@@ -14,8 +15,10 @@ export async function getStaticPaths() {
 const { article, all } = Astro.props;
 const { Content, headings } = await render(article);
 const toc = headings.filter((h) => h.depth === 2);
-// Social platforms don't render SVG previews: SVG covers use a PNG rendered next to them.
-const ogImage = article.data.image?.replace(/\.svg$/, '.png');
+// Link previews: platforms don't render SVG, and LinkedIn is unreliable with WebP, so og:image
+// uses the PNG/JPG copy saved next to the cover (1200px wide) when one exists. Pages keep the WebP.
+const shareCopy = article.data.image?.replace(/\.svg$/, '.png').replace(/\.webp$/, '.jpg');
+const ogImage = shareCopy && existsSync(`public${shareCopy}`) ? shareCopy : article.data.image;
 const related = all.filter((a) => a.id !== article.id && a.data.topic === article.data.topic).slice(0, 3);
 ---
 <BaseLayout title={article.data.title} description={article.data.description} ogImage={ogImage}>

@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Eyebrow from '../../components/ui/Eyebrow.astro';
-import Placeholder from '../../components/ui/Placeholder.astro';
 import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
 import { readingTime, formatDate, topics as allTopics } from '../../data/articles';
 
@@ -24,15 +23,13 @@ const topics = ['All', ...allTopics.filter((t) => rest.some((a) => a.data.topic 
 
   {featured ? (
     <a href={`/articles/${featured.id}/`} class="flex flex-wrap border-b border-line no-underline">
-      <div class="min-w-0 grow basis-105 md:border-r md:border-line">
-        <!-- Cover alt="": inside the link the title already names it; a long description would bloat the link name. -->
-        {featured.data.image ? (
+      {featured.data.image && (
+        <div class="min-w-0 grow basis-105 md:border-r md:border-line">
+          <!-- Cover alt="": inside the link the title already names it; a long description would bloat the link name. -->
           <img src={featured.data.image} alt="" width={featured.data.imageWidth} height={featured.data.imageHeight}
             decoding="async" class="aspect-16/10 h-full w-full object-cover" />
-        ) : (
-          <Placeholder label="[FEATURED ARTICLE IMAGE]" ratio="aspect-16/10" />
-        )}
-      </div>
+        </div>
+      )}
       <div class="flex min-w-0 grow basis-105 flex-col justify-center gap-4 px-5 py-12 md:px-8">
         <Eyebrow tone="primary">Featured · {featured.data.topic}</Eyebrow>
         <span class="font-display text-5xl font-bold tracking-tight">{featured.data.title}</span>
