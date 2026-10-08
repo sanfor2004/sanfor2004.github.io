@@ -1,5 +1,17 @@
 # Status
 
+## 2026-10-08 — apple-touch-icon dropped
+
+**Why:** owner: no need for it. It was also the one icon still out of step with
+the new `favicon.svg`.
+**Done:** removed `<link rel="apple-touch-icon">` from `BaseLayout.astro` and
+deleted `public/apple-touch-icon.png` (still in git history). Head icons are
+now `favicon.ico` + `favicon.svg` only. iPhone home screens fall back to a page
+screenshot if someone adds the site; no other change.
+**Verified:** `npm run verify` passed (0 errors); 0 built pages contain an
+apple-touch link, `dist/apple-touch-icon.png` is gone, the two `rel="icon"`
+links remain.
+
 ## 2026-10-08 — LinkedIn-safe share images, Backend topic, Automation draft
 
 **Done:**
