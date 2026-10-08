@@ -2,15 +2,21 @@
 import { stats } from '../../data/site';
 interface Props { items?: { value: string; label: string }[]; large?: boolean; note?: string }
 const { items = stats, large = false, note } = Astro.props;
-// One column per stat from sm up (full class names so Tailwind sees them).
-const cols = ['sm:grid-cols-1', 'sm:grid-cols-2', 'sm:grid-cols-3'][Math.min(items.length, 3) - 1];
+// Three stats stack until md: the "+" figures (53,000+, $1.35M+) are too wide for three columns below that.
+// Otherwise one column per stat from sm up. Full class names so Tailwind sees them.
+const three = items.length >= 3;
+const cols = three ? 'md:grid-cols-3' : items.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-1';
+const cell = three
+  ? 'flex flex-col gap-2 border-b border-line p-8 last-of-type:border-b-0 md:border-r md:border-b-0 md:last-of-type:border-r-0'
+  : 'flex flex-col gap-2 border-b border-line p-8 last-of-type:border-b-0 sm:border-r sm:border-b-0 sm:last-of-type:border-r-0';
+const noteSpan = three ? 'md:col-span-full' : 'sm:col-span-full';
 ---
 <section aria-label="Results" class:list={['grid border-b border-line', cols]}>
   {items.map((s) => (
-    <div class="flex flex-col gap-2 border-b border-line p-8 last-of-type:border-b-0 sm:border-r sm:border-b-0 sm:last-of-type:border-r-0">
-      <span class:list={['font-display font-bold tracking-tight', large ? 'text-number-lg' : 'text-number']}>{s.value}</span>
+    <div class={cell}>
+      <span class:list={['font-display font-bold tracking-tight', large ? 'text-number lg:text-number-lg' : 'text-number']}>{s.value}</span>
       <span class="text-sm text-muted">{s.label}</span>
     </div>
   ))}
-  {note && <p class="border-t border-line px-8 py-5 text-sm text-graphite sm:col-span-full">{note}</p>}
+  {note && <p class:list={['border-t border-line px-8 py-5 text-sm text-graphite', noteSpan]}>{note}</p>}
 </section>

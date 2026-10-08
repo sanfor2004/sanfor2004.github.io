@@ -117,9 +117,9 @@ export const artworks = [
 ];
 
 export const stats = [
-  { value: '5.4M', label: 'leads processed' },
-  { value: '53k', label: 'orders handled' },
-  { value: '$1.35M', label: 'in payments processed' },
+  { value: '5.4M+', label: 'leads processed' },
+  { value: '53,000+', label: 'orders handled' },
+  { value: '$1.35M+', label: 'in payments processed' },
 ];
 /** Context line under the home stats. Owner-approved; no company name on purpose. */
 export const statsNote = "Across 3+ years building a client's lead-gen, telephony and payments systems.";

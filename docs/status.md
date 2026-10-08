@@ -1,5 +1,40 @@
 # Status
 
+## 2026-10-09 — Owner fix list: 360Vision links, Skylimit numbers, learning-loop hidden
+
+**Done:**
+- **360Vision article:** `360vesion` → `360vision` in the GitHub link, the
+  `git clone` URL and `cd` line (3 places; the old name would not even match the
+  folder `git clone` creates). The "portfolio case study" link to
+  `/projects/360-vision/` is replaced by a link to `/projects/`.
+- **Redirect removed** (owner's call): `"/projects/360-vision": "/projects/"` in
+  `src/data/redirects.mjs` (that's where it lives; `astro.config.mjs` only
+  imports the file). Old links to `/projects/360-vision/` now 404.
+- **Skylimit numbers one way everywhere:** "5.4M+ leads", "53,000+ orders",
+  "$1.35M+ in payments processed": home stats (`site.ts`), /projects/ card,
+  /projects/skylimit/ (stats, results line, SEO description), the About
+  timeline line, and the unpublished distributing-leads article. Case-study stat
+  labels now match the home ones ("orders handled", "in payments processed").
+  Exact figures (53,341 orders) stay in the owner's records, not on the site.
+- **`building-a-technical-learning-loop`:** `draft: true`. Not built, not in RSS
+  or the sitemap; its /articles/ URL is gone. It was the only "Learning" article,
+  so the Learning filter button disappears until another one is published.
+- **Stats layout fix (needed by the longer numbers):** "53,000+" and "$1.35M+"
+  crossed the column divider on tablets (home at ~650px, case studies at
+  ~730–800px; "53,341+" already did on case studies at 768). `Stats.astro`: three
+  stats now stack until `md` (768) instead of `sm` (640), and the large variant
+  is 48px until `lg` (1024), then 56px. Two-stat and one-stat rows are unchanged.
+**Verified:** `npm run verify` passed (tokens + 0 errors). Built output: no
+page for the learning-loop article or `/projects/360-vision/`, RSS 31 items, 360
+article links to `/360vision` and `/projects/`. Stat tiles measured on home,
+Skylimit and eRateApp at 375 / 640 / 768 / 1024 / 1440: no number crosses its
+cell, no horizontal scroll, 1 column below 768, 3 from 768.
+**Known leftovers:**
+- `/blog/building-a-technical-learning-loop/` (old URL) still redirects, now to
+  a 404 until the article is published again (or point it at `/articles/`).
+- `src/content/projects/360-vision.md` still has the `360vesion` repo typo; no
+  page renders that collection, so nothing shows it.
+
 ## 2026-10-09 — Cal.com popup was dark, not on-brand (fixed)
 
 **Bug (owner screenshot):** the booking popup showed Cal's black/white default

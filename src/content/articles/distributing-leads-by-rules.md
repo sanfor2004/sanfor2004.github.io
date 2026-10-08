@@ -15,7 +15,7 @@ draft: true
 <!--
   DRAFT for Ahmed to review. It stays unpublished while `draft: true` (visible only in `npm run dev`).
   Every fact below comes from the Skylimit case study (src/data/case-studies.ts):
-  5M+ / 5.4M+ leads, 2,000+ accounts, 53,341+ orders, $1.35M in payments, rule-based distribution,
+  5M+ / 5.4M+ leads, 2,000+ accounts, 53,000+ orders, $1.35M+ in payments processed, rule-based distribution,
   dedup + validation, Twilio/Plivo calls, SMS and IVR, Stripe, reporting, team of 2 to 10,
   an estimated 48+ hours a week saved, 2022 – 2026.
   CHECK before publishing:
@@ -49,8 +49,8 @@ A rule answers one question: which account should get this lead, right now? In p
 
 Distribution doesn't live on its own. In the same platform:
 
-- **Orders** tied to accounts: 53,341+ of them over the years.
-- **Payments** through Stripe checkout, reconciled for every order: $1.35M in total.
+- **Orders** tied to accounts: 53,000+ of them over the years.
+- **Payments** through Stripe checkout, reconciled for every order: $1.35M+ in total.
 - **Calls, SMS and IVR** on Twilio and Plivo, inbound and outbound.
 - **Reporting**: the numbers the business ran on, without spreadsheets.
 
@@ -58,7 +58,7 @@ Keeping all of it in one system is what made the rules trustworthy. Each decisio
 
 ## What changed
 
-Over 2022 to 2026, the platform processed 5.4M+ leads, 53,341+ orders and $1.35M in payments, while the team ranged from 2 to 10 people. By our estimate, it saved more than 48 hours of manual work every week.
+Over 2022 to 2026, the platform processed 5.4M+ leads, 53,000+ orders and $1.35M+ in payments processed, while the team ranged from 2 to 10 people. By our estimate, it saved more than 48 hours of manual work every week.
 
 ## Wrapping up
 

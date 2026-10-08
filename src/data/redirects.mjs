@@ -83,7 +83,6 @@ export const legacyRedirects = {
   "/learning/patterns/template-method/ar": "/articles/design-pattern-template-method/",
   "/learning/patterns/visitor": "/articles/design-pattern-visitor/",
   "/learning/patterns/visitor/ar": "/articles/design-pattern-visitor/",
-  "/projects/360-vision": "/projects/",
   "/projects/fitness-coach-website": "/projects/",
   "/projects/multi-region-tag-translator": "/projects/",
   "/projects/php-hls-streamer": "/projects/",

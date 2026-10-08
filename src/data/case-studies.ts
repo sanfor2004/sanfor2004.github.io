@@ -32,7 +32,7 @@ export interface CaseStudy {
 export const skylimit: CaseStudy = {
   slug: 'skylimit',
   seoTitle: 'Case study: Skylimit lead-gen platform',
-  seoDescription: "How Sanfor built Skylimit's lead-generation and loan platform from scratch: 5.4M+ leads, 53,341+ orders, $1.35M in payments.",
+  seoDescription: "How Sanfor built Skylimit's lead-generation and loan platform from scratch: 5.4M+ leads, 53,000+ orders, $1.35M+ in payments processed.",
   headline: 'A lead-gen and loan platform, built from scratch.',
   intro: 'For Skylimit LLC, a Sacramento company, as their remote full-stack engineer: calls, texts, IVR, payments and reporting in one system.',
   client: 'Skylimit LLC · Sacramento, CA',
@@ -41,8 +41,8 @@ export const skylimit: CaseStudy = {
   stack: ['PHP', 'Twilio', 'Plivo', 'Stripe', 'IVR', 'MySQL'],
   stats: [
     { value: '5.4M+', label: 'leads processed' },
-    { value: '53,341+', label: 'orders' },
-    { value: '$1.35M', label: 'in payments' },
+    { value: '53,000+', label: 'orders handled' },
+    { value: '$1.35M+', label: 'in payments processed' },
   ],
   // From the owner (2026-10-08).
   problem: [
@@ -62,7 +62,7 @@ export const skylimit: CaseStudy = {
   // None (owner, 2026-10-08: not needed). Hidden while empty.
   screens: [],
   results: [
-    '5.4M+ leads processed, 53,341+ orders and $1.35M in payments through a system I built from an empty repo.',
+    '5.4M+ leads, 53,000+ orders and $1.35M+ in payments processed through a system I built from an empty repo.',
     // Owner's estimate ("maybe more than 48h per week"), so it is worded as one.
     'An estimated 48+ hours of manual work saved every week.',
   ],

@@ -19,7 +19,7 @@ export const categoryLabel: Record<ProjectCategory, string> = {
 
 /** Order matters: client work first, then products, then open source. */
 export const projects: Project[] = [
-  { slug: 'skylimit', category: 'client', title: 'Lead-gen & loan platform', subtitle: 'Skylimit LLC', result: 'Built from scratch: 5.4M+ leads, 53,341+ orders, $1.35M in payments.', tags: ['PHP', 'Twilio', 'Plivo', 'Stripe', 'IVR'], href: '/projects/skylimit/' },
+  { slug: 'skylimit', category: 'client', title: 'Lead-gen & loan platform', subtitle: 'Skylimit LLC', result: 'Built from scratch: 5.4M+ leads, 53,000+ orders, $1.35M+ in payments processed.', tags: ['PHP', 'Twilio', 'Plivo', 'Stripe', 'IVR'], href: '/projects/skylimit/' },
   { slug: 'erateapp', category: 'client', title: 'eRateApp.com', subtitle: 'School collaboration platform', result: 'Adopted by 200+ schools in its first two months.', tags: ['PHP', 'JavaScript', 'MySQL', 'WebSocket'], href: '/projects/erateapp/' },
   { slug: '360vision', category: 'product', title: '360Vision', subtitle: 'Browser-based 360° tour studio', result: 'Authoring, hotspots, floor plans and a viewer, end to end.', tags: ['Next.js', 'Three.js', 'Prisma', 'MySQL'], href: 'https://github.com/sanfor2004/360vision' },
   { slug: 'zomzam', category: 'product', title: 'Zomzam', subtitle: 'Professional operating system', result: 'Life, CRM and more on one identity. In progress.', tags: ['Product', 'Brand', 'Systems'] },

@@ -150,8 +150,8 @@ That distinction is a product lesson as much as a storage lesson: “portable me
 The repository documents Node.js 22 or newer. Start with the source:
 
 ```sh
-git clone https://github.com/sanfor2004/360vesion.git
-cd 360vesion
+git clone https://github.com/sanfor2004/360vision.git
+cd 360vision
 npm install
 npm run dev
 ```
@@ -204,6 +204,6 @@ No. Back up the tour documents and uploaded assets together. Complete media-pack
 
 ## Explore the source and related work
 
-[Explore 360Vision on GitHub](https://github.com/sanfor2004/360vesion) for setup and implementation. The [portfolio case study](/projects/360-vision/) gives a shorter project overview.
+[Explore 360Vision on GitHub](https://github.com/sanfor2004/360vision) for setup and implementation. More of my work is on the [projects page](/projects/).
 
 For related engineering notes, read [Designing a Reliable Background Job Pipeline](/articles/designing-a-reliable-background-job-pipeline/) and [How I Used AI, References, and Review Loops to Build Mint Woodland Pet](/articles/ai-reference-review-loops-mint-woodland-pet/). You can also [browse all writing](/articles/), [subscribe through RSS](/rss.xml), or [contact me](/contact/) about a project.
