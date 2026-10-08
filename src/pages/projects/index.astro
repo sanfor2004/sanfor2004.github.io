@@ -25,16 +25,21 @@ const pad = (n: number) => String(n).padStart(2, '0');
   </div>
 
   <section class="border-b border-line">
-    {projects.map((p, i) => (
-      <a href={p.href ?? '#'} data-category={p.category}
+    {projects.map((p, i) => {
+      // Rows link only when there is somewhere to go (case study or GitHub); external links open a new tab.
+      const Row = p.href ? 'a' : 'div';
+      const external = p.href?.startsWith('http');
+      return (
+      <Row href={p.href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined} data-category={p.category}
         class="project grid items-start gap-3 border-t border-line px-5 py-7 no-underline first:border-t-0 md:grid-project md:gap-6 md:px-8">
         <span class="hidden pt-1.5 text-sm text-muted md:block">{pad(i + 1)}</span>
         <span class="flex flex-col gap-1"><span class="font-display text-3xl font-semibold">{p.title}</span><span class="text-ui text-muted">{p.subtitle} · {categoryLabel[p.category]}</span></span>
         <span class="text-base font-light text-graphite">{p.result}</span>
         <span class="flex flex-wrap gap-1.5">{p.tags.map((t) => <Tag quiet>{t}</Tag>)}</span>
-        <span class="hidden pt-1.5 md:block"><ArrowUpRight /></span>
-      </a>
-    ))}
+        <span class="hidden pt-1.5 md:block">{p.href && <ArrowUpRight />}</span>
+      </Row>
+      );
+    })}
   </section>
 </BaseLayout>
 

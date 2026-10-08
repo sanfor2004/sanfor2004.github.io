@@ -1,5 +1,29 @@
 # Status
 
+## 2026-10-08 — Task 3: Work page leads with client results
+
+**Done:**
+- `projects.ts` order confirmed (client → product → open source; it already
+  was) and commented. Both client rows already carried a business result
+  (Skylimit: 5.4M+ leads / 53,341+ orders / $1.35M; eRateApp: 200+ schools in
+  two months); no wording changed.
+- **Dead links fixed:** every row except Skylimit linked to `#`. Rows now link
+  only when there is somewhere to go: Skylimit → case study; 360Vision and all
+  6 open-source rows → their GitHub repos (new tab), URLs checked against the
+  GitHub API (360Vision's old write-up had the typo `360vesion`). eRateApp
+  (until Task 5) and Zomzam render as plain rows, no arrow.
+- Skylimit case study's last link said "Next project: eRateApp.com" but went
+  to /projects/. Now "More work / All projects" until Task 5.
+- Home stats: new optional `note` on `Stats` (full-width row under the
+  numbers, hairline above). Text in `statsNote` (`site.ts`), owner-approved
+  without the company name: "Across 3+ years building a client's lead-gen,
+  telephony and payments systems." ("4 years" was dropped: Dec 2022 – Feb 2026.)
+  Stats cells use `last-of-type:` so the note doesn't break their borders.
+**Verified:** `npm run verify` passed; 1440 + 375: borders single (no doubles),
+filter counts 02/02/06/10, no horizontal scroll. `.playwright-mcp/task3/`.
+**Deployed earlier today:** 93f85ed (Tasks 1–2) is live.
+
+
 ## 2026-10-08 — Task 2: GA4 + booking events; sitemap checked
 
 **Done:**

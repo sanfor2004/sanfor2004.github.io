@@ -3,10 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/sections/Hero.astro';
 import Stats from '../components/sections/Stats.astro';
 import Story from '../components/sections/Story.astro';
+import { statsNote } from '../data/site';
 ---
 <!-- The story ends on its own CTA, so the shared band is off here. -->
 <BaseLayout cta={false}>
   <Hero />
-  <Stats />
+  <Stats note={statsNote} />
   <Story />
 </BaseLayout>

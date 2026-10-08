@@ -121,6 +121,8 @@ export const stats = [
   { value: '53k', label: 'orders handled' },
   { value: '$1.35M', label: 'in payments processed' },
 ];
+/** Context line under the home stats. Owner-approved; no company name on purpose. */
+export const statsNote = "Across 3+ years building a client's lead-gen, telephony and payments systems.";
 
 export const services = [
   { title: 'Backend & APIs', desc: 'Laravel, Django and Node services that stay fast under real traffic.' },
