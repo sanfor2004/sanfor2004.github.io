@@ -1,5 +1,30 @@
 # Status
 
+## 2026-10-08 — Task 4: CaseStudy template, Skylimit moved onto it
+
+**Done:**
+- `src/data/case-studies.ts`: `CaseStudy` type + `skylimit` object (client,
+  role, years, stack, stats, problem, myRole, built, screens, results,
+  optional quote, next). Skylimit's existing copy moved over unchanged.
+- `src/components/sections/CaseStudy.astro`: header + meta, Stats, numbered
+  sections, quote (text + name/role, 1px `line` border on the left, no card),
+  screens (image + 1px border + FigureCaption, no shadow), next link. Empty
+  blocks are skipped and numbers close up (Skylimit now shows 01 My role /
+  02 What I built / 03 Results). Section titles are now real `<h2>`s (same
+  look: base h2 = Syne bold).
+- `pages/projects/skylimit.astro` is now 8 lines: BaseLayout + CaseStudy.
+- **No placeholder text ships any more** (the old page showed
+  "[Describe the process before…]", "[Add team size…]", "[SCREENSHOT —
+  dashboard]", "[Add one sentence on hours saved…]").
+**Verified:** `npm run verify` passed; Skylimit at 1440 + 375 matches the old
+layout, no `[...]` text, no horizontal scroll. Every block (problem, 2 screens,
+quote) checked on a temporary test page with dummy data at 1440 + 375 (no box
+shadow, quote border 1px line), then the test page was deleted.
+`.playwright-mcp/case-study/`.
+**Waiting on owner (TODOs in `case-studies.ts`):** problem story, team size,
+hours saved, 2 screenshots, client quote.
+
+
 ## 2026-10-08 — Task 3: Work page leads with client results
 
 **Done:**

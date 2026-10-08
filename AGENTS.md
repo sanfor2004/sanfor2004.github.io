@@ -27,12 +27,13 @@ The live reference is the Sanfor2004 design system (Claude artifact). In code, t
 src/styles/global.css          tokens + base + named grids
 src/data/site.ts               nav, links, figures (paintings), stats, services, steps
 src/data/projects.ts           Work page list
+src/data/case-studies.ts       client case studies (CaseStudy objects; empty fields = hidden blocks)
 src/data/articles.ts           reading time + date helpers
 src/content/articles/*.md      articles (files starting with _ are ignored; _template.md)
 src/layouts/BaseLayout.astro   head/SEO, Cal.com loader, frame, navbar, CTA band, footer, mobile sticky CTA
 src/components/ui/             primitives
 src/components/layout/         Navbar, Footer, CtaBand, StickyCta, CalBooking, Analytics
-src/components/sections/       Hero, Stats, Story, ServiceRow, Step
+src/components/sections/       Hero, Stats, Story, ServiceRow, Step, CaseStudy
 src/components/islands/        React: DecryptedWord
 src/pages/                     index, about, projects/, projects/skylimit, articles/, articles/[...slug], art, contact, links, 404
 public/images/                 fig-01 … fig-05 paintings (WebP)
@@ -43,7 +44,7 @@ public/images/                 fig-01 … fig-05 paintings (WebP)
 
 ## Open placeholders
 Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
-- Skylimit problem story, team size, hours saved, 2 screenshots
+- Skylimit problem story, team size, hours saved, 2 screenshots, client quote (`skylimit` in `src/data/case-studies.ts`; hidden while empty)
 - Articles (replace `example-article.md`, keep `_template.md`)
 - Medium and year for each artwork on /art/ (only titles are known)
 
@@ -54,6 +55,7 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - 2026-10-06: **Gradient Waves removed** from the hero (with `ogl`, the `ember` token, and the dark-panel experiment). On a light page the effect only reads as a soft haze; it needs a dark ground to show its layered hills, and in Firefox it showed as a flat gradient. Hero is plain paper again.
 - 2026-10-06: **Launched from `main`** (the only branch; GitHub Pages deploys on push to main). Old live-site URLs (/blog, /learning/patterns, /tags, old /projects/<slug>) redirect via `src/data/redirects.mjs`, a snapshot that never needs new entries. RSS at /rss.xml; sitemap via @astrojs/sitemap.
 - 2026-10-07: **Newsletter signup removed** (Subscribe section on /articles/ and every article): no email service behind it, so the form did nothing. Readers can follow via RSS (/rss.xml). Add a section back only together with a real provider.
+- 2026-10-08: **Case study template** (`sections/CaseStudy.astro` + `data/case-studies.ts`). One page file per client study (`pages/projects/<slug>.astro`), no dynamic route over `content/projects/`; open source stays as list rows → GitHub. Empty blocks are hidden and the section numbers close up, so no placeholder text ships.
 - 2026-10-08: **GA4 re-wired** (`G-7B8D7CCSRQ`, the old site's property; `site.gaId`, not an env var). `layout/Analytics.astro`, production builds only. **No consent banner** (owner's decision, same as the old site; not GDPR-compliant for EU/UK visitors). Events: `book_call_click` and `book_call_booked`, param `cta_location` = the link's `data-cta` (`Button cta="..."`). Every new booking link must get a `cta` label.
 - 2026-10-08: **Calendly → Cal.com** (`site.bookCall` = cal.com/sanfor2004/free-call). `layout/CalBooking.astro` loads the embed on every page, themes it from our tokens at runtime (paper, ink, orange fill with ink text, hairlines, radius 0) and opens every link to `site.bookCall` as a popup (own click handler: Cal's `data-cal-link` didn't cancel `target=_blank`). /contact/ has the inline calendar; no sticky bar there. The popup's open/close animation and the "Cal.com" mark are Cal's, outside our motion/branding rules.
 - 2026-10-08: **Contact form removed** (it posted to `#`). Web3Forms was wired and tested, then dropped by the owner. /contact/ = Calendly (primary) + direct links. Add a form back only together with a real endpoint. Public email is now contact@sanfor2004.com everywhere (`site.email`).

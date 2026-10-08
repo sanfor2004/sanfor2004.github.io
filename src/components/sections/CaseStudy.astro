@@ -1,0 +1,83 @@
+---
+/*
+  Client case study, driven by one CaseStudy object (src/data/case-studies.ts).
+  Header + meta, stats, numbered sections (Problem, My role, What I built, Screens, Results),
+  optional quote, next-project link. Empty blocks are skipped and the numbering closes up.
+*/
+import Eyebrow from '../ui/Eyebrow.astro';
+import Tag from '../ui/Tag.astro';
+import FigureCaption from '../ui/FigureCaption.astro';
+import ArrowUpRight from '../ui/ArrowUpRight.astro';
+import Stats from './Stats.astro';
+import type { CaseStudy } from '../../data/case-studies';
+
+interface Props { study: CaseStudy }
+const { study } = Astro.props;
+const meta = [
+  { k: 'Client', v: study.client },
+  { k: 'Role', v: study.role },
+  { k: 'Years', v: study.years },
+];
+const sections = [
+  { key: 'problem', label: 'Problem', title: 'What was slow and manual', show: study.problem.length > 0 },
+  { key: 'role', label: 'My role', title: 'What I owned', show: study.myRole.length > 0 },
+  { key: 'built', label: 'What I built', title: 'The machine', show: study.built.length > 0 },
+  { key: 'screens', label: 'Screens', title: 'How it looked', show: study.screens.length > 0 },
+  { key: 'results', label: 'Results', title: 'What changed', show: study.results.length > 0 },
+].filter((s) => s.show);
+const paras: Record<string, string[]> = { problem: study.problem, role: study.myRole, results: study.results };
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<section class="flex flex-wrap border-b border-line">
+  <div class="flex min-w-0 grow basis-140 flex-col gap-6 px-5 pt-20 pb-14 md:border-r md:border-line md:px-8">
+    <a href="/projects/" class="text-sm text-muted no-underline">← All work</a>
+    <Eyebrow>Case study · Client work</Eyebrow>
+    <h1 class="max-w-head text-h1 tracking-tighter">{study.headline}</h1>
+    <p class="max-w-copy text-lg font-light text-graphite">{study.intro}</p>
+  </div>
+  <dl class="m-0 flex min-w-0 grow basis-84 flex-col gap-5 px-5 pb-14 md:px-8 md:pt-20">
+    {meta.map((m) => <div><dt class="text-xs uppercase tracking-label text-muted">{m.k}</dt><dd class="m-0 mt-1 text-md">{m.v}</dd></div>)}
+    <div><dt class="text-xs uppercase tracking-label text-muted">Stack</dt><dd class="m-0 mt-2 flex flex-wrap gap-1.5">{study.stack.map((s) => <Tag>{s}</Tag>)}</dd></div>
+  </dl>
+</section>
+
+{study.stats.length > 0 && <Stats large items={study.stats} />}
+
+{sections.map((s, i) => (
+  <section class="grid gap-8 border-b border-line px-5 py-16 md:grid-split md:gap-12 md:px-8">
+    <div class="flex flex-col gap-2"><Eyebrow tone="primary">{pad(i + 1)} · {s.label}</Eyebrow><h2 class="text-4xl">{s.title}</h2></div>
+    <div class="flex min-w-0 flex-col gap-5 text-md font-light leading-read text-graphite">
+      {paras[s.key]?.map((p) => <p class="max-w-read">{p}</p>)}
+      {s.key === 'built' && (
+        <ul class="m-0 list-none border-b border-line p-0">
+          {study.built.map((b) => <li class="border-t border-line py-3.5"><strong class="font-semibold text-ink">{b.title}</strong> — {b.desc}</li>)}
+        </ul>
+      )}
+      {s.key === 'screens' && (
+        <div class="grid gap-4 sm:grid-cols-2">
+          {study.screens.map((img) => (
+            <figure class="m-0 border border-line">
+              <img src={img.src} alt={img.alt} width={img.width} height={img.height} loading="lazy" decoding="async" class="h-auto w-full" />
+              <FigureCaption left={img.fig} />
+            </figure>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+))}
+
+{study.quote && (
+  <section class="grid gap-8 border-b border-line px-5 py-16 md:grid-split md:gap-12 md:px-8">
+    <div><Eyebrow>In their words</Eyebrow></div>
+    <figure class="m-0 flex max-w-read flex-col gap-5 border-l border-line pl-6">
+      <blockquote class="m-0 text-xl font-light leading-read text-ink">“{study.quote.text}”</blockquote>
+      <figcaption class="text-sm text-muted"><span class="text-ink">{study.quote.name}</span> · {study.quote.role}</figcaption>
+    </figure>
+  </section>
+)}
+
+<a href={study.next.href} class="flex items-center justify-between gap-6 border-b border-line px-5 py-12 no-underline md:px-8">
+  <span class="flex flex-col gap-2"><Eyebrow>{study.next.eyebrow}</Eyebrow><span class="font-display text-5xl font-bold">{study.next.title}</span></span>
+  <ArrowUpRight size={20} />
+</a>

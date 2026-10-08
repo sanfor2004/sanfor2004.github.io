@@ -1,65 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Eyebrow from '../../components/ui/Eyebrow.astro';
-import Tag from '../../components/ui/Tag.astro';
-import Placeholder from '../../components/ui/Placeholder.astro';
-import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
-import Stats from '../../components/sections/Stats.astro';
-
-const meta = [
-  { k: 'Client', v: 'Skylimit LLC · Sacramento, CA' },
-  { k: 'Role', v: 'Full-stack engineer (remote)' },
-  { k: 'Years', v: '2022 – 2026' },
-];
-const stack = ['PHP', 'Twilio', 'Plivo', 'Stripe', 'IVR', 'MySQL'];
-const built = [
-  ['Telephony layer', 'inbound and outbound calls, SMS and IVR flows on Twilio and Plivo.'],
-  ['Payments', 'Stripe checkout and reconciliation for every order.'],
-  ['Data cleaning', 'deduplication and validation so millions of leads stayed usable.'],
-  ['Reporting', 'the numbers the business ran on, without spreadsheets.'],
-];
+import CaseStudy from '../../components/sections/CaseStudy.astro';
+import { skylimit as study } from '../../data/case-studies';
 ---
-<BaseLayout title="Case study: Skylimit lead-gen platform" description="How Sanfor built Skylimit's lead-generation and loan platform from scratch: 5.4M+ leads, 53,341+ orders, $1.35M in payments.">
-  <section class="flex flex-wrap border-b border-line">
-    <div class="flex min-w-0 grow basis-140 flex-col gap-6 px-5 pt-20 pb-14 md:border-r md:border-line md:px-8">
-      <a href="/projects/" class="text-sm text-muted no-underline">← All work</a>
-      <Eyebrow>Case study · Client work</Eyebrow>
-      <h1 class="max-w-head text-h1 tracking-tighter">A lead-gen and loan platform, built from scratch.</h1>
-      <p class="max-w-copy text-lg font-light text-graphite">For Skylimit LLC, a Sacramento company, as their remote full-stack engineer: calls, texts, IVR, payments and reporting in one system.</p>
-    </div>
-    <dl class="m-0 flex min-w-0 grow basis-84 flex-col gap-5 px-5 pb-14 md:px-8 md:pt-20">
-      {meta.map((m) => <div><dt class="text-xs uppercase tracking-label text-muted">{m.k}</dt><dd class="m-0 mt-1 text-md">{m.v}</dd></div>)}
-      <div><dt class="text-xs uppercase tracking-label text-muted">Stack</dt><dd class="m-0 mt-2 flex flex-wrap gap-1.5">{stack.map((s) => <Tag>{s}</Tag>)}</dd></div>
-    </dl>
-  </section>
-
-  <Stats large items={[{ value: '5.4M+', label: 'leads processed' }, { value: '53,341+', label: 'orders' }, { value: '$1.35M', label: 'in payments' }]} />
-
-  {[
-    { n: '01 · Problem', t: 'What was slow and manual' },
-    { n: '02 · My role', t: 'What I owned' },
-    { n: '03 · What I built', t: 'The machine' },
-    { n: '04 · Screens', t: 'How it looked' },
-    { n: '05 · Results', t: 'What changed' },
-  ].map((b, i) => (
-    <section class="grid gap-8 border-b border-line px-5 py-16 md:grid-split md:gap-12 md:px-8">
-      <div class="flex flex-col gap-2"><Eyebrow tone="primary">{b.n}</Eyebrow><span class="font-display text-4xl font-bold">{b.t}</span></div>
-      <div class="flex flex-col gap-5 text-md font-light leading-read text-graphite">
-        {i === 0 && <p class="max-w-read">[Describe the process before: who handled the leads, what was done by hand, and what it cost the business in hours or missed calls.]</p>}
-        {i === 1 && <p class="max-w-read">I was the engineer behind the platform end to end: architecture, telephony and payment integrations, the data pipeline and the reporting. [Add team size and who you worked with.]</p>}
-        {i === 2 && (
-          <ul class="m-0 list-none border-b border-line p-0">
-            {built.map(([k, v]) => <li class="border-t border-line py-3.5"><strong class="font-semibold text-ink">{k}</strong> — {v}</li>)}
-          </ul>
-        )}
-        {i === 3 && <div class="grid gap-4 sm:grid-cols-2"><Placeholder label="[SCREENSHOT — dashboard]" ratio="aspect-16/10" /><Placeholder label="[SCREENSHOT — reporting]" ratio="aspect-16/10" /></div>}
-        {i === 4 && <p class="max-w-read">5.4M+ leads processed, 53,341+ orders and $1.35M in payments through a system I built from an empty repo. [Add one sentence on hours saved or what the team stopped doing by hand.]</p>}
-      </div>
-    </section>
-  ))}
-
-  <a href="/projects/" class="flex items-center justify-between gap-6 border-b border-line px-5 py-12 no-underline md:px-8">
-    <span class="flex flex-col gap-2"><Eyebrow>More work</Eyebrow><span class="font-display text-5xl font-bold">All projects</span></span>
-    <ArrowUpRight size={20} />
-  </a>
+<BaseLayout title={study.seoTitle} description={study.seoDescription}>
+  <CaseStudy study={study} />
 </BaseLayout>
