@@ -3,10 +3,25 @@ export const site = {
   url: 'https://sanfor2004.com',
   description:
     'Backend, automation, AI integration and payments that save businesses hours of manual work. By Ahmed (Sanfor), Alexandria.',
-  email: '2004.sanfor@gmail.com',
-  bookCall: 'https://calendly.com/sanfor2004',
+  email: 'contact@sanfor2004.com',
+  bookCall: 'https://cal.com/sanfor2004/free-call',
+  calLink: 'sanfor2004/free-call', // Cal.com embed: user/event
+  calNamespace: 'free-call',
+  gaId: 'G-7B8D7CCSRQ', // GA4 (public measurement ID)
   linkedin: 'https://www.linkedin.com/in/sanfor2004',
+  upwork: 'https://www.upwork.com/freelancers/~0108502d49f0acdd84',
+  contra: 'https://contra.com/sanfor2004',
   location: 'Alexandria, EG',
+};
+
+/** /contact/ direct links. */
+export const contact = {
+  links: [
+    { k: 'Email', v: site.email, href: `mailto:${site.email}` },
+    { k: 'LinkedIn', v: site.linkedin.replace('https://www.', ''), href: site.linkedin },
+    { k: 'Upwork', v: 'Hire me on Upwork', href: site.upwork },
+    { k: 'Contra', v: site.contra.replace('https://', ''), href: site.contra },
+  ],
 };
 
 export const nav = [
@@ -20,16 +35,16 @@ export const nav = [
 export const footerLinks = [
   { label: 'LinkedIn', href: site.linkedin },
   { label: 'GitHub', href: 'https://github.com/sanfor2004' },
-  { label: 'Upwork', href: 'https://www.upwork.com/freelancers/~0108502d49f0acdd84' },
+  { label: 'Upwork', href: site.upwork },
   { label: 'X', href: 'https://x.com/Sanfor2004_' },
   { label: 'YouTube', href: 'https://youtube.com/@sanfor2004' },
 ];
 
 export const linkGroups = [
   { name: 'Freelance', links: [
-    { label: 'Upwork', href: 'https://www.upwork.com/freelancers/~0108502d49f0acdd84' },
-    { label: 'Contra', href: 'https://contra.com/sanfor2004' },
-    { label: 'Calendly', href: 'https://calendly.com/sanfor2004' },
+    { label: 'Upwork', href: site.upwork },
+    { label: 'Contra', href: site.contra },
+    { label: 'Cal.com', href: site.bookCall },
   ]},
   { name: 'Writing', links: [
     { label: 'DEV', href: 'https://dev.to/sanfor2004' },

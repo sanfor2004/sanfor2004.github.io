@@ -10,6 +10,8 @@ import Navbar from '../components/layout/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
 import CtaBand from '../components/layout/CtaBand.astro';
 import StickyCta from '../components/layout/StickyCta.astro';
+import CalBooking from '../components/layout/CalBooking.astro';
+import Analytics from '../components/layout/Analytics.astro';
 
 interface Props {
   title?: string;
@@ -17,8 +19,9 @@ interface Props {
   ogImage?: string;
   cta?: boolean;   // final "Have manual work eating your week?" band
   chrome?: boolean; // navbar + sticky CTA (off for /links/)
+  sticky?: boolean; // phone sticky "Book a call" bar (off on /contact/, where the calendar is the page)
 }
-const { title, description = site.description, ogImage = '/og/default.png', cta = true, chrome = true } = Astro.props;
+const { title, description = site.description, ogImage = '/og/default.png', cta = true, chrome = true, sticky = true } = Astro.props;
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — Backend & automation engineer`;
 const canonical = new URL(Astro.url.pathname, site.url);
 ---
@@ -43,6 +46,8 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — Articles`} href="/rss.xml" />
+    <Analytics />
+    <CalBooking />
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-ink focus:p-3 focus:text-paper">Skip to content</a>
@@ -54,6 +59,6 @@ const canonical = new URL(Astro.url.pathname, site.url);
       {cta && <CtaBand />}
       <Footer />
     </div>
-    {chrome && <StickyCta />}
+    {chrome && sticky && <StickyCta />}
   </body>
 </html>

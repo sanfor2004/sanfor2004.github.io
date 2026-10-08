@@ -1,5 +1,69 @@
 # Status
 
+## 2026-10-08 — Task 2: GA4 + booking events; sitemap checked
+
+**Done:**
+- `layout/Analytics.astro` (in BaseLayout `<head>`): gtag.js for
+  `G-7B8D7CCSRQ` (owner reused the old site's property; `site.gaId`).
+  Production builds only (`import.meta.env.PROD`), so `npm run dev` sends
+  nothing. **No cookie banner**, owner's decision (GA4 sets cookies; EU/UK
+  consent law not met).
+- Events, sent from `CalBooking.astro`:
+  - `book_call_click` {cta_location}: navbar, navbar_menu, hero, story,
+    cta_band, sticky_bar, about, links_page ("other" for any untagged link,
+    e.g. Cal.com in the /links/ list).
+  - `book_call_booked` {cta_location}: Cal's `bookingSuccessfulV2` /
+    `bookingSuccessful`, counted once, credited to the button that opened the
+    popup; "contact_page" for the /contact/ inline calendar. **Not tested
+    end-to-end** (would need a real booking).
+  - The form-submission event is gone with the form; `book_call_booked`
+    replaces it.
+- `Button` gained an optional `cta` prop (→ `data-cta`).
+- `.env.example` rewritten: no env vars needed any more.
+**Verified:** `npm run verify` passed. Against `astro preview` (prod build)
+with GA hits intercepted (none reached Google): gtag loads with the right ID,
+page_view sent, all 8 CTAs send `book_call_click` with the right
+cta_location, popup still opens, 0 new tabs. Dev server: 0 GA tags. Live:
+`/sitemap-index.xml`, `/sitemap-0.xml` (40 URLs, same as the new build),
+`/robots.txt` (points at the sitemap) and the Google verification file all 200.
+**Owner to do in GA4:** register `cta_location` as a custom dimension, mark
+`book_call_booked` as a key event, then submit the sitemap in Search Console.
+
+
+## 2026-10-08 — /contact/: form removed, Calendly embed fixed, email → contact@sanfor2004.com
+
+**Done (Task 1 of the booked-calls plan):**
+- The "Or write to me" form (posted to `#`) is gone. A Web3Forms version was
+  built and tested, then dropped by the owner. /contact/ = Calendly (primary)
+  + Direct links (email, LinkedIn, Upwork, Contra), now in `contact.links`
+  (`site.ts`). Upwork/Contra URLs live once in `site.upwork` / `site.contra`.
+- `site.email` → `contact@sanfor2004.com` (footer + Contact). The gmail
+  address no longer appears anywhere in `src/`.
+- **Calendly bug fixed:** the embed's iframe was 150px tall inside a 680px box
+  (visitors saw a tiny scrolling strip), because the container used `min-h-170`
+  and Calendly's iframe is `height:100%`. Now `h-170`: iframe = 680px.
+**Verified:** `npm run verify` passed; 0 forms; inline calendar renders at
+1440 and 375; popup opens from hero, navbar, sticky bar and keyboard (Enter)
+with 0 new tabs and no navigation; no "calendly" left in `dist/`; no
+horizontal scroll. `.playwright-mcp/cal-embed/`.
+- **Calendly → Cal.com** (owner's choice; event "Free 30-minute call: what
+  can we automate?"). `site.bookCall` = `https://cal.com/sanfor2004/free-call`
+  (+ `calLink`, `calNamespace`). New `layout/CalBooking.astro` in BaseLayout's
+  `<head>`: Cal loader, theme from tokens read at runtime (no hex in source),
+  and one document click handler that opens the popup for every link to
+  `site.bookCall` (navbar, phone menu, hero, story, CTA band, sticky bar,
+  About, /links/). Cal's own `data-cal-link` trigger opened the popup *and* a
+  new tab (target=_blank isn't cancelled), hence our handler. Modifier/middle
+  clicks still open a tab; without JS the link opens cal.com.
+- /contact/: Cal inline calendar replaces Calendly (opens straight on the
+  date picker). New BaseLayout prop `sticky` (default true); /contact/ turns
+  the phone sticky bar off because it covered the calendar.
+- /links/ Freelance group: Calendly → Cal.com.
+- Footer: "Contact" link (→ /contact/) first in the footer nav, which is now
+  labelled "Footer" instead of "Social". Same tab, unlike the social links.
+**Next:** Task 2 (analytics). Search Console file
+`public/google803efb89b101b6da.html` is already deployed.
+
 ## 2026-10-07 — Newsletter signup removed
 
 **Why:** the "Get new articles by email" form posted to `#`; there was no

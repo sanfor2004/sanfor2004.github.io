@@ -6,8 +6,9 @@ interface Props {
   arrow?: boolean;
   full?: boolean;
   class?: string;
+  cta?: string; // analytics label for booking links (data-cta)
 }
-const { href, variant = 'primary', arrow = false, full = false, class: extra = '' } = Astro.props;
+const { href, variant = 'primary', arrow = false, full = false, class: extra = '', cta } = Astro.props;
 const variants = {
   primary: 'bg-primary text-ink hover:bg-ink hover:text-paper',
   ink: 'bg-ink text-paper hover:bg-primary hover:text-ink',
@@ -19,6 +20,7 @@ const external = href.startsWith('http');
   href={href}
   target={external ? '_blank' : undefined}
   rel={external ? 'noopener' : undefined}
+  data-cta={cta}
   class:list={[
     'inline-flex min-h-12 items-center justify-center gap-2 px-6 text-base font-medium no-underline transition-colors',
     variants[variant],

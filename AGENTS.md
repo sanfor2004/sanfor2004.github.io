@@ -29,9 +29,9 @@ src/data/site.ts               nav, links, figures (paintings), stats, services,
 src/data/projects.ts           Work page list
 src/data/articles.ts           reading time + date helpers
 src/content/articles/*.md      articles (files starting with _ are ignored; _template.md)
-src/layouts/BaseLayout.astro   head/SEO, frame, navbar, CTA band, footer, mobile sticky CTA
+src/layouts/BaseLayout.astro   head/SEO, Cal.com loader, frame, navbar, CTA band, footer, mobile sticky CTA
 src/components/ui/             primitives
-src/components/layout/         Navbar, Footer, CtaBand, StickyCta
+src/components/layout/         Navbar, Footer, CtaBand, StickyCta, CalBooking, Analytics
 src/components/sections/       Hero, Stats, Story, ServiceRow, Step
 src/components/islands/        React: DecryptedWord
 src/pages/                     index, about, projects/, projects/skylimit, articles/, articles/[...slug], art, contact, links, 404
@@ -46,8 +46,6 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - Skylimit problem story, team size, hours saved, 2 screenshots
 - Articles (replace `example-article.md`, keep `_template.md`)
 - Medium and year for each artwork on /art/ (only titles are known)
-- Contact form `action` endpoint (GitHub Pages can't process forms: use Formspree/Web3Forms or similar)
-- Budget ranges and reply time on /contact/
 
 ## Decisions log
 - 2026-10: Light mode "Paper & Ink"; Astro + Tailwind v4 + React islands; GitHub Pages with custom domain sanfor2004.com (no base path).
@@ -56,4 +54,7 @@ Search the repo for `[YEAR]`, `<Placeholder`, `TODO`:
 - 2026-10-06: **Gradient Waves removed** from the hero (with `ogl`, the `ember` token, and the dark-panel experiment). On a light page the effect only reads as a soft haze; it needs a dark ground to show its layered hills, and in Firefox it showed as a flat gradient. Hero is plain paper again.
 - 2026-10-06: **Launched from `main`** (the only branch; GitHub Pages deploys on push to main). Old live-site URLs (/blog, /learning/patterns, /tags, old /projects/<slug>) redirect via `src/data/redirects.mjs`, a snapshot that never needs new entries. RSS at /rss.xml; sitemap via @astrojs/sitemap.
 - 2026-10-07: **Newsletter signup removed** (Subscribe section on /articles/ and every article): no email service behind it, so the form did nothing. Readers can follow via RSS (/rss.xml). Add a section back only together with a real provider.
+- 2026-10-08: **GA4 re-wired** (`G-7B8D7CCSRQ`, the old site's property; `site.gaId`, not an env var). `layout/Analytics.astro`, production builds only. **No consent banner** (owner's decision, same as the old site; not GDPR-compliant for EU/UK visitors). Events: `book_call_click` and `book_call_booked`, param `cta_location` = the link's `data-cta` (`Button cta="..."`). Every new booking link must get a `cta` label.
+- 2026-10-08: **Calendly → Cal.com** (`site.bookCall` = cal.com/sanfor2004/free-call). `layout/CalBooking.astro` loads the embed on every page, themes it from our tokens at runtime (paper, ink, orange fill with ink text, hairlines, radius 0) and opens every link to `site.bookCall` as a popup (own click handler: Cal's `data-cal-link` didn't cancel `target=_blank`). /contact/ has the inline calendar; no sticky bar there. The popup's open/close animation and the "Cal.com" mark are Cal's, outside our motion/branding rules.
+- 2026-10-08: **Contact form removed** (it posted to `#`). Web3Forms was wired and tested, then dropped by the owner. /contact/ = Calendly (primary) + direct links. Add a form back only together with a real endpoint. Public email is now contact@sanfor2004.com everywhere (`site.email`).
 - 2026-10-06: React Bits **Side Rays** tried and removed (with `ogl`): like Gradient Waves, a light-on-dark WebGL effect that reads as a grey veil on paper. Replaced by our own **GradientBand** (`ui/GradientBand.astro`): light peach/orange linear gradient rising from the bottom of the hero's left column, slowly drifting sideways. Pure CSS, tokens only, still under reduced motion. Hero text stays muted/graphite (≥5.4:1 measured over it).

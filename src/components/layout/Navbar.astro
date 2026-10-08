@@ -18,7 +18,7 @@ const isActive = (href: string) => path.startsWith(href);
         class:list={['flex h-full items-center no-underline', isActive(item.href) && 'border-b-2 border-primary']}>{item.label}</a>
     ))}
   </nav>
-  <a href={site.bookCall} target="_blank" rel="noopener" class="hidden min-h-11 shrink-0 items-center gap-2 whitespace-nowrap bg-ink px-6 text-ui font-medium text-paper no-underline transition-colors hover:bg-primary hover:text-ink md:flex lg:px-8">
+  <a href={site.bookCall} target="_blank" rel="noopener" data-cta="navbar" class="hidden min-h-11 shrink-0 items-center gap-2 whitespace-nowrap bg-ink px-6 text-ui font-medium text-paper no-underline transition-colors hover:bg-primary hover:text-ink md:flex lg:px-8">
     Book a free call <ArrowUpRight size={16} />
   </a>
 
@@ -30,7 +30,7 @@ const isActive = (href: string) => path.startsWith(href);
       {nav.map((item) => (
         <a href={item.href} class="border-b border-line py-4 font-display text-3xl font-semibold no-underline">{item.label}</a>
       ))}
-      <a href={site.bookCall} target="_blank" rel="noopener" class="mt-6 flex min-h-12 items-center justify-center bg-primary font-medium text-ink no-underline">Book a free call</a>
+      <a href={site.bookCall} target="_blank" rel="noopener" data-cta="navbar_menu" class="mt-6 flex min-h-12 items-center justify-center bg-primary font-medium text-ink no-underline">Book a free call</a>
     </nav>
   </details>
 </header>
