@@ -1,5 +1,21 @@
 # Status
 
+## 2026-10-10 — Stats caption names Skylimit; owner facts in AGENTS.md
+
+**Done:**
+- Home stats note (`statsNote`, `site.ts`): "Across 3+ years at Skylimit LLC
+  building lead-gen, telephony and payments systems." (owner's wording; first
+  "4 years", changed to "3+ years" on 2026-10-11 to match Dec 2022 – Feb 2026).
+  Skylimit years are 2022 – 2026 on About, the case study and the
+  lead-distribution draft. No changes needed there.
+- /links/: all 8 profiles in the owner's list are already there, Contra
+  included. No change. Facebook, Twitch and Kick stay off.
+- AGENTS.md: new "About the owner" section (positioning, booking, emails,
+  proof points, profiles, platform rules, audit list). Stale "/contact/ =
+  Calendly" line in the decisions log now says Cal.com.
+**Verified:** `npm run verify` passed (0 errors). The caption renders on one row
+at 1440 and wraps to 2 lines at 375, with no horizontal scroll.
+
 ## 2026-10-09 — Owner fix list: 360Vision links, Skylimit numbers, learning-loop hidden
 
 **Done:**
