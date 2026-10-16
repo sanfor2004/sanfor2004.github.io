@@ -1,5 +1,22 @@
 # Status
 
+## 2026-10-16 — Article + LinkedIn kit: CVE-2026-96889 (librsvg use-after-free)
+
+**Done:**
+- New article `src/content/articles/cve-2026-96889-librsvg-use-after-free.md`
+  (topic Backend, published, dated 2026-10-16). Facts only from the CVE record,
+  NVD, Red Hat, RustSec RUSTSEC-2026-0305 and GNOME issue 1241, all linked at the
+  end. Red Hat says fixed upstream in 2.63.1, RustSec says 2.63.2; the article
+  names the gap and recommends 2.63.2+.
+- Cover `public/images/writing/cve-2026-96889-librsvg.svg` (1200 × 630 diagram)
+  plus `.png` share copy, rendered with Playwright. og:image points at the PNG.
+- LinkedIn kit `docs/linkedin/cve-2026-96889.md`: post copy, first comment with
+  the link, alt text, image to attach, and a claim-to-source table.
+**Verified:** `npm run verify` passed (0 errors). Checked at 1440 and 375, no
+horizontal scroll at 375 (a facts table overflowed on phones, so it became a list:
+article markdown has no table styles yet).
+**Next:** push to main (owner), then post on LinkedIn once the page is live.
+
 ## 2026-10-10 — Stats caption names Skylimit; owner facts in AGENTS.md
 
 **Done:**
