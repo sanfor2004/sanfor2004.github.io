@@ -60,6 +60,7 @@ export const linkGroups = [
   { name: 'Design & video', links: [
     { label: 'Behance', href: 'https://be.net/sanfor2004' },
     { label: 'Dribbble', href: 'https://dribbble.com/sanfor2004' },
+    { label: 'Pinterest', href: 'https://www.pinterest.com/Sanfor2004/' },
     { label: 'YouTube', href: 'https://youtube.com/@sanfor2004' },
   ]},
   { name: 'Social', links: [
