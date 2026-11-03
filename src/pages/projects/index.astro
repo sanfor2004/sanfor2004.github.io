@@ -4,10 +4,37 @@ import Eyebrow from '../../components/ui/Eyebrow.astro';
 import Tag from '../../components/ui/Tag.astro';
 import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
 import { projects, categoryLabel } from '../../data/projects';
+import { site } from '../../data/site';
 const filters = [['all', 'All'], ['client', 'Client work'], ['product', 'Products'], ['oss', 'Open source']] as const;
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <BaseLayout title="Work" description="Production platforms, products and open-source tools by Sanfor2004.">
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Projects, Products & Open-Source Software by Sanfor2004",
+    "itemListElement": projects.map((p, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "item": p.category === 'oss'
+        ? {
+            "@type": "SoftwareSourceCode",
+            "name": p.title,
+            "description": `${p.subtitle}. ${p.result}`,
+            "codeRepository": p.href,
+            "programmingLanguage": p.tags,
+            "author": { "@id": `${site.url}/#person` }
+          }
+        : {
+            "@type": "SoftwareApplication",
+            "name": p.title,
+            "applicationCategory": "BusinessApplication",
+            "description": `${p.subtitle}. ${p.result}`,
+            ...(p.href ? { "url": p.href.startsWith('http') ? p.href : `${site.url}${p.href}` } : {}),
+            "author": { "@id": `${site.url}/#person` }
+          }
+    }))
+  })} />
   <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
     <Eyebrow>Work</Eyebrow>
     <h1 class="max-w-head text-h1 tracking-tighter">Things I've built, for clients and for myself.</h1>

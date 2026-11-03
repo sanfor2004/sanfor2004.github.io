@@ -6,7 +6,7 @@ import Tag from '../../components/ui/Tag.astro';
 import Eyebrow from '../../components/ui/Eyebrow.astro';
 import ArrowUpRight from '../../components/ui/ArrowUpRight.astro';
 import { readingTime, formatDate } from '../../data/articles';
-import { portrait } from '../../data/site';
+import { site, portrait } from '../../data/site';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -20,21 +20,38 @@ const toc = headings.filter((h) => h.depth === 2);
 const shareCopy = article.data.image?.replace(/\.svg$/, '.png').replace(/\.webp$/, '.jpg');
 const ogImage = shareCopy && existsSync(`public${shareCopy}`) ? shareCopy : article.data.image;
 const related = all.filter((a) => a.id !== article.id && a.data.topic === article.data.topic).slice(0, 3);
+const articleUrl = `${site.url}/articles/${article.id}/`;
 ---
 <BaseLayout title={article.data.title} description={article.data.description} ogImage={ogImage}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "TechArticle",
-    "headline": article.data.title,
-    "description": article.data.description,
-    "datePublished": article.data.date.toISOString(),
-    "author": {
-      "@type": "Person",
-      "name": "Ahmed Abdelaziz Hanafy",
-      "alternateName": "Sanfor",
-      "url": "https://sanfor2004.com"
-    },
-    ...(ogImage ? { "image": new URL(ogImage, "https://sanfor2004.com").toString() } : {})
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "@id": `${articleUrl}#article`,
+        "headline": article.data.title,
+        "description": article.data.description,
+        "datePublished": article.data.date.toISOString(),
+        "mainEntityOfPage": articleUrl,
+        "articleSection": article.data.topic,
+        "keywords": article.data.tags,
+        "author": { "@id": `${site.url}/#person` },
+        "publisher": { "@id": `${site.url}/#person` },
+        ...(ogImage ? { "image": new URL(ogImage, site.url).toString() } : {})
+      },
+      ...(article.data.faqs.length > 0 ? [{
+        "@type": "FAQPage",
+        "@id": `${articleUrl}#faq-page`,
+        "mainEntity": article.data.faqs.map((faq) => ({
+          "@type": "Question",
+          "name": faq.q,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.a
+          }
+        }))
+      }] : [])
+    ]
   })} />
   <section class="flex flex-col gap-5 border-b border-line px-5 pt-20 pb-12 md:px-8">
     <a href="/articles/" class="text-sm text-muted no-underline">← All articles</a>
@@ -59,7 +76,30 @@ const related = all.filter((a) => a.id !== article.id && a.data.topic === articl
         <img src={article.data.image} alt={article.data.imageAlt ?? ''} width={article.data.imageWidth} height={article.data.imageHeight}
           fetchpriority="high" decoding="async" class="block h-auto w-full" />
       )}
+      {article.data.tldr && (
+        <aside aria-label="Key takeaway" class="border border-line p-6">
+          <Eyebrow tone="primary">TL;DR</Eyebrow>
+          <p class="mt-2 text-base font-light leading-read text-graphite">{article.data.tldr}</p>
+        </aside>
+      )}
       <Content />
+      {article.data.faqs.length > 0 && (
+        <section aria-label="Frequently asked questions" class="mt-12 border-t border-line pt-8">
+          <h2 class="text-3xl tracking-tight">Frequently asked questions</h2>
+          <div class="mt-4 flex flex-col border-t border-line">
+            {article.data.faqs.map((faq) => (
+              <details class="group border-b border-line py-4">
+                <summary class="flex cursor-pointer list-none items-baseline justify-between gap-4 font-display text-xl font-semibold text-ink">
+                  <span>{faq.q}</span>
+                  <span class="shrink-0 font-mono text-md text-muted group-open:hidden" aria-hidden="true">+</span>
+                  <span class="hidden shrink-0 font-mono text-md text-muted group-open:inline" aria-hidden="true">−</span>
+                </summary>
+                <p class="mt-2 text-base font-light leading-read text-graphite">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
       <div class="mt-12 flex items-center gap-5 border border-line p-6">
         <img src={portrait.avatar} alt="" width="64" height="64" loading="lazy" decoding="async" class="size-16 shrink-0" />
         <div class="flex flex-col gap-1">

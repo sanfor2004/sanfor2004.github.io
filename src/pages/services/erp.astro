@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Eyebrow from '../../components/ui/Eyebrow.astro';
 import Button from '../../components/ui/Button.astro';
 import ErpServices from '../../components/sections/ErpServices.astro';
+import { erpTiers, erpPlatforms, erpFaqs } from '../../data/erp-services';
 import { site } from '../../data/site';
 ---
 
@@ -10,6 +11,54 @@ import { site } from '../../data/site';
   title="ERP & Systems Integration"
   description="Custom ERP integrations, end-to-end setup, module customisation and system recovery. Odoo, SAP, Microsoft Dynamics 365 and NetSuite."
 >
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": `${site.url}/services/erp/#service`,
+        "name": "ERP & Systems Integration — Sanfor2004",
+        "url": `${site.url}/services/erp/`,
+        "description": "Custom ERP integrations, end-to-end setup, module customisation and system recovery for Odoo, SAP, Microsoft Dynamics 365 and Oracle NetSuite.",
+        "provider": { "@id": `${site.url}/#person` },
+        "areaServed": "Worldwide",
+        "knowsAbout": erpPlatforms.map((p) => p.label),
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "ERP Integration Service Tiers",
+          "itemListElement": erpTiers.map((tier, idx) => ({
+            "@type": "Offer",
+            "position": idx + 1,
+            "itemOffered": {
+              "@type": "Service",
+              "name": tier.title,
+              "description": `${tier.desc} Deliverables: ${tier.bullets.join('; ')}.`
+            }
+          }))
+        },
+        "potentialAction": {
+          "@type": "ReserveAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": site.bookCall
+          },
+          "name": "Book a free call"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${site.url}/services/erp/#faq-page`,
+        "mainEntity": erpFaqs.map((faq) => ({
+          "@type": "Question",
+          "name": faq.q,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.a
+          }
+        }))
+      }
+    ]
+  })} />
   <!-- Hero Section -->
   <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
     <Eyebrow>Services · ERP & Systems Integration</Eyebrow>

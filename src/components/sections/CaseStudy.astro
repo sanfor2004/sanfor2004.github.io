@@ -9,6 +9,7 @@ import Tag from '../ui/Tag.astro';
 import FigureCaption from '../ui/FigureCaption.astro';
 import ArrowUpRight from '../ui/ArrowUpRight.astro';
 import Stats from './Stats.astro';
+import { site } from '../../data/site';
 import type { CaseStudy } from '../../data/case-studies';
 
 interface Props { study: CaseStudy }
@@ -28,6 +29,23 @@ const sections = [
 const paras: Record<string, string[]> = { problem: study.problem, role: study.myRole, results: study.results };
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": study.headline,
+  "name": study.seoTitle,
+  "description": study.seoDescription,
+  "author": { "@id": `${site.url}/#person` },
+  "publisher": { "@id": `${site.url}/#person` },
+  "mainEntityOfPage": `${site.url}/projects/${study.slug}/`,
+  "keywords": study.stack,
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": study.client,
+    "applicationCategory": "BusinessApplication",
+    "description": `${study.intro} Results: ${study.results.join(' ')}`
+  }
+})} />
 <section class="flex flex-wrap border-b border-line">
   <div class="flex min-w-0 grow basis-140 flex-col gap-6 px-5 pt-20 pb-14 md:border-r md:border-line md:px-8">
     <a href="/projects/" class="text-sm text-muted no-underline">← All work</a>

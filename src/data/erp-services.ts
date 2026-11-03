@@ -74,3 +74,32 @@ export const erpTiers: ErpTier[] = [
   },
 ];
 
+export interface ErpFaq {
+  q: string;
+  a: string;
+}
+
+export const erpFaqs: ErpFaq[] = [
+  {
+    q: 'Which ERP platforms do you integrate and customise?',
+    a: 'I work across Odoo, SAP, Microsoft Dynamics 365 and Oracle NetSuite, connecting them with e-commerce platforms (Shopify, WooCommerce), payment processors (Stripe), telephony (Twilio, Plivo), e-invoicing standards (UBL, Factur-X, ZUGFeRD) and custom REST or SOAP APIs.',
+  },
+  {
+    q: 'Can you fix a broken ERP sync or migration without rebuilding from scratch?',
+    a: 'Yes. Tier 04 covers migration recovery and maintenance: diagnosing silent webhook failures, profiling database and queue bottlenecks, adding idempotent retry and dead-letter handling, and tuning PostgreSQL or MySQL queries so your existing integration holds up under production load.',
+  },
+  {
+    q: 'How do you prevent duplicate orders or lost data between Shopify and an ERP?',
+    a: 'Every connector is built around idempotency keys, verified webhook signatures, persistent retry queues with exponential back-off and dead-letter alerting. If an ERP endpoint times out or rate-limits, events are queued and replayed cleanly without duplicating orders or invoices.',
+  },
+  {
+    q: 'Do you build custom Odoo modules and QWeb PDF reports?',
+    a: 'Yes. I write custom Python modules on Odoo ORM (models, views, wizards, scheduled actions, multi-tier purchase and expense approval rules) and custom QWeb PDF layouts for invoices, delivery slips and purchase orders—isolated in clean add-on modules so upgrades stay straightforward.',
+  },
+  {
+    q: 'How does an ERP project start and how is pricing structured?',
+    a: 'We start with a free call on Cal.com where you walk me through the workflow or broken sync. You then receive a short written plan with a clear scope, timeline and fixed price. Once delivered, all code and documentation are yours to keep with no vendor lock-in.',
+  },
+];
+
+

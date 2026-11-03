@@ -7,7 +7,7 @@ import OdooLogo from '../ui/logos/OdooLogo.astro';
 import SapLogo from '../ui/logos/SapLogo.astro';
 import D365Logo from '../ui/logos/D365Logo.astro';
 import NetsuiteLogo from '../ui/logos/NetsuiteLogo.astro';
-import { erpTiers, erpPlatforms, type PlatformId } from '../../data/erp-services';
+import { erpTiers, erpPlatforms, erpFaqs, type PlatformId } from '../../data/erp-services';
 import { site } from '../../data/site';
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -79,6 +79,26 @@ const logoMap: Record<PlatformId, any> = {
       </div>
     </div>
   ))}
+</section>
+
+<!-- FAQ Section (AEO) -->
+<section aria-label="Frequently asked questions" class="grid gap-8 border-b border-line px-5 py-16 md:grid-split md:gap-12 md:px-8">
+  <div class="flex flex-col gap-3">
+    <Eyebrow tone="primary">Common questions</Eyebrow>
+    <h2 class="text-h2 tracking-tight">ERP integration FAQ.</h2>
+  </div>
+  <div class="flex min-w-0 flex-col border-t border-line">
+    {erpFaqs.map((faq) => (
+      <details class="group border-b border-line py-5">
+        <summary class="flex cursor-pointer list-none items-baseline justify-between gap-6 font-display text-xl font-semibold tracking-tight text-ink">
+          <span>{faq.q}</span>
+          <span class="shrink-0 font-mono text-md text-muted group-open:hidden" aria-hidden="true">+</span>
+          <span class="hidden shrink-0 font-mono text-md text-muted group-open:inline" aria-hidden="true">−</span>
+        </summary>
+        <p class="mt-3 max-w-read text-base font-light leading-read text-graphite">{faq.a}</p>
+      </details>
+    ))}
+  </div>
 </section>
 
 <!-- Bottom CTA Band -->

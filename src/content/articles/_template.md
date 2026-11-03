@@ -9,6 +9,11 @@ description: "[One or two sentences on what the reader will learn.]"
 date: 2026-10-05
 topic: Backend
 tags: ["[Tag]"]
+# Optional AEO fields (top TL;DR summary box + bottom FAQ with FAQPage JSON-LD):
+# tldr: "[40-60 word direct answer or summary for answer engines.]"
+# faqs:
+#   - q: "[Question a developer or client asks?]"
+#     a: "[Direct 1-3 sentence answer.]"
 featured: false
 draft: true
 ---

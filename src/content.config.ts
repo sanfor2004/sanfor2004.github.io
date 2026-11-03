@@ -19,6 +19,8 @@ const articles = defineCollection({
     // The list lives in src/data/articles.ts (shared with the /articles/ filter).
     topic: z.enum(topics),
     tags: z.array(z.string()).default([]),
+    tldr: z.string().optional(),
+    faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
@@ -40,6 +42,8 @@ const projects = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
+    tldr: z.string().optional(),
+    faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     draft: z.boolean().default(false),
     status: z.string(),
     role: z.string(),
