@@ -1,0 +1,24 @@
+---
+import Eyebrow from '../ui/Eyebrow.astro';
+import { clients } from '../../data/site';
+---
+<!-- Trusted by: centered text wordmarks (Syne) linking to each client, ending in "and more". -->
+<section aria-label="Trusted by" class="flex flex-col items-center gap-5 border-b border-line px-5 py-8 md:px-8">
+  <Eyebrow>Trusted by</Eyebrow>
+  <ul class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+    {clients.map((c) => (
+      <li>
+        <a
+          href={c.href}
+          target="_blank"
+          rel="noopener"
+          class="font-display text-2xl font-semibold tracking-tight text-ink transition-colors hover:text-primary-text focus-visible:text-primary-text"
+        >
+          {c.name}
+        </a>
+      </li>
+    ))}
+    <li class="text-sm text-muted">and more</li>
+  </ul>
+</section>
+

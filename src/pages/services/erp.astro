@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import Button from '../../components/ui/Button.astro';
+import ErpServices from '../../components/sections/ErpServices.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout
+  title="ERP & Systems Integration"
+  description="Custom ERP integrations, end-to-end setup, module customisation and system recovery. Odoo, SAP, Microsoft Dynamics 365 and NetSuite."
+>
+  <!-- Hero Section -->
+  <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
+    <Eyebrow>Services · ERP & Systems Integration</Eyebrow>
+    <h1 class="max-w-head text-h1 tracking-tighter">
+      ERP integrations, setup and recovery.
+    </h1>
+    <p class="max-w-copy text-lg font-light text-graphite">
+      Whether you're connecting Shopify to Odoo for the first time or fixing a sync that went silent three weeks ago — I build, configure and maintain ERP systems that run quietly and reliably.
+    </p>
+    <div class="flex flex-wrap gap-4">
+      <Button href={site.bookCall} cta="erp_page_hero">Book a free call</Button>
+      <Button href="/projects/" variant="outline" arrow>See the work</Button>
+    </div>
+  </section>
+
+  <!-- Service Tiers & Details -->
+  <ErpServices />
+</BaseLayout>
+

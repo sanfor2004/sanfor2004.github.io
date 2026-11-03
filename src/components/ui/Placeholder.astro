@@ -1,6 +1,6 @@
 ---
 // Dotted stand-in for content Ahmed still has to supply. Search the repo for <Placeholder to find them all.
-interface Props { label: string; ratio?: string; class?: string }
+export interface Props { label: string; ratio?: string; class?: string }
 const { label, ratio = 'aspect-4/5', class: extra = '' } = Astro.props;
 ---
 <div class:list={['placeholder flex items-center justify-center p-4 text-center text-sm text-graphite', ratio, extra]}>

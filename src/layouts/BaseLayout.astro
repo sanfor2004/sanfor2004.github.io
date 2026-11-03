@@ -47,6 +47,38 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <meta name="p:domain_verify" content="36fa3b800b5697c14c96fbf621830c8b" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — Articles`} href="/rss.xml" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": `${site.url}/#website`,
+          "url": site.url,
+          "name": site.name,
+          "description": site.description
+        },
+        {
+          "@type": "Person",
+          "@id": `${site.url}/#person`,
+          "name": "Ahmed Abdelaziz Hanafy",
+          "alternateName": "Sanfor",
+          "jobTitle": "Backend & Automation Engineer",
+          "url": site.url,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Alexandria",
+            "addressCountry": "EG"
+          },
+          "sameAs": [
+            site.linkedin,
+            "https://github.com/sanfor2004",
+            site.upwork,
+            site.contra,
+            "https://x.com/Sanfor2004_"
+          ]
+        }
+      ]
+    })} />
     <Analytics />
     <CalBooking />
   </head>

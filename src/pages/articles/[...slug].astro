@@ -22,6 +22,20 @@ const ogImage = shareCopy && existsSync(`public${shareCopy}`) ? shareCopy : arti
 const related = all.filter((a) => a.id !== article.id && a.data.topic === article.data.topic).slice(0, 3);
 ---
 <BaseLayout title={article.data.title} description={article.data.description} ogImage={ogImage}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": article.data.title,
+    "description": article.data.description,
+    "datePublished": article.data.date.toISOString(),
+    "author": {
+      "@type": "Person",
+      "name": "Ahmed Abdelaziz Hanafy",
+      "alternateName": "Sanfor",
+      "url": "https://sanfor2004.com"
+    },
+    ...(ogImage ? { "image": new URL(ogImage, "https://sanfor2004.com").toString() } : {})
+  })} />
   <section class="flex flex-col gap-5 border-b border-line px-5 pt-20 pb-12 md:px-8">
     <a href="/articles/" class="text-sm text-muted no-underline">← All articles</a>
     <div class="flex flex-wrap gap-2"><Tag>{article.data.topic}</Tag>{article.data.tags.map((t) => <Tag>{t}</Tag>)}</div>

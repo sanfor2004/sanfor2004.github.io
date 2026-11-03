@@ -1,0 +1,21 @@
+---
+// Official Oracle NetSuite brand logo (from user image).
+// Uniform visual sizing and grayscale hover transition.
+interface Props { class?: string; size?: 'sm' | 'md' }
+const { class: extra = '', size = 'md' } = Astro.props;
+// NetSuite is wider (aspect 4.19) so max-w-32 on md gives proportional scaling
+const sizeClass = size === 'sm' ? 'h-5 max-w-24' : 'h-7 max-w-32';
+---
+<img
+  src="/images/logos/netsuite.webp"
+  alt="Oracle NetSuite"
+  width="884"
+  height="211"
+  loading="lazy"
+  decoding="async"
+  class:list={[
+    'w-auto object-contain filter grayscale contrast-125 opacity-70 transition-all duration-200 hover:filter-none hover:opacity-100',
+    sizeClass,
+    extra,
+  ]}
+/>

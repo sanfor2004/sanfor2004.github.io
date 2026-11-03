@@ -1,0 +1,21 @@
+---
+// Official SAP brand logo (from user image).
+// Uniform visual sizing and grayscale hover transition.
+interface Props { class?: string; size?: 'sm' | 'md' }
+const { class: extra = '', size = 'md' } = Astro.props;
+// SAP trapezoid is squarer (aspect 2.01) so h-6 / h-4 balances visual weight with wider wordmarks
+const sizeClass = size === 'sm' ? 'h-4 max-w-16' : 'h-6 max-w-24';
+---
+<img
+  src="/images/logos/sap.webp"
+  alt="SAP"
+  width="357"
+  height="178"
+  loading="lazy"
+  decoding="async"
+  class:list={[
+    'w-auto object-contain filter grayscale contrast-125 opacity-70 transition-all duration-200 hover:filter-none hover:opacity-100',
+    sizeClass,
+    extra,
+  ]}
+/>

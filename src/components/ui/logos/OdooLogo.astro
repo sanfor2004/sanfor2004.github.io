@@ -1,0 +1,20 @@
+---
+// Official Odoo brand logo (from user image).
+// Uniform visual sizing and grayscale hover transition.
+interface Props { class?: string; size?: 'sm' | 'md' }
+const { class: extra = '', size = 'md' } = Astro.props;
+const sizeClass = size === 'sm' ? 'h-5 max-w-20' : 'h-7 max-w-28';
+---
+<img
+  src="/images/logos/odoo.webp"
+  alt="Odoo"
+  width="623"
+  height="199"
+  loading="lazy"
+  decoding="async"
+  class:list={[
+    'w-auto object-contain filter grayscale contrast-125 opacity-70 transition-all duration-200 hover:filter-none hover:opacity-100',
+    sizeClass,
+    extra,
+  ]}
+/>

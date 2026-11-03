@@ -1,0 +1,94 @@
+---
+import Eyebrow from '../ui/Eyebrow.astro';
+import Button from '../ui/Button.astro';
+import Tag from '../ui/Tag.astro';
+import ArrowUpRight from '../ui/ArrowUpRight.astro';
+import OdooLogo from '../ui/logos/OdooLogo.astro';
+import SapLogo from '../ui/logos/SapLogo.astro';
+import D365Logo from '../ui/logos/D365Logo.astro';
+import NetsuiteLogo from '../ui/logos/NetsuiteLogo.astro';
+import { erpTiers, erpPlatforms, type PlatformId } from '../../data/erp-services';
+import { site } from '../../data/site';
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const logoMap: Record<PlatformId, any> = {
+  odoo: OdooLogo,
+  sap: SapLogo,
+  d365: D365Logo,
+  netsuite: NetsuiteLogo,
+};
+---
+
+<!-- Platform Logos Strip -->
+<div class="flex flex-wrap items-center justify-center gap-6 border-b border-line px-5 py-6 md:px-8" aria-label="Supported platforms">
+  <div class="flex flex-wrap items-center justify-center gap-8">
+    {erpPlatforms.map((p) => {
+      const LogoComponent = logoMap[p.id];
+      return (
+        <span class="inline-flex items-center" title={p.label}>
+          <LogoComponent size="md" />
+          <span class="sr-only">{p.label}</span>
+        </span>
+      );
+    })}
+  </div>
+</div>
+
+<!-- Service Tier Grid -->
+<section aria-label="Service tiers" class="grid border-b border-line md:grid-erp-tiers">
+  {erpTiers.map((tier, i) => (
+    <div class="flex flex-col gap-6 border-b border-line p-6 last:border-b-0 md:p-8 md:[&:nth-child(odd)]:border-r md:[&:nth-last-child(-n+2)]:border-b-0">
+      <!-- Tier number + title -->
+      <div class="flex flex-col gap-3">
+        <span class="text-xs uppercase tracking-label text-primary-text">Tier {pad(i + 1)}</span>
+        <h3 class="font-display text-3xl font-semibold tracking-tight">{tier.title}</h3>
+        <p class="text-base font-light text-graphite">{tier.desc}</p>
+      </div>
+
+      <!-- Deliverable bullets -->
+      <ul class="m-0 list-none border-t border-line p-0 pt-4">
+        {tier.bullets.map((b) => (
+          <li class="flex items-start gap-3 border-b border-line py-3 text-sm text-graphite last:border-b-0">
+            <span class="mt-0.5 text-primary-text"><ArrowUpRight size={16} /></span>
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Tech stack tags -->
+      <div class="flex flex-wrap gap-1.5 pt-2">
+        {tier.tags.map((t) => <Tag quiet>{t}</Tag>)}
+      </div>
+
+      <!-- Tier platform indicators -->
+      <div class="mt-auto flex items-center gap-5 border-t border-line pt-5" aria-label={`Platforms for ${tier.title}`}>
+        <span class="text-xs uppercase tracking-label text-muted">Target:</span>
+        <div class="flex items-center gap-4 text-muted">
+          {tier.platforms.map((pid) => {
+            const LogoComponent = logoMap[pid];
+            const platformInfo = erpPlatforms.find((p) => p.id === pid);
+            return (
+              <span class="inline-flex items-center" title={platformInfo?.label}>
+                <LogoComponent size="sm" />
+                <span class="sr-only">{platformInfo?.label}</span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  ))}
+</section>
+
+<!-- Bottom CTA Band -->
+<div class="flex flex-wrap items-center justify-between gap-6 border-b border-line px-5 py-12 md:px-8">
+  <div class="flex flex-col gap-2">
+    <Eyebrow tone="primary">Get started</Eyebrow>
+    <span class="max-w-head font-display text-h2 font-bold tracking-tight">
+      Ready to untangle your ERP stack?
+    </span>
+  </div>
+  <Button href={site.bookCall} cta="erp_services_bottom">Book a free call</Button>
+</div>
+

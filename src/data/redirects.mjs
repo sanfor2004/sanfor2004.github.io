@@ -5,7 +5,7 @@ export const legacyRedirects = {
   "/blog": "/articles/",
   "/blog/360vision-nextjs-virtual-tour-studio": "/articles/360vision-nextjs-virtual-tour-studio/",
   "/blog/ai-reference-review-loops-mint-woodland-pet": "/articles/ai-reference-review-loops-mint-woodland-pet/",
-  "/blog/building-a-technical-learning-loop": "/articles/building-a-technical-learning-loop/",
+  "/blog/building-a-technical-learning-loop": "/articles/",
   "/blog/cmake-explained-for-beginners": "/articles/cmake-explained-for-beginners/",
   "/blog/cpp-discord-bot-dpp": "/articles/cpp-discord-bot-dpp/",
   "/blog/design-pattern-abstract-factory": "/articles/design-pattern-abstract-factory/",

@@ -24,8 +24,10 @@ export const contact = {
   ],
 };
 
-export const nav = [
+export const nav: { label: string; href: string; short?: string }[] = [
   { label: 'About', href: '/about/' },
+  // `short` shows on tablet widths (768–1023px), where the full label pushes the CTA off the row.
+  { label: 'ERP Services', short: 'ERP', href: '/services/erp/' },
   { label: 'Work', href: '/projects/' },
   { label: 'Articles', href: '/articles/' },
   { label: 'Art', href: '/art/' },
@@ -124,6 +126,13 @@ export const stats = [
 ];
 /** Context line under the home stats. Owner's wording (2026-10-10); years match About's Skylimit 2022 – 2026. */
 export const statsNote = 'Across 3+ years at Skylimit LLC building lead-gen, telephony and payments systems.';
+
+// Home "Trusted by" strip: company wordmarks linking out, followed by "and more".
+export const clients = [
+  { name: 'ErateApp', href: 'http://erateapp.com/' },
+  { name: 'Skylimit', href: 'https://skylimitapp.com/' },
+  { name: 'Isomorphic', href: 'https://theisomorphic.com/' },
+];
 
 export const services = [
   { title: 'Backend & APIs', desc: 'Laravel, Django and Node services that stay fast under real traffic.' },

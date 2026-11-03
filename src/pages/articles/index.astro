@@ -41,8 +41,13 @@ const topics = ['All', ...allTopics.filter((t) => rest.some((a) => a.data.topic 
     <p class="border-b border-line px-5 py-12 text-lg font-light text-graphite md:px-8">The first article is on its way.</p>
   )}
 
-  <div role="group" aria-label="Filter by topic" class="flex flex-wrap gap-2 px-5 py-5 md:px-8">
-    {topics.map((t, i) => <button type="button" data-topic={t} aria-pressed={i === 0 ? 'true' : 'false'} class="filter min-h-10 cursor-pointer border border-line px-4 text-ui font-medium">{t}</button>)}
+  <div class="flex flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-8">
+    <div role="group" aria-label="Filter by topic" class="flex flex-wrap gap-2">
+      {topics.map((t, i) => <button type="button" data-topic={t} aria-pressed={i === 0 ? 'true' : 'false'} class="filter min-h-10 cursor-pointer border border-line px-4 text-ui font-medium">{t}</button>)}
+    </div>
+    <a href="/rss.xml" class="inline-flex items-center gap-1.5 text-xs uppercase tracking-label text-muted no-underline hover:text-ink">
+      RSS Feed <ArrowUpRight size={16} />
+    </a>
   </div>
   <section class="border-b border-line">
     {rest.map((a) => (
