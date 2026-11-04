@@ -54,6 +54,20 @@ const { calLink, calNamespace: ns, bookCall } = site;
         },
       },
     });
+
+    // Ensure any Cal modal or inline iframe immediately receives solid paper ground and line border
+    const paintIframes = () => {
+      const paper = t("paper");
+      const line = t("line");
+      document.querySelectorAll("cal-modal-box iframe, iframe.cal-embed").forEach((f) => {
+        if (f instanceof HTMLElement) {
+          f.style.backgroundColor = paper;
+          f.style.border = `1px solid ${line}`;
+        }
+      });
+    };
+    paintIframes();
+    new MutationObserver(paintIframes).observe(document.body, { childList: true, subtree: true });
   });
 
   // GA4 events (Analytics.astro; window.gtag only exists in production builds).
@@ -86,3 +100,19 @@ const { calLink, calNamespace: ns, bookCall } = site;
   };
   for (const action of ["bookingSuccessfulV2", "bookingSuccessful"]) Cal.ns[ns]("on", { action, callback: onBooked });
 </script>
+
+<style is:global>
+  /* Ensure Cal.com modal popup iframe and host component have solid paper ground */
+  cal-modal-box {
+    --cal-bg: var(--color-paper);
+    --cal-bg-emphasis: var(--color-paper-deep);
+    --cal-bg-subtle: var(--color-paper-deep);
+    --cal-bg-muted: var(--color-paper);
+    --cal-border: var(--color-line);
+  }
+  cal-modal-box iframe,
+  iframe.cal-embed {
+    background-color: var(--color-paper) !important;
+    border: 1px solid var(--color-line) !important;
+  }
+</style>
