@@ -3,6 +3,8 @@
   Cal.com booking, site-wide. Loads the embed once (in <head>) and:
   - themes it with our tokens (read from CSS at runtime, so no raw colours here):
     paper ground, ink text, orange fill with ink text, hairlines, square corners;
+  - applies theme tokens to both light and dark modes to guarantee the calendar
+    window container always has a solid paper ground even on dark system preferences;
   - turns every link to site.bookCall into a popup trigger. The href stays, so
     without JS the link still opens the booking page.
   /contact/ adds an inline calendar on the same namespace (see contact.astro).
@@ -23,51 +25,39 @@ const { calLink, calNamespace: ns, bookCall } = site;
   document.addEventListener("DOMContentLoaded", () => {
     const css = getComputedStyle(document.documentElement);
     const t = (name) => css.getPropertyValue(`--color-${name}`).trim();
+    const themeTokens = {
+      "cal-brand": t("primary"),
+      "cal-brand-emphasis": t("primary"),
+      "cal-brand-text": t("ink"), // never white on orange
+      "cal-brand-subtle": t("peach"),
+      "cal-brand-accent": t("ink"),
+      "cal-text": t("graphite"),
+      "cal-text-emphasis": t("ink"),
+      "cal-text-subtle": t("muted"),
+      "cal-text-muted": t("muted"),
+      "cal-text-inverted": t("paper"),
+      "cal-bg": t("paper"),
+      "cal-bg-emphasis": t("paper-deep"),
+      "cal-bg-subtle": t("paper-deep"),
+      "cal-bg-muted": t("paper"),
+      "cal-bg-inverted": t("ink"),
+      "cal-border": t("line"),
+      "cal-border-emphasis": t("ink"),
+      "cal-border-subtle": t("line"),
+      "cal-border-muted": t("line"),
+      "cal-border-booker": t("line"),
+      "cal-border-booker-width": "1px",
+      radius: "0px",
+    };
     Cal.ns[ns]("ui", {
       theme: "light",
       hideEventTypeDetails: false,
       layout: "month_view",
       cssVarsPerTheme: {
-        light: {
-          "cal-brand": t("primary"),
-          "cal-brand-emphasis": t("primary"),
-          "cal-brand-text": t("ink"), // never white on orange
-          "cal-brand-subtle": t("peach"),
-          "cal-brand-accent": t("ink"),
-          "cal-text": t("graphite"),
-          "cal-text-emphasis": t("ink"),
-          "cal-text-subtle": t("muted"),
-          "cal-text-muted": t("muted"),
-          "cal-text-inverted": t("paper"),
-          "cal-bg": t("paper"),
-          "cal-bg-emphasis": t("paper-deep"),
-          "cal-bg-subtle": t("paper-deep"),
-          "cal-bg-muted": t("paper"),
-          "cal-bg-inverted": t("ink"),
-          "cal-border": t("line"),
-          "cal-border-emphasis": t("ink"),
-          "cal-border-subtle": t("line"),
-          "cal-border-muted": t("line"),
-          "cal-border-booker": t("line"),
-          "cal-border-booker-width": "1px",
-          radius: "0px",
-        },
+        light: themeTokens,
+        dark: themeTokens,
       },
     });
-
-    // Ensure any Cal modal or inline iframe immediately receives solid paper ground and line border
-    const paintIframes = () => {
-      const paper = t("paper");
-      const line = t("line");
-      document.querySelectorAll("cal-modal-box iframe, iframe.cal-embed").forEach((f) => {
-        if (f instanceof HTMLElement) {
-          f.style.backgroundColor = paper;
-          f.style.border = `1px solid ${line}`;
-        }
-      });
-    };
-    paintIframes();
-    new MutationObserver(paintIframes).observe(document.body, { childList: true, subtree: true });
   });
 
   // GA4 events (Analytics.astro; window.gtag only exists in production builds).
@@ -100,19 +90,3 @@ const { calLink, calNamespace: ns, bookCall } = site;
   };
   for (const action of ["bookingSuccessfulV2", "bookingSuccessful"]) Cal.ns[ns]("on", { action, callback: onBooked });
 </script>
-
-<style is:global>
-  /* Ensure Cal.com modal popup iframe and host component have solid paper ground */
-  cal-modal-box {
-    --cal-bg: var(--color-paper);
-    --cal-bg-emphasis: var(--color-paper-deep);
-    --cal-bg-subtle: var(--color-paper-deep);
-    --cal-bg-muted: var(--color-paper);
-    --cal-border: var(--color-line);
-  }
-  cal-modal-box iframe,
-  iframe.cal-embed {
-    background-color: var(--color-paper) !important;
-    border: 1px solid var(--color-line) !important;
-  }
-</style>
