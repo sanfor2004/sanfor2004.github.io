@@ -1,6 +1,7 @@
 ---
 title: Observer (Behavioral Pattern)
-description: Notify a changing set of subscribers when a subject emits an event or changes state.
+seoTitle: "Observer Pattern in Python & C++: Subscribe and Notify"
+description: "A stock notifies displays it does not know: explicit unsubscribe in Python, weak_ptr listeners in C++20. When a direct call or a transaction fits better."
 image: "/images/writing/patterns/observer.webp"
 imageAlt: "A notification source sends updates to multiple subscribers."
 imageWidth: 1600

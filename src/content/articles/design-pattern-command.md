@@ -1,6 +1,7 @@
 ---
 title: Command (Behavioral Pattern)
-description: Represent a request as an object so it can be queued, logged, retried, or undone.
+seoTitle: "Command Pattern in Python & C++: Undo History and Job Queues"
+description: "Turn editor actions into objects with execute and undo, in Python & C++20. Covers undo history, job queues, Command vs Memento, and when a plain call wins."
 image: "/images/writing/patterns/command.webp"
 imageAlt: "A restaurant order slip carries a request from the waiter to the kitchen."
 imageWidth: 1600

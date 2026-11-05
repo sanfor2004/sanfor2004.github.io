@@ -14,15 +14,23 @@ import CalBooking from '../components/layout/CalBooking.astro';
 import Analytics from '../components/layout/Analytics.astro';
 
 interface Props {
-  title?: string;
+  title?: string;    // human title: breadcrumb, og:title
+  seoTitle?: string; // search-result <title>, used exactly as written (no suffix)
   description?: string;
   ogImage?: string;
   cta?: boolean;   // final "Have manual work eating your week?" band
   chrome?: boolean; // navbar + sticky CTA (off for /links/)
   sticky?: boolean; // phone sticky "Book a call" bar (off on /contact/, where the calendar is the page)
 }
-const { title, description = site.description, ogImage = '/og/default.png', cta = true, chrome = true, sticky = true } = Astro.props;
-const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — Backend & automation engineer`;
+const { title, seoTitle, description = site.description, ogImage = '/og/default.png', cta = true, chrome = true, sticky = true } = Astro.props;
+// Google cuts titles off around 60 characters. A page's seoTitle wins as written; otherwise
+// the " — Sanfor2004" suffix is added only when it still fits. og:title keeps the human title.
+const TITLE_MAX = 60;
+const suffix = ` — ${site.name}`;
+const defaultTitle = `${site.name} — Backend & automation engineer`;
+const humanTitle = title ? `${title}${suffix}` : defaultTitle;
+const fullTitle = seoTitle
+  ?? (title ? ([...humanTitle].length <= TITLE_MAX ? humanTitle : title) : defaultTitle);
 const canonical = new URL(Astro.url.pathname, site.url);
 
 // Build BreadcrumbList items for nested paths (AEO).
@@ -57,7 +65,7 @@ const breadcrumbItems = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#eae4d8" /><!-- check-tokens-ignore: browsers need a literal -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={fullTitle} />
+    <meta property="og:title" content={humanTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(ogImage, site.url)} />

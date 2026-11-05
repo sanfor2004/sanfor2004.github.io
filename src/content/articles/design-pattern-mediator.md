@@ -1,6 +1,7 @@
 ---
 title: Mediator (Behavioral Pattern)
-description: Centralize complex collaboration so peer objects do not depend directly on one another.
+seoTitle: "Mediator Pattern in Python & C++: Coordinate a Login Form"
+description: "Username and password fields report to one form that enables the login button, in Python and C++20. Mediator vs Observer, and when one callback is plenty."
 image: "/images/writing/patterns/mediator.webp"
 imageAlt: "An airport control tower coordinates several aircraft."
 imageWidth: 1600

@@ -1,6 +1,7 @@
 ---
 title: Chain of Responsibility (Behavioral Pattern)
-description: Pass a request through an ordered chain until a handler processes it or the chain ends.
+seoTitle: "Chain of Responsibility in Python & C++: Request Middleware"
+description: "Chain auth and spending-limit checks as handlers, like request middleware, in Python and C++20. Compare it with Decorator, and see when two ifs are better."
 image: "/images/writing/patterns/chain-of-responsibility.webp"
 imageAlt: "A support request passes through a sequence of handlers."
 imageWidth: 1600

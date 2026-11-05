@@ -1,6 +1,7 @@
 ---
 title: Template Method (Behavioral Pattern)
-description: Define an algorithm’s stable skeleton while allowing selected steps to vary in subclasses.
+seoTitle: "Template Method in Python & C++: Fixed Steps, Custom Hooks"
+description: "Build reports from a fixed begin, read, format, end skeleton with overridable hooks, in Python and C++20. Template Method vs Strategy, and when to compose."
 image: "/images/writing/patterns/template-method.webp"
 imageAlt: "Different cooks follow the same sequence of recipe steps."
 imageWidth: 1600

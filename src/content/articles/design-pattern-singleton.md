@@ -1,6 +1,7 @@
 ---
 title: Singleton (Creational Pattern)
-description: Provide one controlled instance and a global access point—while understanding the coupling it creates.
+seoTitle: "Singleton Pattern in Python & C++: Use It or Inject It?"
+description: "A process-wide metrics counter as a Singleton in Python and C++20, the testing cost of global state, and why passing the dependency in usually wins."
 image: "/images/writing/patterns/singleton.webp"
 imageAlt: "One central fire-alarm panel receives reports from across a building."
 imageWidth: 1600

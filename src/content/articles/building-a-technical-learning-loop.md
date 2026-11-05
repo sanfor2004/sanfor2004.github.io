@@ -1,6 +1,7 @@
 ---
 title: Building a Technical Learning Loop
-description: A practical way to turn programming and cybersecurity study into projects, notes, and portfolio artifacts.
+seoTitle: "Technical Learning Loop: Turn Study into Portfolio Proof"
+description: "A four-step loop for programming and cybersecurity study: pick one question, build the smallest experiment, record what failed, and write a reusable note."
 image: "/images/writing/technical-learning-loop.webp"
 imageAlt: "A visual learning loop connecting technical notes, programming practice, and cybersecurity projects."
 imageWidth: 1568

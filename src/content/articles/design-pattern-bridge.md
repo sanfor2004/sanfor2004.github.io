@@ -1,6 +1,7 @@
 ---
 title: Bridge (Structural Pattern)
-description: Separate an abstraction from its implementation so both dimensions can vary independently.
+seoTitle: "Bridge Pattern in Python & C++: Stop the Subclass Explosion"
+description: "Notices vary by urgency, delivery by channel (email, SMS). See how Bridge keeps both axes apart in Python and C++20, and when a parameter is all you need."
 image: "/images/writing/patterns/bridge.webp"
 imageAlt: "A remote control connects to several device implementations."
 imageWidth: 1600

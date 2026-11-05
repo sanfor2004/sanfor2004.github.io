@@ -5,7 +5,13 @@ import ArrowUpRight from '../components/ui/ArrowUpRight.astro';
 import { site, contact } from '../data/site';
 ---
 <!-- No final CTA band on Contact: this page IS the call to action. -->
-<BaseLayout title="Contact" description="Book a free call with Sanfor about the manual work you want automated." cta={false} sticky={false}>
+<BaseLayout
+  title="Contact"
+  seoTitle="Book a Free Call: Backend & Automation Help — Sanfor2004"
+  description="Book a free call with Sanfor about the manual work you want automated: APIs, integrations, ERP or payments. Pick a time on the calendar, or email directly."
+  cta={false}
+  sticky={false}
+>
   <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
     <Eyebrow>Contact</Eyebrow>
     <h1 class="max-w-head-sm text-h1 tracking-tighter">Let's talk about your project.</h1>

@@ -1,6 +1,7 @@
 ---
 title: Composite (Structural Pattern)
-description: Treat individual objects and nested groups through the same component interface.
+seoTitle: "Composite Pattern in Python & C++: Files, Folders and Trees"
+description: "Get the size of a file or a nested folder through one interface, in Python and C++20. Why Composite fits real trees but misleads for graphs and flat lists."
 image: "/images/writing/patterns/composite.webp"
 imageAlt: "Shipping boxes contain smaller boxes and individual items in a nested structure."
 imageWidth: 1600

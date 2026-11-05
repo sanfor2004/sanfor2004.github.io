@@ -1,6 +1,7 @@
 ---
 title: "360Vision: Building a 360° Virtual Tour Studio in Next.js"
-description: How I built 360Vision with Next.js, Three.js, interactive floor plans, angular hotspots, and local JSON storage for connected real-estate tours.
+seoTitle: "360° Virtual Tour Builder in Next.js and Three.js: 360Vision"
+description: "How 360Vision links panoramas with hotspots and floor plans in Next.js and Three.js: angle-based hotspots, Sharp image variants, and JSON autosave."
 image: "/images/writing/360vision/cover.webp"
 imageAlt: "360Vision campaign cover showing the Cedar House panorama viewer, interactive property map, and room navigation."
 imageWidth: 1600

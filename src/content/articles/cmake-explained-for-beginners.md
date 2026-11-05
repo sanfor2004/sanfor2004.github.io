@@ -1,6 +1,7 @@
 ---
 title: "CMake Explained for Beginners: Targets, Libraries, and Builds"
-description: Learn what CMake actually does by building a small C++20 executable, library, and test with targets, usage requirements, and out-of-source builds.
+seoTitle: "CMake for Beginners: Targets, Libraries & Builds (C++20)"
+description: "Build a C++20 library, executable and test with CMake. Learn targets, PUBLIC vs PRIVATE vs INTERFACE, out-of-source builds and six common mistakes."
 image: "/images/writing/cmake-explained-for-beginners.webp"
 imageAlt: "A hand-drawn workshop machine assembling source pages into a reusable library block and an executable robot."
 imageWidth: 1600

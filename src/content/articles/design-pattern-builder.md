@@ -1,6 +1,7 @@
 ---
 title: Builder (Creational Pattern)
-description: Construct a complex object step by step while allowing different final representations.
+seoTitle: "Builder Pattern in Python & C++: When and How to Use It"
+description: "Build a validated HTTP request config step by step in Python and C++20. Learn why a fluent interface alone is not a Builder, and when named arguments win."
 image: "/images/writing/patterns/builder.webp"
 imageAlt: "A sandwich moves through successive preparation stations, with each step adding part of the finished result."
 imageWidth: 1600

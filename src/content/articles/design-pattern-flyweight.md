@@ -1,6 +1,7 @@
 ---
 title: Flyweight (Structural Pattern)
-description: Share repeated intrinsic state while keeping context-specific state outside the shared object.
+seoTitle: "Flyweight Pattern in Python & C++: Share State, Save Memory"
+description: "Share glyph data across many characters, each with its own position, in Python and C++20. Measure first: sometimes the lookups cost more than they save."
 image: "/images/writing/patterns/flyweight.webp"
 imageAlt: "Shared book information connects to separate borrowing records."
 imageWidth: 1600

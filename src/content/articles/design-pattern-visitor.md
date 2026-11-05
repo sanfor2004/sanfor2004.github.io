@@ -1,6 +1,7 @@
 ---
 title: Visitor (Behavioral Pattern)
-description: Add operations across a stable set of element types without placing every operation on those elements.
+seoTitle: "Visitor Pattern in Python & C++: Add Operations Cleanly"
+description: "Compute tax across books and food without editing each item class, using accept and visit in Python and C++20. Compare std::visit, and when new types hurt."
 image: "/images/writing/patterns/visitor.webp"
 imageAlt: "Different inspectors visit the same set of buildings."
 imageWidth: 1600

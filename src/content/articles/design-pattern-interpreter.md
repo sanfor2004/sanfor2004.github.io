@@ -1,6 +1,7 @@
 ---
 title: Interpreter (Behavioral Pattern)
-description: Represent a small grammar as objects that evaluate expressions in a context.
+seoTitle: "Interpreter Pattern in Python & C++: A Tiny Rule Language"
+description: "Model permission rules such as \"role A and role B\" as an expression tree you can evaluate, in Python and C++20. Know when to use a real parser instead."
 image: "/images/writing/patterns/interpreter.webp"
 imageAlt: "Symbol cards are combined into a small expression using grammar rules."
 imageWidth: 1600

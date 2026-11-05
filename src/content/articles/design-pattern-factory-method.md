@@ -1,6 +1,7 @@
 ---
 title: Factory Method (Creational Pattern)
-description: Let subclasses or specialized creators decide which concrete product to instantiate.
+seoTitle: "Factory Method in Python & C++: Not Just a Simple Factory"
+description: "An alert job that picks email or console senders per environment, in Python and C++20. Why a switch is not Factory Method, and when to pass a sender in."
 image: "/images/writing/patterns/factory-method.webp"
 imageAlt: "A delivery office coordinates different vehicles for a shared delivery workflow."
 imageWidth: 1600

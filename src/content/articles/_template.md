@@ -1,6 +1,8 @@
 ---
 title: "[Article title, in sentence case]"
-description: "[One or two sentences on what the reader will learn.]"
+# Search-result <title>, used as written (max 60 chars): main search term first, then the payoff.
+seoTitle: "[Main term: specific payoff]"
+description: "[140–155 chars: what the reader walks away with (example, checklist, code), main term included.]"
 # Optional cover / social preview (file lives in public/images/writing/):
 # image: "/images/writing/[slug].webp"
 # imageAlt: "[What the image shows]"

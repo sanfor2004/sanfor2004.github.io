@@ -1,6 +1,7 @@
 ---
 title: Memento (Behavioral Pattern)
-description: Capture and restore an object’s state without exposing its internal representation.
+seoTitle: "Memento Pattern in Python & C++: Save and Restore State"
+description: "Checkpoint an editor before an experimental edit and restore it without exposing internals, in Python and C++20. Memento vs Command, and when to skip it."
 image: "/images/writing/patterns/memento.webp"
 imageAlt: "A hand places a glowing crystal into a row of save slots beside two versions of a game scene."
 imageWidth: 1600

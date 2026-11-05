@@ -1,6 +1,7 @@
 ---
 title: Strategy (Behavioral Pattern)
-description: Package interchangeable algorithms behind one interface and choose among them by composition.
+seoTitle: "Strategy Pattern in Python & C++: Swap Algorithms at Runtime"
+description: "Choose a shipping-fee rule at checkout by passing in a callable, in Python and C++20. Fits pricing, ranking and retry policies; skip it for one stable if."
 image: "/images/writing/patterns/strategy.webp"
 imageAlt: "A traveler chooses between alternative routes to a destination."
 imageWidth: 1600

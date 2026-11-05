@@ -1,6 +1,7 @@
 ---
 title: Proxy (Structural Pattern)
-description: Stand in for another object to control access, loading, location, or instrumentation.
+seoTitle: "Proxy Pattern in Python & C++: Lazy Loading on First Use"
+description: "Load a gallery image from disk only on first display, then reuse it, in Python and C++20. Plus access-control proxies, and when a proxy is just overhead."
 image: "/images/writing/patterns/proxy.webp"
 imageAlt: "A bank card mediates access to an account."
 imageWidth: 1600

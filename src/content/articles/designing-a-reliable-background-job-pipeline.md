@@ -1,6 +1,7 @@
 ---
 title: Designing a Reliable Background Job Pipeline
-description: A long-form systems note about queues, retries, idempotency, observability, and operating background work safely in production.
+seoTitle: "Background Job Pipeline Design: Retries, Idempotency, DLQs"
+description: "Design background jobs that survive production: job contracts, idempotency keys, retries with backoff, backpressure, timeouts, and a launch checklist."
 image: "/images/writing/background-job-pipeline.svg"
 imageAlt: "Editorial diagram of an API sending jobs through a queue to two workers, a retry path, and a database."
 imageWidth: 240

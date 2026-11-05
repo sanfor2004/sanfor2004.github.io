@@ -1,6 +1,7 @@
 ---
 title: Build a Desktop App with Electron and Next.js
-description: Package a Next.js static export inside Electron with TypeScript, a custom application protocol, isolated preload code, narrow IPC, and no embedded web server.
+seoTitle: "Electron + Next.js Desktop App: Secure Static Export Setup"
+description: "Package a Next.js static export in Electron with TypeScript: a custom protocol instead of file://, a one-method preload bridge, a starter CSP, and Forge."
 image: "/images/writing/electron-nextjs-desktop-app.webp"
 imageAlt: "A hand-drawn desktop window cutaway showing a web interface, guarded bridge, main-process machinery, and packaged static pages."
 imageWidth: 1600

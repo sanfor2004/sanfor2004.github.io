@@ -76,7 +76,7 @@ export const skylimit: CaseStudy = {
 export const erateapp: CaseStudy = {
   slug: 'erateapp',
   seoTitle: 'Case study: eRateApp.com school platform',
-  seoDescription: 'How Sanfor built eRateApp.com as lead developer in vanilla PHP and JavaScript: contract uploads, live chat over WebSocket and government APIs. 200+ schools onboarded in two months.',
+  seoDescription: 'How Sanfor built eRateApp.com as lead developer in vanilla PHP and JS: contract uploads, WebSocket chat and government APIs, 200+ schools in two months.',
   headline: 'A school platform for contracts, equipment and live chat.',
   intro: 'For school owners and top managers. As lead developer, I built it in vanilla PHP and JavaScript: contract uploads, schools connected with equipment, live chat over WebSocket and government API integrations.',
   client: 'eRateApp.com',

@@ -1,6 +1,7 @@
 ---
 title: Abstract Factory (Creational Pattern)
-description: Create compatible families of objects without coupling the client to concrete classes.
+seoTitle: "Abstract Factory Pattern in Python & C++: Matching Themes"
+description: "Abstract Factory in Python and C++20: one theme object builds matching buttons and panels. Plus how it differs from Factory Method and when it is overkill."
 image: "/images/writing/patterns/abstract-factory.webp"
 imageAlt: "A furniture workshop assembles matching chairs, tables, and cabinets as one coordinated family."
 imageWidth: 1600

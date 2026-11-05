@@ -1,6 +1,7 @@
 ---
 title: Iterator (Behavioral Pattern)
-description: Traverse a collection without exposing how that collection stores its elements.
+seoTitle: "Iterator Pattern in Python & C++: Hide How Data Is Stored"
+description: "Let callers loop over a playlist without touching its storage: __iter__ in Python, a custom forward iterator in C++20, and when standard ranges are enough."
 image: "/images/writing/patterns/iterator.webp"
 imageAlt: "A marked museum route guides a visitor through exhibits."
 imageWidth: 1600

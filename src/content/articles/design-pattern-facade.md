@@ -1,6 +1,7 @@
 ---
 title: Facade (Structural Pattern)
-description: Offer a focused entry point to a complex subsystem without removing lower-level access.
+seoTitle: "Facade Pattern in Python & C++: One Call for Checkout"
+description: "Hide stock, payment and shipping behind one checkout call, in Python and C++20. When a facade helps SDKs and service layers, and when it is a pass-through."
 image: "/images/writing/patterns/facade.webp"
 imageAlt: "A hotel reception desk coordinates services from several departments."
 imageWidth: 1600

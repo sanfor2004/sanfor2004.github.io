@@ -14,7 +14,11 @@ const rest = all.filter((a) => a !== featured);
 // the filter), so no button leads to an empty list. New topics appear on their own.
 const topics = ['All', ...allTopics.filter((t) => rest.some((a) => a.data.topic === t))];
 ---
-<BaseLayout title="Articles" description="Notes on backend, automation, design patterns and systems, by Sanfor2004.">
+<BaseLayout
+  title="Articles"
+  seoTitle="Backend, C++ & Design Pattern Articles with Code"
+  description="Practical articles on backend systems, automation, C++, Redis and all 23 design patterns, with runnable Python and C++20 code. Written plainly by Sanfor."
+>
   <section class="flex flex-col gap-6 border-b border-line px-5 pt-24 pb-12 md:px-8">
     <Eyebrow>Articles</Eyebrow>
     <h1 class="max-w-head text-h1 tracking-tighter">Notes from building backends that run on their own.</h1>

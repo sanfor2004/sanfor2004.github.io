@@ -1,5 +1,29 @@
 # Status
 
+## 2026-11-05 — Search titles and meta descriptions (CTR fix)
+
+**Why:** Search Console showed avg position 8.6 but CTR 0.6% (13 clicks / 2.06K
+impressions). Titles were cut off (up to 87 chars) and most descriptions were 40–110
+chars, so Google rewrote or truncated the snippets.
+**Done:**
+- `BaseLayout`: new `seoTitle` prop, used as written. Without it, the
+  " — Sanfor2004" suffix is added only when the result fits in 60 chars.
+  og:title and breadcrumbs keep the human title.
+- Schema: `seoTitle` (max 60) on articles and projects; article pages pass it.
+  `_template.md` documents it.
+- New `seoTitle` + 140–155 char description on all 34 articles (drafts included),
+  each written from the article body. The 23 pattern articles each name their own
+  example, Python + C++20, and when not to use the pattern.
+- Static pages: home, about, articles, work, ERP, contact get a `seoTitle`; those
+  plus art, links and the eRateApp case study get descriptions in range.
+- `scripts/check-seo.mjs` (`npm run check:seo`, now part of `npm run verify`):
+  scans dist/ for titles > 60, descriptions outside 120–160, and duplicates.
+  Skips redirect stubs, 404 and files copied from public/.
+**Verified:** `npm run verify` passed (0 errors; SEO check: 42 pages, 0 problems).
+**Next:** owner reviews the diff, commits and pushes. Re-check CTR in Search Console
+in 3–4 weeks (Google needs to recrawl). `public/email-signature.html` is crawlable
+with no description: consider a `noindex` meta in it.
+
 ## 2026-10-16 — Article + LinkedIn kit: CVE-2026-96889 (librsvg use-after-free)
 
 **Done:**

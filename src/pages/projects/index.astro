@@ -8,7 +8,11 @@ import { site } from '../../data/site';
 const filters = [['all', 'All'], ['client', 'Client work'], ['product', 'Products'], ['oss', 'Open source']] as const;
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
-<BaseLayout title="Work" description="Production platforms, products and open-source tools by Sanfor2004.">
+<BaseLayout
+  title="Work"
+  seoTitle="Projects & Case Studies: Backend and Automation Work"
+  description="Case studies and projects by Sanfor: a lead-gen platform with 5.4M+ leads and $1.35M+ in payments, the eRateApp school platform, and open-source tools."
+>
   <script is:inline type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "ItemList",

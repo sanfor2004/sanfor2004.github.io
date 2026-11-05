@@ -1,6 +1,7 @@
 ---
 title: Design Patterns Overview (Creational, Structural, and Behavioral Patterns)
-description: "Start here: all 23 GoF design patterns, their categories and scope, with illustrated Python and C++20 lessons."
+seoTitle: "23 Design Patterns Explained with Python & C++20 Examples"
+description: "All 23 GoF design patterns by category (creational, structural, behavioral), each with illustrated Python and C++20 lessons and advice on when to skip it."
 image: "/images/writing/patterns/overview.webp"
 imageAlt: "An open sketchbook becomes a workshop, modular bridges, and connected signal stations, illustrating creation, structure, and collaboration."
 imageWidth: 1600

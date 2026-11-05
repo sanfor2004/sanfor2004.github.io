@@ -1,6 +1,7 @@
 ---
 title: Adapter (Structural Pattern)
-description: Translate one interface into another interface the client already understands.
+seoTitle: "Adapter Pattern in Python & C++: Wrap a Legacy API Cleanly"
+description: "Wrap a legacy Fahrenheit sensor so a Celsius dashboard can use it, in Python and C++20. Plus Adapter vs Facade, and why to skip it when you own both sides."
 image: "/images/writing/patterns/adapter.webp"
 imageAlt: "A travel plug connects an appliance to a socket with a different connection standard."
 imageWidth: 1600

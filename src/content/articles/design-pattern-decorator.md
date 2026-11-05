@@ -1,6 +1,7 @@
 ---
 title: Decorator (Structural Pattern)
-description: Add responsibilities by wrapping an object with components that share its interface.
+seoTitle: "Decorator Pattern in Python & C++: Add Behavior by Wrapping"
+description: "Add milk to a coffee order any number of times without a class per combination, in Python and C++20. Real uses like stream layers, and Decorator vs Proxy."
 image: "/images/writing/patterns/decorator.webp"
 imageAlt: "Successive paper, ribbon, and card layers wrap the same gift."
 imageWidth: 1600

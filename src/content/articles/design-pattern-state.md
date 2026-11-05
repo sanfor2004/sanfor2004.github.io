@@ -1,6 +1,7 @@
 ---
 title: State (Behavioral Pattern)
-description: Change an object’s behavior when its internal state changes by delegating to state objects.
+seoTitle: "State Pattern in Python & C++: Replace State-Machine Ifs"
+description: "A door that acts differently when open or closed, each state picking the next, in Python and C++20. State vs Strategy, and when an enum table is enough."
 image: "/images/writing/patterns/state.webp"
 imageAlt: "A traffic signal changes between distinct operating states."
 imageWidth: 1600

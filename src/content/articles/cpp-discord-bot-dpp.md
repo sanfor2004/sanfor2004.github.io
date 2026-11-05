@@ -1,6 +1,7 @@
 ---
 title: Build a C++ Discord Bot with DPP
-description: Create a modern C++ Discord bot with DPP, CMake, slash commands, safe token handling, and a practical path from local testing to deployment.
+seoTitle: "C++ Discord Bot with DPP: Slash Commands Step by Step"
+description: "Build a /ping slash-command Discord bot in C++20 with DPP and CMake, keep the bot token out of your code, and fix the five most common startup failures."
 image: "/images/writing/cpp-discord-bot-dpp.webp"
 imageAlt: "A hand-drawn mechanical messenger carrying blank command bubbles between a terminal and a network of community members."
 imageWidth: 1600

@@ -32,7 +32,7 @@ The live reference is the Sanfor2004 design system (Claude artifact). In code, t
 9. If a request conflicts with these rules, STOP and ask.
 
 ## Verify loop (every task)
-`npm run verify` → token check + `astro check` + build must pass with zero errors. Then list every file you changed.
+`npm run verify` → token check + `astro check` + build + SEO check (`scripts/check-seo.mjs`: titles ≤ 60, descriptions 120–160, no duplicates) must pass with zero errors. Then list every file you changed.
 
 ## File map
 ```
@@ -70,4 +70,5 @@ Search the repo for `<Placeholder`, `TODO` before adding new ones. Draft article
 - 2026-10-08: **GA4 re-wired** (`G-7B8D7CCSRQ`, the old site's property; `site.gaId`, not an env var). `layout/Analytics.astro`, production builds only. **No consent banner** (owner's decision, same as the old site; not GDPR-compliant for EU/UK visitors). Events: `book_call_click` and `book_call_booked`, param `cta_location` = the link's `data-cta` (`Button cta="..."`). Every new booking link must get a `cta` label.
 - 2026-10-08: **Calendly → Cal.com** (`site.bookCall` = cal.com/sanfor2004/free-call). `layout/CalBooking.astro` loads the embed on every page, themes it from our tokens at runtime (paper, ink, orange fill with ink text, hairlines, radius 0) and opens every link to `site.bookCall` as a popup (own click handler: Cal's `data-cal-link` didn't cancel `target=_blank`). /contact/ has the inline calendar; no sticky bar there. The popup's open/close animation and the "Cal.com" mark are Cal's, outside our motion/branding rules.
 - 2026-10-08: **Contact form removed** (it posted to `#`). Web3Forms was wired and tested, then dropped by the owner. /contact/ = Cal.com inline calendar (primary) + direct links. Add a form back only together with a real endpoint. Public email is now contact@sanfor2004.com everywhere (`site.email`).
+- 2026-11-05: **Search titles/descriptions** (Search Console: avg position 8.6, CTR 0.6%). `<title>` = page `seoTitle` as written, else `title — Sanfor2004` only when that fits in 60 chars, else `title` alone; og:title and breadcrumbs keep the human title. Articles carry `seoTitle` (main search term first, ≤ 60) and a 140–155 char description that says what the reader gets. `npm run verify` runs `check:seo` on dist/.
 - 2026-10-06: React Bits **Side Rays** tried and removed (with `ogl`): like Gradient Waves, a light-on-dark WebGL effect that reads as a grey veil on paper. Replaced by our own **GradientBand** (`ui/GradientBand.astro`): light peach/orange linear gradient rising from the bottom of the hero's left column, slowly drifting sideways. Pure CSS, tokens only, still under reduced motion. Hero text stays muted/graphite (≥5.4:1 measured over it).

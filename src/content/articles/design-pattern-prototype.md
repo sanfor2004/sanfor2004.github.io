@@ -1,6 +1,7 @@
 ---
 title: Prototype (Creational Pattern)
-description: Create new objects by copying an existing configured prototype.
+seoTitle: "Prototype Pattern in Python & C++: Clone Configured Objects"
+description: "Spawn game enemies from a configured template without knowing their concrete type, in Python and C++20 with unique_ptr. When a plain copy is all you need."
 image: "/images/writing/patterns/prototype.webp"
 imageAlt: "A robot design on a drawing board is copied into separate sheets with customized robots."
 imageWidth: 1600

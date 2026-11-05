@@ -1,6 +1,7 @@
 ---
 title: "Distributing 5 million leads by rules, not by hand"
-description: "How a rule-based system kept 5M+ leads, 2,000+ accounts and their orders under control, and saved an estimated 48+ hours of manual work a week."
+seoTitle: "Rule-Based Lead Distribution: 5M+ Leads Without Manual Work"
+description: "How rule-based routing kept 5M+ leads, 2,000+ accounts and their orders under control at Skylimit, saving an estimated 48+ hours of manual work a week."
 image: "/images/writing/distributing-leads-by-rules.webp"
 imageAlt: "Illustration: a brass sorting machine on a workbench takes a stack of lead cards and routes them along orange arrows into colour-tabbed trays, while an engineer relaxes with tea."
 imageWidth: 1376

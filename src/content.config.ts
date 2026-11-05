@@ -7,7 +7,9 @@ const articles = defineCollection({
   // Files starting with _ are ignored: keep drafts/templates as _name.md
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/articles' }),
   schema: z.object({
-    title: z.string(),
+    title: z.string(), // on-page H1 (and og:title)
+    // Search-result <title>, used exactly as written: main search term first, ≤ 60 chars.
+    seoTitle: z.string().max(60).optional(),
     description: z.string(),
     // Cover image under public/ (root-relative path). Used as the article's
     // social preview; restored from the pre-merge blog posts.
@@ -33,7 +35,7 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
-    seoTitle: z.string().optional(),
+    seoTitle: z.string().max(60).optional(),
     description: z.string(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),

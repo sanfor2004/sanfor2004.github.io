@@ -7,7 +7,11 @@ import TrustedBy from '../components/sections/TrustedBy.astro';
 import { statsNote } from '../data/site';
 ---
 <!-- The story ends on its own CTA, so the shared band is off here. -->
-<BaseLayout cta={false}>
+<BaseLayout
+  seoTitle="Sanfor2004: Backend, API & Automation Engineer for Hire"
+  description="Freelance backend, API and automation engineer: integrations, payments and workflows that cut manual work. Built a platform that processed 5.4M+ leads."
+  cta={false}
+>
   <Hero />
   <Stats note={statsNote} />
   <TrustedBy />

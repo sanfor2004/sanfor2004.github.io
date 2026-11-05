@@ -1,6 +1,7 @@
 ---
 title: How I Used AI, References, and Review Loops to Build Mint Woodland Pet
-description: A first-person case study on turning a visual reference into an original Windows desktop companion through AI-assisted asset generation, deterministic sprite preparation, UI matching, and repeatable visual review.
+seoTitle: "AI Sprite Pipeline: Building a Desktop Pet with Review Loops"
+description: "How I turned AI-generated pixel art into a Windows desktop pet: reference checklists, deterministic sprite packing, and review loops that caught defects."
 image: "/images/writing/ai-reference-review-loop-mint-woodland-pet.webp"
 imageAlt: "Editorial illustration of an original woodland desktop pet moving through a reference, AI generation, sprite-sheet, QA, and UI review loop."
 imageWidth: 1600

@@ -1,6 +1,7 @@
 ---
 title: "Redis Internals: From a Command to Memory and Disk"
-description: Follow a Redis command through the event loop, data structures, expiration, eviction, persistence, and replication without reducing Redis to 'just a cache.'
+seoTitle: "Redis Internals: Event Loop, Memory & Persistence Explained"
+description: "Follow one Redis command from socket to memory to disk: event loop, RESP, encodings, expiry vs eviction, RDB vs AOF and replication, with ops answers."
 image: "/images/writing/redis-internals.webp"
 imageAlt: "A hand-drawn command flowing through an event-loop wheel into memory shelves, an append-only journal, a snapshot, and a replica."
 imageWidth: 1600
