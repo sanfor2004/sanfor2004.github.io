@@ -1,5 +1,30 @@
 # Status
 
+## 2026-11-05 — Cal.com popup: see-through calendar + stacked popups
+
+**Why:** QA found the "Book a free call" popup see-through (page showing through the
+calendar) and a new popup stacked on top of the old one on every click.
+**Root cause (see-through):** `CalBooking.astro` read our colour tokens on
+DOMContentLoaded, which doesn't wait for CSS. On short pages (/links/ every time,
+others depending on the network) the stylesheet wasn't applied yet, so Cal got empty
+strings for every `--cal-*` token and drew its default: no ground, dark side panels.
+**Done (`src/components/layout/CalBooking.astro`):**
+- Theme is sent only once the tokens resolve; otherwise it retries on `load`.
+- Each click removes old `<cal-modal-box>` elements before opening, so there is one
+  popup (fresh slots each time). Cal only reuses a popup that was preloaded, and
+  preloading would load the full booker on every page view.
+- Run-once guard (`window.__calBookingReady`) so a re-run script can't add a second
+  click handler.
+- Not added: `iframe.cal-embed { background: paper }`. Cal's popup iframe is the
+  full viewport width, so that paints a paper band across the page (what commit
+  14f118a removed). Not needed once the tokens arrive.
+**Verified:** `npm run verify` passed. Preview: 3 opens = 1 `cal-modal-box` on /,
+/links/ and /contact/ (inline calendar untouched), light and dark, 1280px and 375px;
+calendar solid paper everywhere.
+**Next:** owner reviews and commits. Known, pre-existing: on /contact/, opening the
+popup before the inline calendar has sized itself (~first 2 s) leaves the inline
+iframe at 300px (both share one Cal namespace).
+
 ## 2026-11-05 — Search titles and meta descriptions (CTR fix)
 
 **Why:** Search Console showed avg position 8.6 but CTR 0.6% (13 clicks / 2.06K
