@@ -1,5 +1,28 @@
 # Status
 
+## 2026-11-05 — QA fixes: Dribbble, mobile menu, tap targets, /links/ h1
+
+**Done:**
+- Dribbble removed (profile 404s, "isn't public yet"): `data/site.ts` (/links/ Design &
+  video group), the /art/ header button (Behance alone now), and the About "Beyond" line.
+  Add it back once the profile is public.
+- Mobile menu (`layout/Navbar.astro`): icon is two bars when closed, an X when open
+  (`group-open:`, CSS only, no animation). Script: aria-label "Open menu"/"Close menu"
+  follows state; Escape closes and refocuses the toggle; a tap outside closes the menu
+  and is swallowed (capture phase), so it doesn't also follow a link or open the Cal
+  popup behind; links inside the menu work as before and close it.
+- Tap targets below md: footer links and the home "Trusted by" wordmarks are
+  `inline-flex min-h-11` (44px). Row gaps/padding give the height back; Trusted by is
+  within 1px of before, footer link rows sit ~11px lower (two 44px areas can't fit the
+  old 34px email-to-links spacing). md+ unchanged.
+- /links/: the "Sanfor2004" name is now the page's `<h1>` (was a span, same styles).
+**Verified:** `npm run verify` passed. dist/: no "dribbble"; every built page has exactly
+one h1. Preview at 375px: menu open/X/"Close menu", Escape closes + focus on toggle,
+outside taps on hero buttons only close the menu, menu links navigate, menu CTA opens
+the popup; all footer and Trusted by links 44px tall, no overlaps; /articles/ filter
+works. 1440px: footer and Trusted by sizes unchanged.
+**Next:** owner reviews and commits.
+
 ## 2026-11-05 — Cal.com popup: see-through calendar + stacked popups
 
 **Why:** QA found the "Book a free call" popup see-through (page showing through the

@@ -3,16 +3,18 @@ import Eyebrow from '../ui/Eyebrow.astro';
 import { clients } from '../../data/site';
 ---
 <!-- Trusted by: centered text wordmarks (Syne) linking to each client, ending in "and more". -->
-<section aria-label="Trusted by" class="flex flex-col items-center gap-5 border-b border-line px-5 py-8 md:px-8">
+<!-- Below md each wordmark link is 44px tall (min-h-11) for tapping; row gap and section padding
+     give that height back, so the layout looks the same. -->
+<section aria-label="Trusted by" class="flex flex-col items-center gap-3 border-b border-line px-5 pt-8 pb-6 md:gap-5 md:px-8 md:py-8">
   <Eyebrow>Trusted by</Eyebrow>
-  <ul class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+  <ul class="flex flex-wrap items-center justify-center gap-x-10 md:gap-y-4">
     {clients.map((c) => (
       <li>
         <a
           href={c.href}
           target="_blank"
           rel="noopener"
-          class="font-display text-2xl font-semibold tracking-tight text-ink transition-colors hover:text-primary-text focus-visible:text-primary-text"
+          class="inline-flex min-h-11 items-center md:min-h-0 font-display text-2xl font-semibold tracking-tight text-ink transition-colors hover:text-primary-text focus-visible:text-primary-text"
         >
           {c.name}
         </a>

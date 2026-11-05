@@ -24,9 +24,12 @@ const isActive = (href: string) => path.startsWith(href);
     Book a free call <ArrowUpRight size={16} />
   </a>
 
-  <details class="menu ml-auto md:hidden">
+  <!-- Menu icon: two bars when closed, an X when open (CSS only, no animation).
+       The script below keeps aria-label in step and closes on Escape / outside tap. -->
+  <details class="menu group ml-auto md:hidden">
     <summary aria-label="Open menu" class="flex size-14 cursor-pointer list-none items-center justify-center border-l border-line">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"></path></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" class="group-open:hidden"><path d="M4 8h16M4 16h16"></path></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" class="hidden group-open:block"><path d="M6 6l12 12M18 6L6 18"></path></svg>
     </summary>
     <nav aria-label="Mobile" class="absolute inset-x-0 top-full flex flex-col border-b border-line bg-paper px-5 pb-6">
       {nav.map((item) => (
@@ -39,3 +42,32 @@ const isActive = (href: string) => path.startsWith(href);
 <style>
   .menu summary::-webkit-details-marker { display: none; }
 </style>
+<script>
+  // Mobile menu (<details>): label follows state; Escape and taps outside close it.
+  const menu = document.querySelector<HTMLDetailsElement>('details.menu');
+  const toggle = menu?.querySelector('summary');
+  if (menu && toggle) {
+    const close = () => { menu.open = false; };
+    menu.addEventListener('toggle', () => {
+      toggle.setAttribute('aria-label', menu.open ? 'Close menu' : 'Open menu');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape' || !menu.open) return;
+      close();
+      toggle.focus();
+    });
+    // Capture phase on window, so it runs before anything else: a tap outside the open menu
+    // only closes it and is swallowed, instead of also following a link or opening a painting.
+    window.addEventListener('click', (e) => {
+      if (!menu.open || (e.target instanceof Node && menu.contains(e.target))) return;
+      e.preventDefault();
+      e.stopPropagation();
+      close();
+    }, true);
+    // A link inside the menu still does its normal thing (navigate, or open the Cal popup)
+    // and the menu closes behind it.
+    menu.querySelector('nav')?.addEventListener('click', (e) => {
+      if (e.target instanceof Element && e.target.closest('a')) close();
+    });
+  }
+</script>

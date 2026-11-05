@@ -1,13 +1,17 @@
 ---
 import { footerLinks, site } from '../../data/site';
+// Below md every link gets a 44px-tall hit area (min-h-11) with the text centred in it. The row gaps
+// and padding shrink to give that height back; only the email-to-links gap grows (~10px), because
+// two 44px areas can't fit the old 34px spacing without overlapping.
+const link = 'inline-flex min-h-11 items-center text-graphite md:min-h-0';
 ---
 <!-- -mt-px: the top border overlaps whatever line the section above ends with, so it never doubles up.
      relative: paint above sticky elements (the home Story painting) that would otherwise hide that line. -->
-<footer class="relative -mt-px flex flex-wrap items-center justify-between gap-x-8 gap-y-4 border-y border-line px-5 py-6 pb-28 text-sm text-muted md:px-8 md:pb-6">
-  <span>© Sanfor2004 · <a href={`mailto:${site.email}`} class="text-graphite">{site.email}</a></span>
-  <nav aria-label="Footer" class="flex flex-wrap gap-6">
-    <a href="/contact/" class="text-graphite">Contact</a>
-    {footerLinks.map((l) => <a href={l.href} target="_blank" rel="noopener" class="text-graphite">{l.label}</a>)}
-    <a href="/links/" class="text-graphite">All links</a>
+<footer class="relative -mt-px flex flex-wrap items-center justify-between gap-x-8 gap-y-0 border-y border-line px-5 pt-3 pb-25 text-sm text-muted md:gap-y-4 md:px-8 md:py-6">
+  <span>© Sanfor2004 · <a href={`mailto:${site.email}`} class={link}>{site.email}</a></span>
+  <nav aria-label="Footer" class="flex flex-wrap gap-x-6 md:gap-y-6">
+    <a href="/contact/" class={link}>Contact</a>
+    {footerLinks.map((l) => <a href={l.href} target="_blank" rel="noopener" class={link}>{l.label}</a>)}
+    <a href="/links/" class={link}>All links</a>
   </nav>
 </footer>
